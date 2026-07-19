@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+/* Explicitly tell Tailwind which files to scan for class names.
+   This makes content detection deterministic and immune to the
+   workspace-root inference problem, so every utility (including
+   arbitrary values like max-w-[1100px]) is always generated. */
+@source "../**/*.{ts,tsx}";
+
+@theme {
+  --font-amiri: 'Amiri', serif;
+  --font-cormorant: 'Cormorant Garamond', serif;
+  --font-naskh: 'Noto Naskh Arabic', serif;
+
+  --color-primary: #0d4634;
+  --color-primary-dark: #062017;
+  --color-primary-mid: #082a1f;
+  --color-primary-deep: #061d16;
+  --color-primary-accent: #0f5540;
+  --color-primary-muted: #0c3527;
+
+  --color-secondary: #c19a45;
+  --color-secondary-light: #e7cd86;
+  --color-secondary-dark: #a87b2c;
+
+  --color-cream: #f4ecda;
+  --color-cream-light: #fffdf7;
+  --color-cream-warm: #f3ecd8;
+
+  --color-text-body: #23302a;
+  --color-text-light: #f3ead4;
+  --color-text-muted: #5d6b62;
+  --color-text-subtle: #9fb0a4;
+  --color-text-dim: #6f8077;
+  --color-text-hero: #f4e9c8;
+  --color-text-soft: #d8e0d3;
+  --color-text-faint: #cdd8cd;
+  --color-text-dark: #3a473f;
+
+  --color-border: #e6d8b4;
+}
+
+/* NOTE: no manual `* { margin:0; padding:0 }` reset here.
+   Tailwind v4's preflight already resets margin/padding/box-sizing on
+   every element, and it lives in @layer base so utilities (mx-auto,
+   px-*, py-*) correctly override it. Adding an UNLAYERED reset here
+   would beat every layered utility and break all spacing/centering. */
+
+body {
+  font-family: 'Noto Naskh Arabic', serif;
+  color: var(--color-text-body);
+  background: var(--color-cream);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+@keyframes taj-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes taj-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes taj-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes taj-eq {
+  0%, 100% { height: 40%; }
+  50% { height: 100%; }
+}
+
+@keyframes taj-float0 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
+@keyframes taj-float1 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+@keyframes taj-float2 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+@keyframes taj-float3 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+
+/* ── Abdullah mascot (hero guide) ── */
+@keyframes taj-mascot-in {
+  from { opacity: 0; transform: translateX(-48px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes taj-mascot-idle {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-5px) rotate(-1deg); }
+}
+
+@keyframes taj-bubble-in {
+  0%   { opacity: 0; transform: scale(0.5) translateY(12px); }
+  70%  { opacity: 1; transform: scale(1.06) translateY(-2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}

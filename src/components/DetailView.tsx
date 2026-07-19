@@ -35,144 +35,68 @@ export default function DetailView({
 
   return (
     <div>
-      {/* ─── Hero Banner ─── */}
-      <div
-        style={{
-          position: 'relative',
-          background:
-            'radial-gradient(120% 120% at 50% -10%, #0d4634, #082a1f 55%, #061d16)',
-          padding: '30px 28px',
-          overflow: 'hidden',
-        }}
-      >
+      {/* Hero Banner */}
+      <div className="relative bg-[radial-gradient(120%_120%_at_50%_-10%,_#0d4634,_#082a1f_55%,_#061d16)] px-4 md:px-7 py-[30px] overflow-hidden">
         {/* Crosshatch overlay */}
         <div
+          className="absolute inset-0 opacity-[0.08] pointer-events-none"
           style={{
-            position: 'absolute',
-            inset: 0,
-            opacity: 0.08,
             backgroundImage:
-              'repeating-linear-gradient(45deg, transparent, transparent 10px, #c9a24b 10px, #c9a24b 11px), repeating-linear-gradient(-45deg, transparent, transparent 10px, #c9a24b 10px, #c9a24b 11px)',
-            pointerEvents: 'none',
+              'repeating-linear-gradient(45deg, transparent, transparent 10px, #c19a45 10px, #c19a45 11px), repeating-linear-gradient(-45deg, transparent, transparent 10px, #c19a45 10px, #c19a45 11px)',
           }}
         />
 
         {/* Back button */}
         <button
           onClick={onGoBack}
-          style={{
-            position: 'relative',
-            zIndex: 1,
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 8,
-            background: 'none',
-            border: 'none',
-            color: '#c9a24b',
-            fontFamily: "'Amiri', serif",
-            fontSize: 16,
-            cursor: 'pointer',
-            marginBottom: 12,
-            padding: 0,
-          }}
+          className="relative z-[1] inline-flex items-center gap-2 bg-transparent border-none text-secondary font-amiri text-base cursor-pointer mb-3 p-0"
         >
-          <span style={{ fontSize: 18 }}>&rarr;</span>
+          <span className="text-lg">&rarr;</span>
           <span>كل الأسماء</span>
         </button>
 
         {/* Center content */}
-        <div
-          style={{
-            position: 'relative',
-            zIndex: 1,
-            textAlign: 'center',
-          }}
-        >
+        <div className="relative z-[1] text-center">
           {/* Number circle */}
-          <div
-            style={{
-              width: 42,
-              height: 42,
-              borderRadius: '50%',
-              border: '1px solid #c9a24b88',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 16,
-              color: '#c9a24b',
-              margin: '0 auto 50px',
-            }}
-          >
+          <div className="w-[42px] h-[42px] rounded-full border border-secondary/50 flex items-center justify-center font-cormorant text-base text-secondary mx-auto mb-8 md:mb-[50px]">
             {name.n}
           </div>
 
           {/* Arabic name */}
-          <div
-            className="taj-detail-name"
-            style={{
-              fontFamily: "'Amiri', serif",
-              fontSize: 96,
-              color: '#f4e9c8',
-              lineHeight: 1.2,
-              textShadow: '0 4px 24px rgba(0,0,0,0.4)',
-              marginBottom: 12,
-            }}
-          >
+          <div className="font-amiri text-[44px] sm:text-[56px] md:text-[96px] text-text-hero leading-[1.2] [text-shadow:0_4px_24px_rgba(0,0,0,0.4)] mb-3">
             {name.ar}
           </div>
 
           {/* Transliteration */}
-          <div
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 26,
-              color: '#c9a24b',
-              marginBottom: 8,
-            }}
-          >
+          <div className="font-cormorant text-[20px] md:text-[26px] text-secondary mb-2">
             {name.tr}
           </div>
 
           {/* English meaning */}
-          <div
-            style={{
-              fontSize: 18,
-              color: '#d8e0d3',
-              marginBottom: 28,
-            }}
-          >
+          <div className="text-base md:text-lg text-text-soft mb-4">
             {name.en}
+          </div>
+
+          {/* Verified content badge */}
+          <div className="inline-flex items-center gap-1.5 bg-secondary/10 border border-secondary/40 rounded-full px-3.5 py-1 mb-4 font-naskh text-[11px] md:text-xs text-secondary-light">
+            <span aria-hidden>✓</span> محتوى موثّق ومُراجع علمياً
+          </div>
+
+          {/* Ornamental divider */}
+          <div className="flex items-center justify-center gap-2.5 mb-7">
+            <span className="h-px w-10 bg-gradient-to-l from-secondary/60 to-transparent" />
+            <span className="text-secondary text-sm">&#10022;</span>
+            <span className="h-px w-10 bg-gradient-to-r from-secondary/60 to-transparent" />
           </div>
 
           {/* Play button */}
           <button
             onClick={() => setPlaying(!playing)}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 10,
-              background: 'linear-gradient(135deg, #c9a24b, #a87b2c)',
-              border: 'none',
-              borderRadius: 9999,
-              padding: '10px 24px',
-              cursor: 'pointer',
-              color: '#fff',
-              fontFamily: "'Amiri', serif",
-              fontSize: 15,
-              marginBottom: 32,
-            }}
+            className="inline-flex items-center gap-2.5 bg-gradient-to-br from-secondary to-secondary-dark border-none rounded-full px-6 py-2.5 cursor-pointer text-white font-amiri text-[15px] mb-8"
           >
             <span>استمع للتلاوة</span>
             {/* Equalizer bars */}
-            <span
-              style={{
-                display: 'inline-flex',
-                alignItems: 'flex-end',
-                gap: 2,
-                height: 16,
-              }}
-            >
+            <span className="inline-flex items-end gap-0.5 h-4">
               {[0, 1, 2, 3].map((i) => (
                 <span
                   key={i}
@@ -192,46 +116,16 @@ export default function DetailView({
           </button>
 
           {/* Prev / Next navigation */}
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: 18,
-            }}
-          >
+          <div className="flex justify-center gap-[18px]">
             <button
               onClick={() => onOpenName(prevIndex)}
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: '50%',
-                border: '1px solid #c9a24b55',
-                background: 'rgba(255,255,255,0.06)',
-                color: '#c9a24b',
-                fontSize: 22,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
+              className="w-10 h-10 rounded-full border border-secondary/30 bg-white/[0.06] text-secondary text-[22px] cursor-pointer flex items-center justify-center hover:bg-white/10 transition-colors"
             >
               &lsaquo;
             </button>
             <button
               onClick={() => onOpenName(nextIndex)}
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: '50%',
-                border: '1px solid #c9a24b55',
-                background: 'rgba(255,255,255,0.06)',
-                color: '#c9a24b',
-                fontSize: 22,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
+              className="w-10 h-10 rounded-full border border-secondary/30 bg-white/[0.06] text-secondary text-[22px] cursor-pointer flex items-center justify-center hover:bg-white/10 transition-colors"
             >
               &rsaquo;
             </button>
@@ -239,135 +133,43 @@ export default function DetailView({
         </div>
       </div>
 
-      {/* ─── Content Cards ─── */}
-      <div
-        className="taj-detail-cards"
-        style={{
-          maxWidth: 920,
-          margin: '-34px auto 0',
-          padding: '0 20px 80px',
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 20,
-        }}
-      >
+      {/* Content Cards */}
+      <div className="max-w-[920px] mx-auto -mt-[34px] px-5 pb-20 grid grid-cols-1 gap-5">
         {/* Meaning Card */}
-        <div
-          style={{
-            gridColumn: '1 / -1',
-            backgroundColor: '#fffdf7',
-            border: '1px solid #e6d8b4',
-            borderRadius: 18,
-            padding: '32px 34px',
-            marginTop: '40px',
-          }}
-        >
-          <div
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 12,
-              textTransform: 'uppercase',
-              letterSpacing: 2,
-              color: '#a87b2c',
-              marginBottom: 8,
-            }}
-          >
-            Meaning
+        <div className="bg-cream-light border border-border rounded-[18px] p-6 md:px-[34px] md:py-8 mt-10 border-r-4 border-r-secondary">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="h-px w-6 bg-secondary/50" />
+            <span className="font-cormorant text-xs uppercase tracking-[2px] text-secondary-dark">Meaning</span>
           </div>
-          <h2
-            style={{
-              fontFamily: "'Amiri', serif",
-              fontSize: 26,
-              color: '#0d4634',
-              marginBottom: 16,
-            }}
-          >
+          <h2 className="font-amiri text-[26px] text-primary mb-4">
             المعنى والدلالة
           </h2>
-          <p
-            style={{
-              fontSize: 18,
-              lineHeight: 2,
-              color: '#23302a',
-              fontFamily: "'Amiri', serif",
-            }}
-          >
+          <p className="text-lg leading-[2] text-text-body font-amiri">
             {name.da}
           </p>
         </div>
 
         {/* Quran Card */}
-        <div
-          style={{
-            gridColumn: '1 / -1',
-            background:
-              'radial-gradient(120% 120% at 50% -10%, #0d4634, #082a1f 55%, #061d16)',
-            borderRadius: 18,
-            padding: '32px 34px',
-            color: '#f3ead4',
-          }}
-        >
-          <div
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 12,
-              textTransform: 'uppercase',
-              letterSpacing: 2,
-              color: '#c9a24b',
-              marginBottom: 8,
-            }}
-          >
+        <div className="bg-[radial-gradient(120%_120%_at_50%_-10%,_#0d4634,_#082a1f_55%,_#061d16)] rounded-[18px] p-6 md:px-[34px] md:py-8 text-text-light">
+          <div className="font-cormorant text-xs uppercase tracking-[2px] text-secondary mb-2">
             In the Qur&apos;an
           </div>
-          <h2
-            style={{
-              fontFamily: "'Amiri', serif",
-              fontSize: 26,
-              color: '#f4e9c8',
-              marginBottom: 20,
-            }}
-          >
+          <h2 className="font-amiri text-[26px] text-text-hero mb-5">
             شواهد من القرآن الكريم
           </h2>
 
           {quranRef?.phrase && (
-            <div
-              style={{
-                fontFamily: "'Amiri', serif",
-                fontSize: 27,
-                lineHeight: 2,
-                borderRight: '3px solid #c9a24b',
-                paddingRight: 20,
-                marginBottom: 20,
-                color: '#f4e9c8',
-              }}
-            >
+            <div className="font-amiri text-[21px] md:text-[27px] leading-[2] border-r-[3px] border-secondary pr-4 md:pr-5 mb-5 text-text-hero">
               {quranRef.phrase}
             </div>
           )}
 
           {quranRef?.cites && quranRef.cites.length > 0 && (
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: 10,
-                marginBottom: quranRef.note ? 16 : 0,
-              }}
-            >
+            <div className={`flex flex-wrap gap-2.5 ${quranRef.note ? 'mb-4' : ''}`}>
               {quranRef.cites.map((cite, i) => (
                 <span
                   key={i}
-                  style={{
-                    display: 'inline-block',
-                    backgroundColor: 'rgba(201,162,75,0.15)',
-                    border: '1px solid #c9a24b44',
-                    borderRadius: 9999,
-                    padding: '6px 16px',
-                    fontSize: 14,
-                    color: '#e7cd86',
-                    fontFamily: "'Amiri', serif",
-                  }}
+                  className="inline-block bg-secondary/15 border border-secondary/25 rounded-full px-4 py-1.5 text-sm text-secondary-light font-amiri"
                 >
                   {cite.ar} &mdash; {cite.en}
                 </span>
@@ -376,124 +178,42 @@ export default function DetailView({
           )}
 
           {quranRef?.note && (
-            <p
-              style={{
-                fontSize: 15,
-                color: '#9fb0a4',
-                lineHeight: 1.8,
-                fontFamily: "'Amiri', serif",
-              }}
-            >
+            <p className="text-[15px] text-text-subtle leading-[1.8] font-amiri">
               {quranRef.note}
             </p>
           )}
         </div>
 
         {/* Reflection Card */}
-        <div
-          style={{
-            gridColumn: '1 / -1',
-            backgroundColor: '#fffdf7',
-            border: '1px solid #e6d8b4',
-            borderRadius: 18,
-            padding: '32px 34px',
-          }}
-        >
-          <div
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 12,
-              textTransform: 'uppercase',
-              letterSpacing: 2,
-              color: '#a87b2c',
-              marginBottom: 8,
-            }}
-          >
-            Reflection
+        <div className="bg-cream-light border border-border rounded-[18px] p-6 md:px-[34px] md:py-8 border-r-4 border-r-secondary">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="h-px w-6 bg-secondary/50" />
+            <span className="font-cormorant text-xs uppercase tracking-[2px] text-secondary-dark">Reflection</span>
           </div>
-          <h2
-            style={{
-              fontFamily: "'Amiri', serif",
-              fontSize: 26,
-              color: '#0d4634',
-              marginBottom: 16,
-            }}
-          >
+          <h2 className="font-amiri text-[26px] text-primary mb-4">
             وقفة تأمل
           </h2>
-          <p
-            style={{
-              fontSize: 18,
-              lineHeight: 2,
-              color: '#23302a',
-              fontFamily: "'Amiri', serif",
-            }}
-          >
+          <p className="text-lg leading-[2] text-text-body font-amiri">
             {`معرفةُ الله باسمه «${strippedName}» تملأ القلب يقيناً وطمأنينة، وتدعو العبد إلى التخلّق بأثر هذا الاسم في حياته وسلوكه.`}
           </p>
         </div>
 
         {/* Supplication Card */}
-        <div
-          style={{
-            gridColumn: '1 / -1',
-            backgroundColor: '#f3ecd8',
-            border: '2px dashed #c9a24b',
-            borderRadius: 18,
-            padding: '36px 34px',
-            textAlign: 'center',
-          }}
-        >
-          <div
-            style={{
-              fontFamily: "'Cormorant Garamond', serif",
-              fontSize: 12,
-              textTransform: 'uppercase',
-              letterSpacing: 2,
-              color: '#a87b2c',
-              marginBottom: 12,
-            }}
-          >
+        <div className="bg-cream-warm border-2 border-dashed border-secondary rounded-[18px] p-6 md:px-[34px] md:py-9 text-center">
+          <div className="font-cormorant text-xs uppercase tracking-[2px] text-secondary-dark mb-3">
             Supplication
           </div>
-          <div
-            className="taj-supplication"
-            style={{
-              fontFamily: "'Amiri', serif",
-              fontSize: 34,
-              color: '#0d4634',
-              lineHeight: 1.6,
-            }}
-          >
+          <div className="font-amiri text-[26px] md:text-[34px] text-primary leading-[1.6]">
             {`يَا ${name.ar}`}
           </div>
         </div>
 
         {/* Related Names Card */}
-        <div
-          style={{
-            gridColumn: '1 / -1',
-          }}
-        >
-          <h2
-            style={{
-              fontFamily: "'Amiri', serif",
-              fontSize: 26,
-              color: '#0d4634',
-              marginBottom: 18,
-              textAlign: 'center',
-            }}
-          >
+        <div>
+          <h2 className="font-amiri text-[26px] text-primary mb-[18px] text-center">
             أسماء ذات صلة
           </h2>
-          <div
-            className="taj-related-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, 1fr)',
-              gap: 14,
-            }}
-          >
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
             {relatedIndices.map((idx) => {
               const related = names[idx];
               if (!related) return null;
@@ -501,62 +221,19 @@ export default function DetailView({
                 <div
                   key={related.n}
                   onClick={() => onOpenName(idx)}
-                  style={{
-                    backgroundColor: '#fffdf7',
-                    border: '1px solid #e6d8b4',
-                    borderRadius: 14,
-                    padding: '20px 12px 16px',
-                    textAlign: 'center',
-                    cursor: 'pointer',
-                    transition:
-                      'transform 0.25s ease, box-shadow 0.25s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLDivElement).style.transform =
-                      'translateY(-4px)';
-                    (e.currentTarget as HTMLDivElement).style.boxShadow =
-                      '0 12px 28px #0d463418';
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLDivElement).style.transform =
-                      'translateY(0)';
-                    (e.currentTarget as HTMLDivElement).style.boxShadow =
-                      'none';
-                  }}
+                  className="group relative bg-cream-light border border-border rounded-[14px] px-3 pt-5 pb-4 text-center cursor-pointer overflow-hidden transition-all duration-[250ms] ease-out hover:-translate-y-1 hover:border-secondary hover:shadow-[0_12px_28px_#0d463418]"
                 >
-                  <div
-                    style={{
-                      fontFamily: "'Cormorant Garamond', serif",
-                      fontSize: 11,
-                      color: '#a87b2c',
-                      marginBottom: 6,
-                    }}
-                  >
+                  <div className="absolute bottom-0 inset-x-0 h-1 bg-secondary scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-300" />
+                  <div className="font-cormorant text-[11px] text-secondary-dark mb-1.5">
                     {related.n}
                   </div>
-                  <div
-                    style={{
-                      fontFamily: "'Amiri', serif",
-                      fontSize: 32,
-                      color: '#0d4634',
-                      lineHeight: 1.3,
-                      marginBottom: 6,
-                    }}
-                  >
+                  <div className="font-amiri text-[26px] md:text-[32px] text-primary leading-[1.3] mb-1.5">
                     {related.ar}
                   </div>
-                  <div
-                    style={{
-                      fontFamily: "'Cormorant Garamond', serif",
-                      fontSize: 13,
-                      fontWeight: 600,
-                      color: '#a87b2c',
-                      marginBottom: 3,
-                    }}
-                  >
+                  <div className="font-cormorant text-[13px] font-semibold text-secondary-dark mb-[3px]">
                     {related.tr}
                   </div>
-                  <div style={{ fontSize: 12, color: '#5d6b62' }}>
+                  <div className="text-xs text-text-muted">
                     {related.en}
                   </div>
                 </div>

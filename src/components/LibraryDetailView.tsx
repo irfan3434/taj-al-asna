@@ -11,101 +11,90 @@ export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewP
   return (
     <main>
       {/* Hero */}
-      <section style={{
-        position: 'relative',
-        background: 'radial-gradient(120% 120% at 50% -10%, #0d4634, #082a1f 55%, #061d16)',
-        color: '#f3ead4', padding: '30px 28px 56px', overflow: 'hidden'
-      }}>
-        <div style={{
-          position: 'absolute', inset: 0, opacity: 0.08,
-          backgroundImage: 'repeating-linear-gradient(45deg, #c9a24b 0 1px, transparent 1px 24px), repeating-linear-gradient(-45deg, #c9a24b 0 1px, transparent 1px 24px)'
-        }} />
-        <div style={{ position: 'relative', maxWidth: 980, margin: '0 auto' }}>
-          <button onClick={onGoBack} style={{
-            background: '#ffffff12', border: '1px solid #c9a24b55', color: '#e7cd86',
-            borderRadius: 10, padding: '8px 16px', fontFamily: "'Noto Naskh Arabic', serif",
-            fontSize: 14, cursor: 'pointer'
-          }}>&rarr; المكتبة المعرفية</button>
+      <section className="relative bg-[radial-gradient(120%_120%_at_50%_-10%,var(--color-primary),var(--color-primary-mid)_55%,var(--color-primary-deep))] text-text-light py-[30px] px-4 md:px-7 pb-10 md:pb-14 overflow-hidden">
+        {/* Crosshatch overlay */}
+        <div className="absolute inset-0 opacity-[0.08] bg-[repeating-linear-gradient(45deg,var(--color-secondary)_0_1px,transparent_1px_24px),repeating-linear-gradient(-45deg,var(--color-secondary)_0_1px,transparent_1px_24px)]" />
 
-          <div style={{ display: 'flex', gap: 22, alignItems: 'center', marginTop: 20, flexWrap: 'wrap' }}>
-            <div style={{
-              flex: 'none', width: 90, height: 90, borderRadius: 22,
-              background: 'linear-gradient(135deg, #0f5540, #062017)',
-              border: '1px solid #c9a24b66', display: 'grid', placeItems: 'center',
-              fontSize: 40, color: '#e7cd86'
-            }}>{item.icon}</div>
-            <div style={{ flex: 1, minWidth: 240 }}>
-              <span style={{
-                display: 'inline-block', background: '#062017cc', color: '#c9a24b',
-                fontFamily: 'monospace', fontSize: 12, padding: '4px 12px', borderRadius: 8, marginBottom: 8
-              }}>{item.kind}</span>
-              <div className="taj-libdetail-title" style={{ fontFamily: "'Amiri', serif", fontSize: 38, color: '#f4e9c8', lineHeight: 1.2 }}>{item.ar}</div>
-              <div style={{
-                fontFamily: "'Cormorant Garamond', serif", fontSize: 16,
-                letterSpacing: 2, color: '#c9a24b', marginTop: 2
-              }}>{item.en}</div>
+        <div className="relative max-w-[980px] mx-auto">
+          {/* Back button */}
+          <button
+            onClick={onGoBack}
+            className="bg-white/[0.07] border border-secondary/30 text-secondary-light rounded-[10px] px-4 py-2 font-naskh text-sm cursor-pointer hover:bg-white/[0.12] transition-colors"
+          >
+            &rarr; المكتبة المعرفية
+          </button>
+
+          {/* Icon + Title */}
+          <div className="flex gap-4 md:gap-[22px] items-center mt-5 flex-wrap">
+            {/* Icon box */}
+            <div className="shrink-0 w-[64px] h-[64px] md:w-[90px] md:h-[90px] rounded-2xl md:rounded-[22px] bg-gradient-to-br from-primary-accent to-primary-dark border border-secondary/40 grid place-items-center text-[28px] md:text-[40px] text-secondary-light">
+              {item.icon}
+            </div>
+
+            <div className="flex-1 min-w-[240px]">
+              <span className="inline-block bg-primary-dark/80 text-secondary font-mono text-xs px-3 py-1 rounded-lg mb-2">
+                {item.kind}
+              </span>
+              <div className="font-amiri text-[28px] md:text-[38px] text-text-hero leading-[1.2]">
+                {item.ar}
+              </div>
+              <div className="font-cormorant text-base tracking-[2px] text-secondary mt-0.5">
+                {item.en}
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Content */}
-      <section className="taj-libdetail-content" style={{
-        maxWidth: 980, margin: '0 auto', padding: '40px 28px 80px',
-        display: 'grid', gridTemplateColumns: '1.7fr 1fr', gap: 26, alignItems: 'start'
-      }}>
+      <section className="max-w-[980px] mx-auto px-4 md:px-7 pt-8 md:pt-10 pb-16 md:pb-20 grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-[26px] items-start">
+        {/* Main content */}
         <div>
-          <p style={{ fontSize: 18, lineHeight: 2, color: '#3a473f', margin: '0 0 26px' }}>{item.about}</p>
-          <h3 style={{ fontFamily: "'Amiri', serif", fontSize: 24, color: '#0d4634', margin: '0 0 16px' }}>المحتوى</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div className="font-cormorant text-xs uppercase tracking-[3px] text-secondary-dark mb-2">Overview</div>
+          <p className="text-lg leading-[2] text-text-dark mb-[26px]">{item.about}</p>
+          <h3 className="font-amiri text-2xl text-primary mb-4">المحتوى</h3>
+
+          <div className="flex flex-col gap-2.5">
             {item.entries.map((ent, i) => (
-              <div key={i} style={{
-                display: 'flex', alignItems: 'center', gap: 16,
-                background: '#fffdf7', border: '1px solid #e6d8b4', borderRadius: 14,
-                padding: '16px 18px', cursor: 'pointer', transition: 'all .16s'
-              }}>
-                <div style={{
-                  flex: 'none', width: 40, height: 40, borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #0d4634, #082a1f)',
-                  display: 'grid', placeItems: 'center', color: '#e7cd86', fontSize: 16
-                }}>{item.entryIcon}</div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 16, fontWeight: 600, color: '#23302a' }}>{ent.t}</div>
+              <div
+                key={i}
+                className="group flex items-center gap-3 md:gap-4 bg-cream-light border border-border rounded-[14px] px-3.5 md:px-[18px] py-3.5 md:py-4 cursor-pointer transition-all duration-200 hover:border-secondary hover:shadow-[0_6px_20px_rgba(13,70,52,0.07)] hover:bg-cream-warm/40"
+              >
+                <div className="shrink-0 w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-primary to-primary-mid grid place-items-center text-secondary-light text-sm md:text-base transition-transform duration-200 group-hover:scale-105">
+                  {item.entryIcon}
                 </div>
-                <div style={{ flex: 'none', fontFamily: "'Cormorant Garamond', serif", fontSize: 14, color: '#a87b2c' }}>{ent.meta}</div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm md:text-base font-semibold text-text-body group-hover:text-primary transition-colors">{ent.t}</div>
+                </div>
+                <div className="shrink-0 font-cormorant text-xs md:text-sm text-secondary-dark hidden min-[400px]:block">{ent.meta}</div>
+                <span className="shrink-0 text-secondary-dark opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 hidden md:inline" aria-hidden>&larr;</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Sidebar */}
-        <aside style={{
-          background: 'linear-gradient(160deg, #0d4634, #082a1f)',
-          border: '1px solid #c9a24b44', borderRadius: 20, padding: 28,
-          color: '#f3ead4', position: 'sticky', top: 90
-        }}>
-          <div style={{
-            fontFamily: "'Cormorant Garamond', serif", fontSize: 13,
-            letterSpacing: 3, textTransform: 'uppercase', color: '#c9a24b'
-          }}>About this collection</div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 18, marginTop: 18 }}>
+        <aside className="bg-gradient-to-br from-primary to-primary-mid border border-secondary/25 rounded-[20px] p-7 text-text-light lg:sticky lg:top-[90px]">
+          <div className="font-cormorant text-[13px] tracking-[3px] uppercase text-secondary">
+            About this collection
+          </div>
+
+          <div className="flex flex-col gap-[18px] mt-[18px]">
             {[
               { val: item.stat1, label: 'المحتوى' },
               { val: item.stat2, label: 'الإتاحة' },
               { val: item.stat3, label: 'التحديث' },
             ].map((s, i) => (
               <div key={i}>
-                <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 28, fontWeight: 700, color: '#e7cd86' }}>{s.val}</div>
-                <div style={{ fontSize: 13, color: '#9fb0a4' }}>{s.label}</div>
+                <div className="font-cormorant text-[28px] font-bold text-secondary-light">{s.val}</div>
+                <div className="text-[13px] text-text-subtle">{s.label}</div>
               </div>
             ))}
           </div>
-          <button style={{
-            width: '100%', marginTop: 24,
-            background: 'linear-gradient(135deg, #e7cd86, #c9a24b)',
-            color: '#062017', border: 'none', borderRadius: 12, padding: 13,
-            fontFamily: "'Noto Naskh Arabic', serif", fontSize: 15, fontWeight: 700, cursor: 'pointer'
-          }}>ابدأ الآن</button>
+
+          <button className="w-full mt-6 bg-gradient-to-br from-secondary-light to-secondary text-primary-dark border-none rounded-xl py-[13px] font-naskh text-[15px] font-bold cursor-pointer hover:opacity-90 transition-opacity">
+            ابدأ الآن
+          </button>
         </aside>
       </section>
     </main>

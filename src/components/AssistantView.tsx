@@ -44,81 +44,83 @@ export default function AssistantView({ names }: AssistantViewProps) {
   const suggestions = ['ما معنى اسم الرحمن؟', 'حدّثني عن اسم العليم', 'الفرق بين الرحمن والرحيم'];
 
   return (
-    <main style={{ maxWidth: 840, margin: '0 auto', padding: '40px 28px 60px' }}>
-      <div style={{ textAlign: 'center', marginBottom: 24 }}>
-        <div style={{
-          display: 'inline-grid', placeItems: 'center', width: 60, height: 60,
-          borderRadius: 18, background: 'linear-gradient(135deg, #0d4634, #082a1f)',
-          fontSize: 28, color: '#e7cd86', marginBottom: 12, animation: 'taj-pulse 3s ease-in-out infinite'
-        }}>&#x2726;</div>
-        <h1 style={{ fontFamily: "'Amiri', serif", fontSize: 36, color: '#0d4634', margin: 0 }}>المساعد المعرفي الذكي</h1>
-        <p style={{ color: '#5d6b62', margin: '6px 0 0' }}>اسأل عن أيّ اسمٍ من أسماء الله الحسنى ومعانيه</p>
+    <main className="max-w-[840px] mx-auto px-4 md:px-7 pt-8 md:pt-10 pb-12 md:pb-[60px]">
+      {/* Header */}
+      <div className="text-center mb-6">
+        <div className="inline-grid place-items-center w-[60px] h-[60px] rounded-[18px] bg-gradient-to-br from-primary to-primary-mid text-[28px] text-secondary-light mb-3 animate-[taj-pulse_3s_ease-in-out_infinite]">
+          &#x2726;
+        </div>
+        <h1 className="font-amiri text-[28px] md:text-4xl text-primary m-0">المساعد المعرفي الذكي</h1>
+        <p className="text-text-muted mt-1.5">اسأل عن أيّ اسمٍ من أسماء الله الحسنى ومعانيه</p>
       </div>
 
-      <div style={{
-        background: '#fffdf7', border: '1px solid #e6d8b4', borderRadius: 20,
-        overflow: 'hidden', boxShadow: '0 16px 44px #0d463414'
-      }}>
-        <div ref={chatRef} style={{
-          height: 420, overflowY: 'auto', padding: 24,
-          display: 'flex', flexDirection: 'column', gap: 16
-        }}>
+      {/* Chat container */}
+      <div className="bg-cream-light border border-border rounded-[20px] overflow-hidden shadow-[0_16px_44px_rgba(13,70,52,0.08)]">
+        {/* Messages */}
+        <div
+          ref={chatRef}
+          className="h-[320px] md:h-[420px] overflow-y-auto p-4 md:p-6 flex flex-col gap-4"
+        >
           {chat.map((msg, i) => {
             const isUser = msg.role === 'user';
             return (
-              <div key={i} style={{
-                display: 'flex', gap: 12, alignItems: 'flex-start',
-                flexDirection: isUser ? 'row-reverse' : 'row'
-              }}>
-                <div style={{
-                  flex: 'none', width: 38, height: 38, borderRadius: '50%',
-                  display: 'grid', placeItems: 'center', fontSize: 15,
-                  background: isUser ? '#0d4634' : '#f3ecd8',
-                  color: isUser ? '#e7cd86' : '#a87b2c'
-                }}>{isUser ? 'أنا' : '✦'}</div>
-                <div style={{
-                  maxWidth: '78%', padding: '13px 18px', borderRadius: 16,
-                  fontSize: 16, lineHeight: 1.85, whiteSpace: 'pre-line',
-                  background: isUser ? '#0d4634' : '#f6efdc',
-                  color: isUser ? '#f3ead4' : '#23302a',
-                  border: isUser ? 'none' : '1px solid #e6d8b4'
-                }}>{msg.text}</div>
+              <div
+                key={i}
+                className={`flex gap-3 items-start ${isUser ? 'flex-row-reverse' : 'flex-row'}`}
+              >
+                {/* Avatar */}
+                <div
+                  className={`shrink-0 w-[38px] h-[38px] rounded-full grid place-items-center text-[15px] ${
+                    isUser
+                      ? 'bg-primary text-secondary-light'
+                      : 'bg-cream-warm text-secondary-dark'
+                  }`}
+                >
+                  {isUser ? 'أنا' : '✦'}
+                </div>
+                {/* Bubble */}
+                <div
+                  className={`max-w-[78%] px-[18px] py-[13px] rounded-2xl text-base leading-[1.85] whitespace-pre-line ${
+                    isUser
+                      ? 'bg-primary text-text-light'
+                      : 'bg-cream-warm text-text-body border border-border'
+                  }`}
+                >
+                  {msg.text}
+                </div>
               </div>
             );
           })}
         </div>
 
-        <div style={{
-          borderTop: '1px solid #e6d8b4', padding: 14,
-          display: 'flex', gap: 10, background: '#fbf6e9'
-        }}>
+        {/* Input row */}
+        <div className="border-t border-border p-2.5 md:p-3.5 flex gap-2 md:gap-2.5 bg-[#fbf6e9]">
           <input
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter') send(input); }}
             placeholder="مثال: ما معنى اسم الرحمن؟"
-            style={{
-              flex: 1, border: '1px solid #e6d8b4', borderRadius: 12,
-              outline: 'none', background: '#fffdf7',
-              fontFamily: "'Noto Naskh Arabic', serif", fontSize: 16,
-              color: '#23302a', padding: '12px 16px'
-            }}
+            className="flex-1 min-w-0 border border-border rounded-xl outline-none bg-cream-light font-naskh text-sm md:text-base text-text-body px-3 md:px-4 py-2.5 md:py-3 focus:border-secondary transition-colors"
           />
-          <button onClick={() => send(input)} style={{
-            background: 'linear-gradient(135deg, #0d4634, #082a1f)',
-            color: '#e7cd86', border: 'none', borderRadius: 12, padding: '12px 24px',
-            fontFamily: "'Noto Naskh Arabic', serif", fontSize: 15, fontWeight: 600, cursor: 'pointer'
-          }}>إرسال</button>
+          <button
+            onClick={() => send(input)}
+            className="shrink-0 bg-gradient-to-br from-primary to-primary-mid text-secondary-light border-none rounded-xl px-4 md:px-6 py-2.5 md:py-3 font-naskh text-sm md:text-[15px] font-semibold cursor-pointer hover:opacity-90 transition-opacity"
+          >
+            إرسال
+          </button>
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center', marginTop: 18 }}>
+      {/* Suggestions */}
+      <div className="flex gap-2.5 flex-wrap justify-center mt-[18px]">
         {suggestions.map(s => (
-          <button key={s} onClick={() => send(s)} style={{
-            background: '#fffdf7', border: '1px solid #e6d8b4', color: '#0d4634',
-            borderRadius: 20, padding: '8px 16px',
-            fontFamily: "'Noto Naskh Arabic', serif", fontSize: 14, cursor: 'pointer'
-          }}>{s}</button>
+          <button
+            key={s}
+            onClick={() => send(s)}
+            className="bg-cream-light border border-border text-primary rounded-[20px] px-4 py-2 font-naskh text-sm cursor-pointer hover:border-secondary hover:text-secondary-dark transition-colors"
+          >
+            {s}
+          </button>
         ))}
       </div>
     </main>

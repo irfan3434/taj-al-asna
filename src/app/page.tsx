@@ -10,10 +10,12 @@ import LibraryView from '@/components/LibraryView';
 import LibraryDetailView from '@/components/LibraryDetailView';
 import AssistantView from '@/components/AssistantView';
 import EcosystemView from '@/components/EcosystemView';
+import AboutView from '@/components/AboutView';
+import WaqfView from '@/components/WaqfView';
 import { names, refsByN } from '@/data/names';
 import { libraryData, LibraryItem } from '@/data/library';
 
-type View = 'home' | 'names' | 'detail' | 'library' | 'libdetail' | 'assistant' | 'eco';
+type View = 'home' | 'names' | 'detail' | 'library' | 'libdetail' | 'assistant' | 'eco' | 'about' | 'waqf';
 
 export default function Page() {
   const [view, setView] = useState<View>('home');
@@ -38,13 +40,7 @@ export default function Page() {
   }
 
   return (
-    <div dir="rtl" style={{
-      fontFamily: "'Noto Naskh Arabic', serif",
-      color: '#23302a',
-      background: '#f4ecda',
-      minHeight: '100vh',
-      overflowX: 'hidden'
-    }}>
+    <div dir="rtl" className="font-naskh text-text-body bg-cream min-h-screen overflow-x-hidden">
       <Header onNavigate={navigate} />
 
       {view === 'home' && (
@@ -79,6 +75,14 @@ export default function Page() {
 
       {view === 'eco' && (
         <EcosystemView />
+      )}
+
+      {view === 'about' && (
+        <AboutView onNavigate={navigate} />
+      )}
+
+      {view === 'waqf' && (
+        <WaqfView onNavigate={navigate} />
       )}
 
       <Footer />

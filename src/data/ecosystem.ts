@@ -15,7 +15,16 @@ export const ecoData: EcoNode[] = [
   {ar:'الأثر والاستدامة',tr:'Impact & Sustainability',desc:'تعظيم الأثر الوقفي والمعرفي عبر الأجيال.'}
 ];
 
+/* Node CENTER positions as percentages of the orbital container,
+   so the diagram scales fluidly from mobile to desktop.
+   8 points on the orbit ring at 45° steps. */
 export const ecoPositions = [
-  {l:203,t:8},{l:330,t:60},{l:382,t:203},{l:330,t:346},
-  {l:203,t:398},{l:76,t:346},{l:24,t:203},{l:76,t:60}
+  { l: '50%',    t: '9.4%'  },
+  { l: '76.5%',  t: '20.2%' },
+  { l: '87.3%',  t: '50%'   },
+  { l: '76.5%',  t: '79.8%' },
+  { l: '50%',    t: '90.6%' },
+  { l: '23.5%',  t: '79.8%' },
+  { l: '12.7%',  t: '50%'   },
+  { l: '23.5%',  t: '20.2%' },
 ];

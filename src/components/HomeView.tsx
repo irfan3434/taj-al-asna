@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 
 interface HomeViewProps {
   onNavigate: (view: string) => void;
@@ -8,7 +9,13 @@ interface HomeViewProps {
   names: Array<{ n: number; ar: string; tr: string; en: string; da: string }>;
 }
 
-const FEATURED_HERO_INDICES = [0, 1, 55, 46, 92];
+const HERO_CENTER_IDX = 92; // النور — rests statically inside the ring
+const HERO_CORNERS: { idx: number; pos: string }[] = [
+  { idx: 0, pos: 'top-[18%] left-[6%]' },     // الرحمن
+  { idx: 1, pos: 'top-[18%] right-[6%]' },    // الرحيم
+  { idx: 55, pos: 'bottom-[20%] left-[6%]' }, // الحميد
+  { idx: 46, pos: 'bottom-[20%] right-[6%]' },// الودود
+];
 const FEATURED_NAMES_INDICES = [0, 1, 2, 3, 4, 7, 16, 18];
 
 const COUNTERS = [
@@ -87,27 +94,11 @@ const spinKeyframes = `
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-@keyframes float0 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
-@keyframes float1 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
-@keyframes float2 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
-@keyframes float3 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
-@keyframes float4 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-14px); } }
 `;
-
-const floatPositions: React.CSSProperties[] = [
-  { position: 'absolute' as const, top: '15%', left: '8%', animation: 'float0 4s ease-in-out infinite' },
-  { position: 'absolute' as const, top: '15%', right: '8%', animation: 'float1 5s ease-in-out infinite 0.5s' },
-  { position: 'absolute' as const, bottom: '20%', left: '8%', animation: 'float2 4.5s ease-in-out infinite 1s' },
-  { position: 'absolute' as const, bottom: '20%', right: '8%', animation: 'float3 3.5s ease-in-out infinite 0.3s' },
-  { position: 'absolute' as const, top: '20%', left: '50%', transform: 'translateX(-50%)', },
-];
 
 export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProps) {
   const [query, setQuery] = useState('');
-  const [hoveredHeroCard, setHoveredHeroCard] = useState<number | null>(null);
-  const [hoveredPathway, setHoveredPathway] = useState<number | null>(null);
-  const [hoveredFeaturedCard, setHoveredFeaturedCard] = useState<number | null>(null);
-  const [hoveredCta, setHoveredCta] = useState<number | null>(null);
+  const centerName = names[HERO_CENTER_IDX];
 
   const counters = COUNTERS.map((c) => useAnimatedCounter(c.target));
 
@@ -127,539 +118,342 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
 
       {/* Hero Section */}
       <section
-        className="taj-hero"
-        style={{
-          position: 'relative',
-          minHeight: '100vh',
-          background: 'radial-gradient(ellipse at center, #0d4634 0%, #062017 70%)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '80px 20px',
-          overflow: 'hidden',
-          textAlign: 'center',
-        }}
+        className="relative min-h-screen bg-[radial-gradient(ellipse_at_center,_var(--color-primary)_0%,_var(--color-primary-dark)_70%)] flex flex-col items-center justify-center px-5 py-20 lg:py-20 overflow-hidden text-center"
       >
         {/* Crosshatch Overlay */}
         <div
+          className="absolute inset-0 pointer-events-none"
           style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
             backgroundImage:
-              'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(201,162,75,0.03) 10px, rgba(201,162,75,0.03) 11px), repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(201,162,75,0.03) 10px, rgba(201,162,75,0.03) 11px)',
-            pointerEvents: 'none',
+              'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(193,154,69,0.03) 10px, rgba(193,154,69,0.03) 11px), repeating-linear-gradient(-45deg, transparent, transparent 10px, rgba(193,154,69,0.03) 10px, rgba(193,154,69,0.03) 11px)',
           }}
         />
 
-        {/* Spinning Circle */}
-        <div
-          className="taj-spinner"
-          style={{
-            width: 200,
-            height: 200,
-            borderRadius: '50%',
-            border: '2px solid rgba(201,162,75,0.3)',
-            borderTopColor: '#c9a24b',
-            animation: 'spin 8s linear infinite',
-            marginBottom: 40,
-          }}
-        />
+        {/* Spinning ring with the Name of Light resting still at its centre */}
+        <div className="relative flex items-center justify-center w-[120px] h-[120px] lg:w-[200px] lg:h-[200px] mb-8 lg:mb-10">
+          <div className="absolute inset-0 rounded-full border-2 border-secondary/30 border-t-secondary [animation:spin_8s_linear_infinite]" />
+          {centerName && (
+            <button
+              onClick={() => onOpenName(HERO_CENTER_IDX)}
+              className="relative z-[1] flex flex-col items-center justify-center bg-transparent border-none cursor-pointer"
+            >
+              <span className="font-amiri text-[26px] lg:text-[34px] text-secondary leading-none">{centerName.ar}</span>
+              <span className="font-cormorant text-[10px] lg:text-xs text-secondary-light tracking-[2px] mt-1">{centerName.en}</span>
+            </button>
+          )}
+        </div>
 
         {/* Arabic Title */}
         <h1
-          className="taj-hero-title"
-          style={{
-            fontFamily: "'Amiri', serif",
-            fontSize: 76,
-            color: '#c9a24b',
-            margin: '0 0 16px 0',
-            lineHeight: 1.2,
-            direction: 'rtl',
-          }}
+          className="font-amiri text-[34px] sm:text-[40px] md:text-[58px] lg:text-[76px] text-secondary leading-[1.2] mb-4 rtl"
         >
           أسماءُ اللهِ الحُسنى
         </h1>
 
         {/* English Subtitle */}
         <h2
-          className="taj-hero-subtitle"
-          style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 24,
-            color: '#e7cd86',
-            margin: '0 0 24px 0',
-            fontWeight: 400,
-            letterSpacing: 2,
-          }}
+          className="font-cormorant text-lg md:text-xl lg:text-2xl text-secondary-light mb-6 font-normal tracking-[2px]"
         >
           The 99 Beautiful Names of Allah
         </h2>
 
         {/* Description */}
         <p
-          className="taj-hero-description"
-          style={{
-            fontFamily: "'Noto Naskh Arabic', serif",
-            fontSize: 18,
-            color: '#f3ead4',
-            maxWidth: 500,
-            margin: '0 auto 30px auto',
-            lineHeight: 1.8,
-            direction: 'rtl',
-            opacity: 0.85,
-          }}
+          className="font-naskh text-base lg:text-lg text-text-light max-w-[500px] mx-auto mb-8 leading-[1.8] rtl opacity-85"
         >
           اكتشف أسماء الله الحسنى التسعة والتسعين، تعرّف على معانيها العميقة، وتأمّل في
           جمالها وكمالها. رحلة إيمانية تقرّبك إلى الله.
         </p>
 
         {/* Search Bar */}
-        <div className="taj-hero-search-container" style={{ display: 'flex', justifyContent: 'center', width: '100%', maxWidth : 500, alignItems: 'center', flexDirection: 'row', gap: 12, marginBottom: 40 }}>
-        <div
-         className="taj-hero-search-bar"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            background: 'rgba(255,255,255,0.08)',
-            borderRadius: 50,
-            border: '1px solid rgba(201,162,75,0.3)',
-            padding: '6px 12px 6px 12px',
-            maxWidth: 500,
-            width: '100%',
-          }}
-        >
-          <input
-            className="taj-hero-search-input"
-            type="text"
-            placeholder="ابحث عن اسم..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={handleKeyDown}
-            style={{
-              flex: 1,
-              background: 'transparent',
-              border: 'none',
-              outline: 'none',
-              color: '#f3ead4',
-              fontSize: 16,
-              fontFamily: "'Noto Naskh Arabic', serif",
-              direction: 'rtl',
-            }}
-          />
-          
-        </div>
-        <button
-            className="taj-hero-search-button"
+        <div className="flex justify-center w-full max-w-[500px] items-center gap-2 md:gap-3 mb-10">
+          <div
+            className="flex items-center bg-white/[0.08] rounded-full border border-secondary/30 px-3 py-1.5 flex-1 min-w-0"
+          >
+            <input
+              type="text"
+              placeholder="ابحث عن اسم..."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
+              className="w-full min-w-0 bg-transparent border-none outline-none text-text-light text-base font-naskh rtl placeholder:text-text-light/50"
+            />
+          </div>
+          <button
             onClick={handleSearch}
-            style={{
-              background: '#c9a24b',
-              color: '#062017',
-              border: 'none',
-              borderRadius: 50,
-              padding: '7px 30px',
-              fontSize: 15,
-              fontFamily: "'Noto Naskh Arabic', serif",
-              cursor: 'pointer',
-              fontWeight: 600,
-            }}
+            className="bg-secondary text-primary-dark border-none rounded-full px-5 md:px-8 py-[7px] text-[15px] font-naskh cursor-pointer font-semibold hover:bg-secondary-light transition-colors duration-300 shrink-0"
           >
             بحث
           </button>
         </div>
 
         {/* CTA Buttons */}
-        <div className="taj-cta-row" style={{ display: 'flex', gap: 16, marginBottom: 60 }}>
+        <div className="flex flex-col md:flex-row gap-4 mb-12 lg:mb-16">
           <button
-            onMouseEnter={() => setHoveredCta(0)}
-            onMouseLeave={() => setHoveredCta(null)}
             onClick={() => onNavigate('names')}
-            style={{
-              background: hoveredCta === 0 ? '#e7cd86' : '#c9a24b',
-              color: '#062017',
-              border: 'none',
-              borderRadius: 50,
-              padding: '14px 36px',
-              fontSize: 16,
-              fontFamily: "'Noto Naskh Arabic', serif",
-              cursor: 'pointer',
-              fontWeight: 600,
-              transition: 'background 0.3s',
-            }}
+            className="bg-secondary text-primary-dark border-none rounded-full px-9 py-3.5 text-base font-naskh cursor-pointer font-semibold hover:bg-secondary-light transition-colors duration-300"
           >
             استكشف الأسماء
           </button>
           <button
-            onMouseEnter={() => setHoveredCta(1)}
-            onMouseLeave={() => setHoveredCta(null)}
             onClick={() => onNavigate('assistant')}
-            style={{
-              background: 'transparent',
-              color: hoveredCta === 1 ? '#e7cd86' : '#c9a24b',
-              border: `2px solid ${hoveredCta === 1 ? '#e7cd86' : '#c9a24b'}`,
-              borderRadius: 50,
-              padding: '14px 36px',
-              fontSize: 16,
-              fontFamily: "'Noto Naskh Arabic', serif",
-              cursor: 'pointer',
-              fontWeight: 600,
-              transition: 'all 0.3s',
-            }}
+            className="bg-transparent text-secondary border-2 border-secondary rounded-full px-9 py-3.5 text-base font-naskh cursor-pointer font-semibold hover:text-secondary-light hover:border-secondary-light transition-all duration-300"
           >
             اسأل المساعد
           </button>
         </div>
 
-        {/* Floating Featured Name Cards */}
-        {FEATURED_HERO_INDICES.map((nameIdx, i) => {
-          const name = names[nameIdx];
+        {/* Abdullah — mobile version, in normal flow so it never overlaps */}
+        <button
+          onClick={() => onNavigate('assistant')}
+          aria-label="اسأل المساعد — ماذا تودّ أن تتعلّم اليوم؟"
+          className="md:hidden flex items-end gap-2 -mt-4 bg-transparent border-none cursor-pointer [animation:taj-mascot-in_0.7s_ease-out_0.4s_both]"
+        >
+          <div className="[animation:taj-mascot-idle_4s_ease-in-out_2s_infinite] shrink-0">
+            <Image
+              src="/abdullah.webp"
+              alt="عبدالله — المرشد المعرفي"
+              width={84}
+              height={84}
+              className="w-[80px] h-[80px] object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.35)]"
+            />
+          </div>
+          <div
+            dir="rtl"
+            className="relative mb-5 bg-cream-light text-primary-dark font-naskh text-[13px] leading-[1.7] px-3.5 py-2 rounded-2xl border border-secondary/50 shadow-[0_8px_24px_rgba(6,32,23,0.35)] max-w-[200px] text-right [animation:taj-bubble-in_0.5s_ease-out_1.2s_both]"
+          >
+            مرحباً! ماذا تودّ أن تتعلّم اليوم؟
+            {/* tail — points toward Abdullah (image sits on the right in RTL) */}
+            <span className="absolute -right-[7px] bottom-3 w-3 h-3 bg-cream-light border-r border-t border-secondary/50 rotate-45" aria-hidden />
+          </div>
+        </button>
+
+        {/* Still, symmetrically-placed featured name cards (desktop only) */}
+        {HERO_CORNERS.map(({ idx, pos }) => {
+          const name = names[idx];
           if (!name) return null;
           return (
-            <div
-              key={nameIdx}
-              className="taj-float-card"
-              onClick={() => onOpenName(nameIdx)}
-              onMouseEnter={() => setHoveredHeroCard(i)}
-              onMouseLeave={() => setHoveredHeroCard(null)}
-              style={{
-                ...floatPositions[i],
-                background: hoveredHeroCard === i
-                  ? 'rgba(201,162,75,0.18)'
-                  : 'rgba(201,162,75,0.08)',
-                border: '1px solid rgba(201,162,75,0.25)',
-                borderRadius: 16,
-                padding: '16px 24px',
-                cursor: 'pointer',
-                textAlign: 'center',
-                backdropFilter: 'blur(8px)',
-                transition: 'background 0.3s, transform 0.3s',
-                zIndex: 1,
-              }}
+            <button
+              key={idx}
+              onClick={() => onOpenName(idx)}
+              className={`hidden lg:flex flex-col items-center absolute ${pos} rounded-2xl px-6 py-4 text-center backdrop-blur-sm z-[1] border border-secondary/25 bg-secondary/10 hover:bg-secondary/20 hover:border-secondary/50 transition-colors duration-300 cursor-pointer`}
             >
-              <div
-                style={{
-                  fontFamily: "'Amiri', serif",
-                  fontSize: 28,
-                  color: '#c9a24b',
-                  marginBottom: 4,
-                }}
-              >
+              <span className="font-amiri text-[28px] text-secondary mb-1">
                 {name.ar}
-              </div>
-              <div
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: 13,
-                  color: '#e7cd86',
-                  opacity: 0.8,
-                }}
-              >
+              </span>
+              <span className="font-cormorant text-[13px] text-secondary-light opacity-80">
                 {name.en}
-              </div>
-            </div>
+              </span>
+            </button>
           );
         })}
+
+        {/* Abdullah — the knowledge guide (opens the Assistant) */}
+        <button
+          onClick={() => onNavigate('assistant')}
+          aria-label="اسأل المساعد — ماذا تودّ أن تتعلّم اليوم؟"
+          className="hidden md:flex md:flex-row-reverse absolute bottom-4 right-4 lg:bottom-25 lg:right-50 z-[2] items-end gap-2.5 bg-transparent border-none cursor-pointer group [animation:taj-mascot-in_0.7s_ease-out_0.4s_both]"
+        >
+          <div className="[animation:taj-mascot-idle_4s_ease-in-out_2s_infinite] transition-transform duration-300 group-hover:scale-105">
+            <Image
+              src="/abdullah.webp"
+              alt="عبدالله — المرشد المعرفي" 
+              width={150}
+              height={150}
+              className="w-[150px] h-[150px] lg:w-[150px] lg:h-[150px] object-contain drop-shadow-[0_10px_24px_rgba(0,0,0,0.35)]"
+            />
+          </div>
+          <div
+            dir="rtl"
+            className="relative mb-8 lg:mb-10 bg-cream-light text-primary-dark font-naskh text-sm lg:text-[15px] px-4 py-2.5 rounded-2xl border border-secondary/50 shadow-[0_8px_24px_rgba(6,32,23,0.35)] whitespace-nowrap transition-colors duration-300 group-hover:border-secondary [animation:taj-bubble-in_0.5s_ease-out_1.2s_both]"
+          >
+            مرحباً! ماذا تودّ أن تتعلّم اليوم؟
+            {/* bubble tail — points toward Abdullah (on the right) */}
+            <span className="absolute -right-[7px] bottom-3.5 w-3 h-3 bg-cream-light border-r border-t border-secondary/50 rotate-45" aria-hidden />
+          </div>
+        </button>
       </section>
 
       {/* Counters Section */}
-      <section
-        style={{
-          background: '#062017',
-          padding: '80px 20px',
-        }}
-      >
-        <div
-          className="taj-counters-grid"
-          style={{
-            maxWidth: 1100,
-            margin: '0 auto',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: 32,
-            textAlign: 'center',
-          }}
-        >
-          {COUNTERS.map((counter, i) => (
-            <div key={i} ref={counters[i].ref}>
-              <div
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: 48,
-                  fontWeight: 700,
-                  color: '#c9a24b',
-                  marginBottom: 8,
-                }}
-              >
-                {counters[i].value}
-                {counter.suffix}
-              </div>
-              <div
-                style={{
-                  fontFamily: "'Noto Naskh Arabic', serif",
-                  fontSize: 16,
-                  color: '#f3ead4',
-                  marginBottom: 4,
-                  direction: 'rtl',
-                }}
-              >
-                {counter.label}
-              </div>
-              <div
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: 13,
-                  color: '#e7cd86',
-                  opacity: 0.7,
-                  textTransform: 'uppercase' as const,
-                  letterSpacing: 1,
-                }}
-              >
-                {counter.enLabel}
-              </div>
+      <section className="bg-primary-dark px-5 py-16 lg:py-24 border-y border-secondary/15">
+        <div className="max-w-[1100px] mx-auto">
+          <div className="text-center mb-12">
+            <div className="font-cormorant text-xs lg:text-sm uppercase tracking-[4px] text-secondary">
+              By The Numbers
             </div>
-          ))}
+            <h2 className="font-amiri text-[26px] lg:text-[34px] text-secondary-light mt-2 rtl">
+              أثرٌ يتجاوز الحدود
+            </h2>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-8 md:gap-y-10 gap-x-3 md:gap-x-6 lg:gap-8 text-center">
+            {COUNTERS.map((counter, i) => (
+              <div key={i} ref={counters[i].ref} className="flex flex-col items-center">
+                <div className="font-cormorant text-[32px] md:text-[40px] lg:text-[52px] font-bold text-secondary leading-none">
+                  {counters[i].value}
+                  {counter.suffix}
+                </div>
+                <div className="w-8 h-px bg-secondary/40 my-3" />
+                <div className="font-naskh text-sm lg:text-base text-text-light rtl">
+                  {counter.label}
+                </div>
+                <div className="font-cormorant text-[11px] lg:text-xs text-secondary-light/70 uppercase tracking-[1.5px] mt-1">
+                  {counter.enLabel}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Pathways Section */}
-      <section
-        style={{
-          background: '#f4ecda',
-          padding: '80px 20px',
-        }}
-      >
-        <div
-          className="taj-pathways-grid"
-          style={{
-            maxWidth: 1100,
-            margin: '0 auto',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 32,
-          }}
-        >
-          {PATHWAYS.map((pathway, i) => (
-            <div
-              key={i}
-              onClick={() => onNavigate(pathway.view)}
-              onMouseEnter={() => setHoveredPathway(i)}
-              onMouseLeave={() => setHoveredPathway(null)}
-              style={{
-                background: '#fffdf7',
-                borderRadius: 20,
-                padding: '48px 32px',
-                textAlign: 'center',
-                cursor: 'pointer',
-                border: '1px solid #e6d8b4',
-                transition: 'transform 0.3s, box-shadow 0.3s',
-                transform: hoveredPathway === i ? 'translateY(-6px)' : 'translateY(0)',
-                boxShadow: hoveredPathway === i
-                  ? '0 12px 40px rgba(6,32,23,0.12)'
-                  : '0 4px 16px rgba(6,32,23,0.05)',
-              }}
-            >
-              {/* Icon Container */}
-              <div
-                style={{
-                  width: 72,
-                  height: 72,
-                  borderRadius: '50%',
-                  background: 'linear-gradient(135deg, #062017, #0d4634)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 24px auto',
-                  fontSize: 28,
-                  color: '#c9a24b',
-                }}
-              >
-                {pathway.icon}
-              </div>
-
-              {/* Arabic Title */}
-              <h3
-                style={{
-                  fontFamily: "'Amiri', serif",
-                  fontSize: 26,
-                  color: '#062017',
-                  margin: '0 0 8px 0',
-                  direction: 'rtl',
-                }}
-              >
-                {pathway.arTitle}
-              </h3>
-
-              {/* English Subtitle */}
-              <div
-                style={{
-                  fontFamily: "'Cormorant Garamond', serif",
-                  fontSize: 14,
-                  color: '#a87b2c',
-                  marginBottom: 16,
-                  textTransform: 'uppercase' as const,
-                  letterSpacing: 1.5,
-                }}
-              >
-                {pathway.enTitle}
-              </div>
-
-              {/* Description */}
-              <p
-                style={{
-                  fontFamily: "'Noto Naskh Arabic', serif",
-                  fontSize: 15,
-                  color: '#082a1f',
-                  lineHeight: 1.8,
-                  margin: 0,
-                  direction: 'rtl',
-                  opacity: 0.8,
-                }}
-              >
-                {pathway.description}
-              </p>
+      <section className="bg-cream px-5 py-16 lg:py-24">
+        <div className="max-w-[1100px] mx-auto">
+          <div className="text-center mb-12">
+            <div className="font-cormorant text-xs lg:text-sm uppercase tracking-[4px] text-secondary-dark">
+              Begin Your Journey
             </div>
-          ))}
+            <h2 className="font-amiri text-[30px] lg:text-[40px] text-primary mt-2 rtl">
+              اختر مسارك
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+            {PATHWAYS.map((pathway, i) => (
+              <div
+                key={i}
+                onClick={() => onNavigate(pathway.view)}
+                className="group relative bg-cream-light rounded-[20px] px-6 py-10 lg:px-8 lg:py-12 text-center cursor-pointer border border-border overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:border-secondary/50 shadow-[0_4px_16px_rgba(6,32,23,0.05)] hover:shadow-[0_16px_48px_rgba(6,32,23,0.14)]"
+              >
+                {/* Top accent line — grows on hover */}
+                <div className="absolute top-0 inset-x-0 h-1 bg-secondary scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-300" />
+
+                {/* Icon Container */}
+                <div className="w-[76px] h-[76px] rounded-full bg-[linear-gradient(135deg,var(--color-primary-dark),var(--color-primary))] ring-1 ring-secondary/30 flex items-center justify-center mx-auto mb-6 text-[30px] text-secondary group-hover:text-secondary-light transition-colors duration-300">
+                  {pathway.icon}
+                </div>
+
+                {/* Arabic Title */}
+                <h3 className="font-amiri text-[24px] lg:text-[28px] text-primary-dark mb-2 rtl">
+                  {pathway.arTitle}
+                </h3>
+
+                {/* English Subtitle */}
+                <div className="font-cormorant text-sm text-secondary-dark mb-4 uppercase tracking-[1.5px]">
+                  {pathway.enTitle}
+                </div>
+
+                {/* Description */}
+                <p className="font-naskh text-[15px] text-primary-mid leading-[1.9] rtl opacity-80 mb-5">
+                  {pathway.description}
+                </p>
+
+                {/* Explore hint — reveals on hover */}
+                <span className="font-naskh text-sm text-secondary-dark inline-flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  استكشف <span aria-hidden>←</span>
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Journey Strip */}
+      <section className="bg-cream-warm border-y border-border px-4 md:px-5 py-10 md:py-14">
+        <div className="max-w-[1100px] mx-auto">
+          <div className="text-center mb-8">
+            <div className="font-cormorant text-xs lg:text-sm uppercase tracking-[4px] text-secondary-dark">
+              Your Journey
+            </div>
+            <h2 className="font-amiri text-[26px] md:text-[32px] text-primary mt-2 rtl">
+              رحلتك المعرفية معنا
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-3 lg:grid-cols-6 gap-y-6 gap-x-2 md:gap-4 text-center rtl">
+            {[
+              { icon: '✧', ar: 'الاكتشاف' },
+              { icon: '✦', ar: 'التعلّم' },
+              { icon: '❖', ar: 'التفاعل' },
+              { icon: '◈', ar: 'التخصيص' },
+              { icon: '✺', ar: 'التطبيق' },
+              { icon: '∞', ar: 'أثر دائم' },
+            ].map((step, i) => (
+              <div key={i} className="flex flex-col items-center gap-2">
+                <div className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-primary-dark to-primary ring-1 ring-secondary/30 flex items-center justify-center text-lg text-secondary">
+                  {step.icon}
+                </div>
+                <span className="font-naskh text-[12px] md:text-sm text-primary-dark">{step.ar}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-8">
+            <button
+              onClick={() => onNavigate('about')}
+              className="group bg-transparent border-none text-secondary-dark font-naskh text-sm md:text-[15px] cursor-pointer inline-flex items-center gap-2 hover:text-primary transition-colors duration-300"
+            >
+              تعرّف على رحلتك كاملة
+              <span className="inline-block group-hover:-translate-x-1 transition-transform duration-300" aria-hidden>←</span>
+            </button>
+          </div>
         </div>
       </section>
 
       {/* Featured Names Section */}
-      <section
-        style={{
-          background: '#082a1f',
-          padding: '80px 20px',
-        }}
-      >
-        {/* Header */}
-        <div
-          className="taj-featured-header"
-          style={{
-            maxWidth: 1100,
-            margin: '0 auto 40px auto',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            direction: 'rtl',
-          }}
-        >
-          <h2
-            style={{
-              fontFamily: "'Amiri', serif",
-              fontSize: 36,
-              color: '#c9a24b',
-              margin: 0,
-            }}
-          >
-            أسماء مختارة
-          </h2>
-          <button
-            onClick={() => onNavigate('names')}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: '#e7cd86',
-              fontFamily: "'Noto Naskh Arabic', serif",
-              fontSize: 15,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 8,
-            }}
-          >
-            عرض الكل ←
-          </button>
-        </div>
-
-        {/* Names Grid */}
-        <div
-          className="taj-featured-grid"
-          style={{
-            maxWidth: 1100,
-            margin: '0 auto',
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: 24,
-          }}
-        >
-          {FEATURED_NAMES_INDICES.map((nameIdx, i) => {
-            const name = names[nameIdx];
-            if (!name) return null;
-            return (
-              <div
-                key={nameIdx}
-                onClick={() => onOpenName(nameIdx)}
-                onMouseEnter={() => setHoveredFeaturedCard(i)}
-                onMouseLeave={() => setHoveredFeaturedCard(null)}
-                style={{
-                  background: 'linear-gradient(145deg, #0d4634, #062017)',
-                  borderRadius: 20,
-                  padding: '32px 24px',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                  border: `1px solid ${hoveredFeaturedCard === i ? '#c9a24b' : 'rgba(201,162,75,0.2)'}`,
-                  transition: 'transform 0.3s, border-color 0.3s, box-shadow 0.3s',
-                  transform: hoveredFeaturedCard === i ? 'translateY(-4px)' : 'translateY(0)',
-                  boxShadow: hoveredFeaturedCard === i
-                    ? '0 8px 32px rgba(201,162,75,0.15)'
-                    : 'none',
-                }}
-              >
-                {/* Number */}
-                <div
-                  style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    fontSize: 18,
-                    color: '#a87b2c',
-                    marginBottom: 12,
-                    letterSpacing: 1,
-                  }}
-                >
-                  {name.n}
-                </div>
-
-                {/* Arabic Name */}
-                <div
-                  style={{
-                    fontFamily: "'Amiri', serif",
-                    fontSize: 44,
-                    color: '#c9a24b',
-                    marginBottom: 12,
-                    lineHeight: 1.2,
-                    direction: 'rtl',
-                  }}
-                >
-                  {name.ar}
-                </div>
-
-                {/* Transliteration */}
-                <div
-                  style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    fontSize: 15,
-                    color: '#e7cd86',
-                    marginBottom: 8,
-                    fontStyle: 'italic',
-                  }}
-                >
-                  {name.tr}
-                </div>
-
-                {/* English Meaning */}
-                <div
-                  style={{
-                    fontFamily: "'Cormorant Garamond', serif",
-                    fontSize: 13,
-                    color: '#f3ead4',
-                    opacity: 0.75,
-                  }}
-                >
-                  {name.en}
-                </div>
+      <section className="bg-primary-mid px-5 py-16 lg:py-24">
+        <div className="max-w-[1100px] mx-auto">
+          {/* Header */}
+          <div className="flex flex-wrap justify-between items-end gap-3 mb-10 rtl">
+            <div>
+              <div className="font-cormorant text-xs lg:text-sm uppercase tracking-[4px] text-secondary">
+                Featured
               </div>
-            );
-          })}
+              <h2 className="font-amiri text-[26px] md:text-[30px] lg:text-[40px] text-secondary-light mt-2">
+                أسماء مختارة
+              </h2>
+            </div>
+            <button
+              onClick={() => onNavigate('names')}
+              className="group bg-transparent border-none text-secondary-light font-naskh text-[15px] cursor-pointer flex items-center gap-2 hover:text-secondary transition-colors duration-300 shrink-0"
+            >
+              عرض الكل
+              <span className="inline-block group-hover:-translate-x-1 transition-transform duration-300" aria-hidden>←</span>
+            </button>
+          </div>
+
+          {/* Names Grid */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-6">
+            {FEATURED_NAMES_INDICES.map((nameIdx) => {
+              const name = names[nameIdx];
+              if (!name) return null;
+              return (
+                <div
+                  key={nameIdx}
+                  onClick={() => onOpenName(nameIdx)}
+                  className="group relative bg-[linear-gradient(145deg,var(--color-primary),var(--color-primary-dark))] rounded-[20px] px-3 py-6 md:px-4 md:py-7 lg:px-6 lg:py-9 text-center cursor-pointer border border-secondary/20 transition-all duration-300 hover:-translate-y-1.5 hover:border-secondary/60 hover:shadow-[0_10px_36px_rgba(193,154,69,0.2)]"
+                >
+                  {/* Number badge */}
+                  <div className="absolute top-2.5 right-2.5 md:top-3 md:right-3 w-6 h-6 md:w-7 md:h-7 rounded-full border border-secondary/40 flex items-center justify-center font-cormorant text-[10px] md:text-[11px] text-secondary-dark group-hover:border-secondary group-hover:text-secondary transition-colors duration-300">
+                    {name.n}
+                  </div>
+
+                  {/* Arabic Name */}
+                  <div className="font-amiri text-[26px] md:text-[34px] lg:text-[46px] text-secondary mb-3 mt-2 leading-[1.2] rtl">
+                    {name.ar}
+                  </div>
+
+                  {/* Transliteration */}
+                  <div className="font-cormorant text-sm lg:text-[15px] text-secondary-light mb-1 italic">
+                    {name.tr}
+                  </div>
+
+                  {/* English Meaning */}
+                  <div className="font-cormorant text-xs lg:text-[13px] text-text-light opacity-75">
+                    {name.en}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
     </>

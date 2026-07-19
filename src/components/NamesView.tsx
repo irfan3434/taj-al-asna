@@ -21,65 +21,29 @@ export default function NamesView({ names, onOpenName }: NamesViewProps) {
   });
 
   return (
-    <div
-      style={{
-        maxWidth: 1240,
-        margin: '0 auto',
-        padding: '48px 28px 90px',
-      }}
-    >
+    <div className="max-w-[1240px] mx-auto px-4 md:px-7 pt-8 md:pt-12 pb-16 md:pb-[90px]">
       {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: 32 }}>
-        <div
-          style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: 14,
-            textTransform: 'uppercase',
-            color: '#a87b2c',
-            letterSpacing: 2,
-            marginBottom: 12,
-          }}
-        >
+      <div className="text-center mb-8">
+        <div className="font-cormorant text-sm uppercase text-secondary-dark tracking-[2px] mb-3">
           The Knowledge Engine
         </div>
-        <h1
-          className="taj-names-title"
-          style={{
-            fontFamily: "'Amiri', serif",
-            fontSize: 44,
-            color: '#0d4634',
-            margin: 0,
-            lineHeight: 1.3,
-          }}
-        >
+        <h1 className="font-amiri text-[30px] md:text-[44px] text-primary m-0 leading-[1.3]">
           الأسماء الحسنى التسعة والتسعون
         </h1>
       </div>
 
       {/* Search Bar */}
-      <div
-        style={{
-          maxWidth: 560,
-          margin: '0 auto',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 10,
-          backgroundColor: '#fffdf7',
-          border: '1px solid #e6d8b4',
-          borderRadius: 14,
-          padding: '10px 18px',
-        }}
-      >
+      <div className="max-w-[560px] mx-auto flex items-center gap-2.5 bg-cream-light border border-border rounded-[14px] px-[18px] py-3 shadow-[0_2px_10px_rgba(13,70,52,0.04)] transition-colors duration-200 focus-within:border-secondary focus-within:shadow-[0_4px_18px_rgba(193,154,69,0.12)]">
         <svg
           width="18"
           height="18"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="#a87b2c"
+          stroke="currentColor"
           strokeWidth="2"
           strokeLinecap="round"
           strokeLinejoin="round"
-          style={{ flexShrink: 0 }}
+          className="shrink-0 text-secondary-dark"
         >
           <circle cx="11" cy="11" r="8" />
           <line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -89,38 +53,15 @@ export default function NamesView({ names, onOpenName }: NamesViewProps) {
           value={namesQuery}
           onChange={(e) => setNamesQuery(e.target.value)}
           placeholder="Search by name, transliteration, or meaning..."
-          style={{
-            flex: 1,
-            border: 'none',
-            outline: 'none',
-            backgroundColor: 'transparent',
-            fontSize: 14,
-            color: '#0d4634',
-            fontFamily: "'Cormorant Garamond', serif",
-          }}
+          className="flex-1 border-none outline-none bg-transparent text-sm text-primary font-cormorant placeholder:text-text-muted/70"
         />
-        <span
-          style={{
-            fontSize: 13,
-            color: '#5d6b62',
-            flexShrink: 0,
-            fontFamily: "'Cormorant Garamond', serif",
-          }}
-        >
+        <span className="text-[13px] text-secondary-dark shrink-0 font-cormorant font-semibold tabular-nums">
           {filteredNames.length} / {names.length}
         </span>
       </div>
 
       {/* Grid */}
-      <div
-        className="taj-names-grid"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(212px, 1fr))',
-          gap: 16,
-          marginTop: 30,
-        }}
-      >
+      <div className="grid grid-cols-2 md:grid-cols-[repeat(auto-fill,minmax(212px,1fr))] gap-3 md:gap-4 mt-[30px]">
         {filteredNames.map((name) => (
           <NameCard
             key={name.n}
@@ -140,80 +81,31 @@ function NameCard({
   name: { n: number; ar: string; tr: string; en: string };
   onClick: () => void;
 }) {
-  const [hovered, setHovered] = useState(false);
-
   return (
     <div
       onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        position: 'relative',
-        backgroundColor: '#fffdf7',
-        border: `1px solid ${hovered ? '#c9a24b' : '#e6d8b4'}`,
-        borderRadius: 16,
-        padding: '24px 18px 20px',
-        textAlign: 'center',
-        cursor: 'pointer',
-        transition: 'transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease',
-        transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
-        boxShadow: hovered ? '0 16px 34px #0d463418' : 'none',
-      }}
+      className="group relative bg-cream-light border border-border rounded-2xl px-2.5 pt-6 pb-4 md:px-[18px] md:pb-5 text-center cursor-pointer overflow-hidden transition-all duration-[250ms] ease-out hover:-translate-y-1 hover:shadow-[0_16px_34px_#0d463418] hover:border-secondary"
     >
+      {/* Bottom accent — grows on hover */}
+      <div className="absolute bottom-0 inset-x-0 h-1 bg-secondary scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-300" />
+
       {/* Number Badge */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 10,
-          right: 10,
-          width: 26,
-          height: 26,
-          borderRadius: '50%',
-          border: '1px solid #c9a24b',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: 12,
-          color: '#a87b2c',
-        }}
-      >
+      <div className="absolute top-2.5 right-2.5 w-[26px] h-[26px] rounded-full border border-secondary flex items-center justify-center font-cormorant text-xs text-secondary-dark group-hover:bg-secondary group-hover:text-primary-dark transition-colors duration-300">
         {name.n}
       </div>
 
       {/* Arabic Name */}
-      <div
-        style={{
-          fontFamily: "'Amiri', serif",
-          fontSize: 42,
-          color: '#0d4634',
-          lineHeight: 1.3,
-          marginBottom: 8,
-        }}
-      >
+      <div className="font-amiri text-[30px] md:text-[42px] text-primary leading-[1.3] mb-2">
         {name.ar}
       </div>
 
       {/* Transliteration */}
-      <div
-        style={{
-          fontFamily: "'Cormorant Garamond', serif",
-          fontSize: 14,
-          fontWeight: 600,
-          color: '#a87b2c',
-          marginBottom: 4,
-        }}
-      >
+      <div className="font-cormorant text-sm font-semibold text-secondary-dark mb-1">
         {name.tr}
       </div>
 
       {/* English Meaning */}
-      <div
-        style={{
-          fontSize: 13,
-          color: '#5d6b62',
-        }}
-      >
+      <div className="text-[13px] text-text-muted">
         {name.en}
       </div>
     </div>

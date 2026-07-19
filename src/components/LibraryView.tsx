@@ -1,7 +1,6 @@
 'use client';
 
 import { LibraryItem } from '@/data/library';
-import { useState } from 'react';
 
 interface LibraryViewProps {
   items: LibraryItem[];
@@ -9,38 +8,30 @@ interface LibraryViewProps {
 }
 
 function LibCard({ item, onOpen }: { item: LibraryItem; onOpen: () => void }) {
-  const [hovered, setHovered] = useState(false);
   return (
     <div
       onClick={onOpen}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        cursor: 'pointer', background: '#fffdf7', border: '1px solid ' + (hovered ? '#c9a24b' : '#e6d8b4'),
-        borderRadius: 18, overflow: 'hidden', transition: 'all .2s',
-        transform: hovered ? 'translateY(-4px)' : 'none',
-        boxShadow: hovered ? '0 18px 40px #0d463418' : 'none'
-      }}
+      className="group cursor-pointer bg-cream-light border border-border rounded-[18px] overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:border-secondary hover:shadow-[0_18px_40px_rgba(13,70,52,0.09)]"
     >
-      <div style={{
-        height: 128, background: 'repeating-linear-gradient(135deg, #0d4634 0 14px, #0f4f3a 14px 28px)',
-        display: 'grid', placeItems: 'center', position: 'relative'
-      }}>
-        <span style={{ fontSize: 36, color: '#e7cd86' }}>{item.icon}</span>
-        <span style={{
-          position: 'absolute', bottom: 10, right: 12, background: '#062017cc',
-          color: '#c9a24b', fontFamily: 'monospace', fontSize: 11, padding: '3px 8px', borderRadius: 6
-        }}>{item.kind}</span>
+      {/* Banner */}
+      <div className="h-32 bg-[repeating-linear-gradient(135deg,var(--color-primary)_0_14px,var(--color-primary-accent)_14px_28px)] grid place-items-center relative overflow-hidden">
+        <span className="text-4xl text-secondary-light transition-transform duration-300 group-hover:scale-110">{item.icon}</span>
+        <span className="absolute bottom-2.5 right-3 bg-primary-dark/80 text-secondary font-mono text-[11px] px-2 py-[3px] rounded-md">
+          {item.kind}
+        </span>
+        {/* Verified badge */}
+        <span className="absolute bottom-2.5 left-3 flex items-center gap-1 bg-primary-dark/80 text-secondary-light font-naskh text-[10px] px-2 py-[3px] rounded-md">
+          <span aria-hidden>✓</span> موثّق
+        </span>
       </div>
-      <div style={{ padding: 20 }}>
-        <div style={{ fontSize: 18, fontWeight: 700, color: '#0d4634' }}>{item.ar}</div>
-        <div style={{ fontSize: 14, color: '#5d6b62', lineHeight: 1.7, marginTop: 6 }}>{item.desc}</div>
-        <div style={{
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          marginTop: 14, fontSize: 13, color: '#a87b2c'
-        }}>
+
+      {/* Body */}
+      <div className="p-5">
+        <div className="text-lg font-bold text-primary group-hover:text-secondary-dark transition-colors duration-200">{item.ar}</div>
+        <div className="text-sm text-text-muted leading-[1.7] mt-1.5">{item.desc}</div>
+        <div className="flex justify-between items-center mt-3.5 text-[13px] text-secondary-dark">
           <span>{item.meta}</span>
-          <span style={{ fontFamily: "'Cormorant Garamond', serif" }}>&nearr;</span>
+          <span className="font-cormorant text-lg transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">&nearr;</span>
         </div>
       </div>
     </div>
@@ -49,20 +40,22 @@ function LibCard({ item, onOpen }: { item: LibraryItem; onOpen: () => void }) {
 
 export default function LibraryView({ items, onOpenItem }: LibraryViewProps) {
   return (
-    <main style={{ maxWidth: 1180, margin: '0 auto', padding: '48px 28px 90px' }}>
-      <div style={{ textAlign: 'center', marginBottom: 38 }}>
-        <div style={{
-          fontFamily: "'Cormorant Garamond', serif", fontSize: 14,
-          letterSpacing: 4, textTransform: 'uppercase', color: '#a87b2c'
-        }}>Knowledge Library</div>
-        <h1 style={{ fontFamily: "'Amiri', serif", fontSize: 44, color: '#0d4634', margin: '6px 0 0' }}>
+    <main className="max-w-[1180px] mx-auto px-4 md:px-7 pt-8 md:pt-12 pb-16 md:pb-[90px]">
+      {/* Header */}
+      <div className="text-center mb-[38px]">
+        <div className="font-cormorant text-xs md:text-sm tracking-[4px] uppercase text-secondary-dark">
+          Knowledge Library
+        </div>
+        <h1 className="font-amiri text-[32px] md:text-[44px] text-primary mt-1.5">
           المكتبة المعرفية
         </h1>
-        <p style={{ color: '#5d6b62', fontSize: 16, marginTop: 8 }}>
+        <p className="text-text-muted text-sm md:text-base mt-2 leading-[1.8]">
           مصادر موثوقة: دروس، مقالات، صوتيات، ومحتوى للأطفال والباحثين.
         </p>
       </div>
-      <div className="taj-library-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+
+      {/* Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {items.map(item => (
           <LibCard key={item.id} item={item} onOpen={() => onOpenItem(item)} />
         ))}
