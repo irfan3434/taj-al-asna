@@ -33,8 +33,8 @@ export default function Header({ onNavigate }: HeaderProps) {
       <div className="max-w-[1280px] mx-auto px-4 md:px-7 py-2.5 flex items-center gap-4 md:gap-6">
         {/* Logo */}
         <div onClick={() => handleNav('home')} className="flex items-center gap-2 md:gap-3 cursor-pointer shrink-0">
-          <Image src="/logo.webp" alt="Logo" width={70} height={70}
-            className="w-[44px] h-[44px] md:w-[50px] md:h-[50px] lg:w-[70px] lg:h-[70px]" />
+          <Image src="/logo.webp" alt="شعار التاج الأسنى" width={70} height={63}
+            className="w-[44px] h-[44px] md:w-[50px] md:h-[50px] lg:w-[70px] lg:h-[70px] object-contain" />
           <div className="flex flex-col items-center gap-1.5 md:gap-2 justify-center leading-tight">
             <div className="font-amiri text-base md:text-lg font-bold text-secondary-light">التاج الأسنى</div>
             <div className="font-cormorant text-[10px] md:text-[11px] tracking-[2px] md:tracking-[3px] text-secondary uppercase">Al Taj Al Asna</div>
