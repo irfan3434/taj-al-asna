@@ -41,7 +41,7 @@ export default function Page() {
 
   return (
     <div dir="rtl" className="font-naskh text-text-body bg-cream min-h-screen overflow-x-hidden">
-      <Header onNavigate={navigate} />
+      <Header onNavigate={navigate} active={view} />
 
       {view === 'home' && (
         <HomeView names={names} onNavigate={navigate} onOpenName={openName} />

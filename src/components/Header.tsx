@@ -7,47 +7,71 @@ type View = 'home' | 'names' | 'library' | 'assistant' | 'eco' | 'about' | 'waqf
 
 interface HeaderProps {
   onNavigate: (view: View) => void;
+  /** current view — used to mark the active pill (detail pages map to their parent tab) */
+  active?: string;
 }
 
-const navItems: { view: View; label: string }[] = [
+const navItems: { view: View; label: string; highlight?: boolean }[] = [
   { view: 'home', label: 'الرئيسية' },
   { view: 'names', label: 'الأسماء الحسنى' },
   { view: 'library', label: 'المكتبة' },
   { view: 'assistant', label: 'المساعد الذكي' },
   { view: 'eco', label: 'المنظومة' },
-  { view: 'waqf', label: 'الوقف والأثر' },
   { view: 'about', label: 'عن المنصة' },
+  { view: 'waqf', label: 'الوقف والأثر', highlight: true },
 ];
 
-export default function Header({ onNavigate }: HeaderProps) {
+/** map sub-views to their parent nav tab */
+function parentView(view?: string): string | undefined {
+  if (view === 'detail') return 'names';
+  if (view === 'libdetail') return 'library';
+  return view;
+}
+
+export default function Header({ onNavigate, active }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const current = parentView(active);
 
   function handleNav(view: View) {
     onNavigate(view);
     setMenuOpen(false);
   }
 
+  function pillClasses(view: View, highlight?: boolean) {
+    const base =
+      'border-none cursor-pointer font-naskh font-semibold rounded-lg px-3 py-2 xl:px-5 xl:py-2.5 text-sm xl:text-[15px] whitespace-nowrap transition-all duration-200';
+    if (current === view) {
+      // active page — dark green pill, gold text
+      return `${base} bg-primary text-secondary-light shadow-[0_4px_14px_rgba(13,70,52,0.35)]`;
+    }
+    if (highlight) {
+      // standout CTA — gradient gold with glow
+      return `${base} bg-gradient-to-br from-secondary-light to-secondary-dark text-primary-dark shadow-[0_4px_14px_rgba(193,154,69,0.45)] hover:shadow-[0_6px_20px_rgba(193,154,69,0.6)] hover:-translate-y-0.5`;
+    }
+    // regular pill — flat gold
+    return `${base} bg-secondary text-primary-dark hover:bg-secondary-light hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(193,154,69,0.4)]`;
+  }
+
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-[10px] border-b border-secondary/30"
-      style={{ background: 'linear-gradient(180deg, #06201788, #062017)' }}>
-      <div className="max-w-[1280px] mx-auto px-4 md:px-7 py-2.5 flex items-center gap-4 md:gap-6">
-        {/* Logo */}
-        <div onClick={() => handleNav('home')} className="flex items-center gap-2 md:gap-3 cursor-pointer shrink-0">
-          <Image src="/logo.webp" alt="شعار التاج الأسنى" width={70} height={63}
-            className="w-[44px] h-[44px] md:w-[50px] md:h-[50px] lg:w-[70px] lg:h-[70px] object-contain" />
-          <div className="flex flex-col items-center gap-1.5 md:gap-2 justify-center leading-tight">
-            <div className="font-amiri text-base md:text-lg font-bold text-secondary-light">التاج الأسنى</div>
-            <div className="font-cormorant text-[10px] md:text-[11px] tracking-[2px] md:tracking-[3px] text-secondary uppercase">Al Taj Al Asna</div>
+    <header className="sticky top-0 z-50 bg-cream-light border-b border-secondary/30 shadow-[0_2px_16px_rgba(6,32,23,0.07)]">
+      <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-2.5 md:py-5 flex items-center gap-3 lg:gap-5">
+        {/* Logo — crown emblem in a circular badge, like the reference */}
+        <div onClick={() => handleNav('home')} className="flex items-center gap-2.5 md:gap-3 cursor-pointer shrink-0">
+          <div className="w-11 h-11 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full bg-primary-dark ring-2 ring-secondary/60 flex items-center justify-center p-1.5 md:p-2">
+            <Image src="/logo.webp" alt="شعار التاج الأسنى" width={44} height={40}
+              className="w-full h-full object-contain" />
+          </div>
+          <div className="flex flex-col leading-tight">
+            <span className="font-amiri text-base md:text-lg font-bold text-primary">التاج الأسنى</span>
+            <span className="font-cormorant text-[9px] md:text-[10px] tracking-[2px] text-secondary-dark uppercase">Al Taj Al Asna</span>
           </div>
         </div>
 
-        {/* Nav — hidden on mobile */}
-        <nav className="hidden lg:flex gap-1 flex-1 justify-center">
-          {navItems.map(({ view, label }) => (
-            <button key={view} onClick={() => handleNav(view)}
-              className="group relative bg-transparent border-none cursor-pointer font-naskh text-base xl:text-lg text-text-light px-2.5 xl:px-3.5 py-2 whitespace-nowrap hover:text-secondary-light transition-colors duration-200">
+        {/* Pill Nav — desktop */}
+        <nav className="hidden lg:flex flex-wrap items-center gap-3 xl:gap-5 flex-1 justify-center">
+          {navItems.map(({ view, label, highlight }) => (
+            <button key={view} onClick={() => handleNav(view)} className={pillClasses(view, highlight)}>
               {label}
-              <span className="absolute bottom-1 left-1/2 -translate-x-1/2 h-px w-0 bg-secondary transition-all duration-300 group-hover:w-2/3" />
             </button>
           ))}
         </nav>
@@ -55,54 +79,62 @@ export default function Header({ onNavigate }: HeaderProps) {
         {/* Spacer on mobile */}
         <div className="flex-1 lg:hidden" />
 
-        {/* Actions — hidden on mobile */}
-        <div className="hidden lg:flex items-center gap-2.5 shrink-0">
+        {/* Actions — xl and up */}
+        <div className="hidden xl:flex items-center gap-2.5 shrink-0">
           <button onClick={() => handleNav('names')} title="بحث"
-            className="w-[38px] h-[38px] rounded-full bg-white/5 border border-secondary/30 text-secondary-light cursor-pointer grid place-items-center text-base hover:bg-white/10 transition-colors">
+            className="w-[38px] h-[38px] rounded-full bg-transparent border border-secondary/50 text-secondary-dark cursor-pointer grid place-items-center text-base hover:bg-secondary/10 transition-colors">
             &#x2315;
           </button>
-          <div className="flex items-center border border-secondary/30 rounded-[20px] overflow-hidden font-cormorant font-semibold text-[13px]">
+          <div className="flex items-center border border-secondary/50 rounded-[20px] overflow-hidden font-cormorant font-semibold text-[13px]">
             <span className="bg-secondary text-primary-dark px-3.5 py-1.5">ع</span>
-            <span className="text-secondary px-2.5 py-1.5">EN</span>
+            <span className="text-secondary-dark px-2.5 py-1.5">EN</span>
           </div>
         </div>
 
         {/* Hamburger — mobile only */}
-        <button onClick={() => setMenuOpen(!menuOpen)}
-          className="flex lg:hidden flex-col justify-center items-center gap-[5px] w-10 h-10 rounded-lg bg-white/5 border border-secondary/30 cursor-pointer">
-          <span className="block w-5 h-0.5 bg-secondary-light rounded-sm transition-all duration-300"
+        <button onClick={() => setMenuOpen(!menuOpen)} aria-label="القائمة"
+          className="flex lg:hidden flex-col justify-center items-center gap-[5px] w-10 h-10 rounded-lg bg-secondary border-none cursor-pointer">
+          <span className="block w-5 h-0.5 bg-primary-dark rounded-sm transition-all duration-300"
             style={{ transform: menuOpen ? 'translateY(7px) rotate(45deg)' : 'none' }} />
-          <span className="block w-5 h-0.5 bg-secondary-light rounded-sm transition-opacity duration-300"
+          <span className="block w-5 h-0.5 bg-primary-dark rounded-sm transition-opacity duration-300"
             style={{ opacity: menuOpen ? 0 : 1 }} />
-          <span className="block w-5 h-0.5 bg-secondary-light rounded-sm transition-all duration-300"
+          <span className="block w-5 h-0.5 bg-primary-dark rounded-sm transition-all duration-300"
             style={{ transform: menuOpen ? 'translateY(-7px) rotate(-45deg)' : 'none' }} />
         </button>
       </div>
 
       {/* Mobile Menu Dropdown */}
-      <div className="lg:hidden overflow-hidden transition-all duration-300"
+      <div className="lg:hidden overflow-hidden transition-all duration-300 bg-cream-light"
         style={{
-          maxHeight: menuOpen ? 400 : 0,
+          maxHeight: menuOpen ? 520 : 0,
           opacity: menuOpen ? 1 : 0,
-          background: '#062017ee',
-          borderTop: menuOpen ? '1px solid rgba(193,154,69,0.2)' : 'none',
+          borderTop: menuOpen ? '1px solid rgba(193,154,69,0.3)' : 'none',
         }}>
-        <nav className="flex flex-col px-6 py-4 gap-1">
-          {navItems.map(({ view, label }) => (
-            <button key={view} onClick={() => handleNav(view)}
-              className="bg-transparent border-none cursor-pointer font-naskh text-lg text-text-light py-3 px-4 rounded-xl text-right hover:bg-white/5 transition-colors">
-              {label}
-            </button>
-          ))}
+        <nav className="flex flex-col px-4 py-4 gap-2">
+          {navItems.map(({ view, label, highlight }) => {
+            const isActive = current === view;
+            return (
+              <button key={view} onClick={() => handleNav(view)}
+                className={`border-none cursor-pointer font-naskh font-semibold text-[15px] py-3 px-5 rounded-lg text-right transition-colors duration-200 ${
+                  isActive
+                    ? 'bg-primary text-secondary-light'
+                    : highlight
+                      ? 'bg-gradient-to-br from-secondary-light to-secondary-dark text-primary-dark'
+                      : 'bg-secondary text-primary-dark hover:bg-secondary-light'
+                }`}>
+                {label}
+              </button>
+            );
+          })}
           {/* Mobile actions row */}
-          <div className="flex items-center gap-3 mt-3 pt-3 border-t border-secondary/20 pr-4">
+          <div className="flex items-center gap-3 mt-2 pt-3 border-t border-secondary/30 pr-1">
             <button onClick={() => handleNav('names')} title="بحث"
-              className="w-9 h-9 rounded-full bg-white/5 border border-secondary/30 text-secondary-light cursor-pointer grid place-items-center text-sm">
+              className="w-9 h-9 rounded-full bg-transparent border border-secondary/50 text-secondary-dark cursor-pointer grid place-items-center text-sm">
               &#x2315;
             </button>
-            <div className="flex items-center border border-secondary/30 rounded-[20px] overflow-hidden font-cormorant font-semibold text-xs">
+            <div className="flex items-center border border-secondary/50 rounded-[20px] overflow-hidden font-cormorant font-semibold text-xs">
               <span className="bg-secondary text-primary-dark px-3 py-[5px]">ع</span>
-              <span className="text-secondary px-2.5 py-[5px]">EN</span>
+              <span className="text-secondary-dark px-2.5 py-[5px]">EN</span>
             </div>
           </div>
         </nav>
