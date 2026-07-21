@@ -118,7 +118,7 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
 
       {/* Hero Section */}
       <section
-        className="relative min-h-screen bg-[radial-gradient(ellipse_at_center,_var(--color-primary)_0%,_var(--color-primary-dark)_70%)] flex flex-col items-center justify-center px-5 py-20 lg:py-20 overflow-hidden text-center"
+        className="relative min-h-screen bg-[radial-gradient(ellipse_at_center,_var(--color-primary)_0%,_var(--color-primary-dark)_75%)] flex flex-col items-center justify-center px-5 py-20 overflow-hidden text-center"
       >
         {/* Crosshatch Overlay */}
         <div
@@ -129,31 +129,34 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
           }}
         />
 
-        {/* Spinning ring with the Name of Light resting still at its centre */}
-        <div className="relative flex items-center justify-center w-[120px] h-[120px] lg:w-[200px] lg:h-[200px] mb-8 lg:mb-10">
-          <div className="absolute inset-0 rounded-full border-2 border-secondary/30 border-t-secondary [animation:spin_8s_linear_infinite]" />
+        {/* Name of Light inside the ornamental mandala */}
+        <div className="relative flex items-center justify-center w-[240px] h-[240px] sm:w-[280px] sm:h-[280px] lg:w-[340px] lg:h-[340px] mb-6 lg:mb-8">
+          <Image
+            src="/ornament1.webp"
+            alt=""
+            aria-hidden
+            width={340}
+            height={340}
+            className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none"
+          />
           {centerName && (
             <button
               onClick={() => onOpenName(HERO_CENTER_IDX)}
-              className="relative z-[1] flex flex-col items-center justify-center bg-transparent border-none cursor-pointer"
+              className="translate-y-2 relative z-[1] flex flex-col items-center justify-center bg-transparent border-none cursor-pointer"
             >
-              <span className="font-amiri text-[26px] lg:text-[34px] text-secondary leading-none">{centerName.ar}</span>
-              <span className="font-cormorant text-[10px] lg:text-xs text-secondary-light tracking-[2px] mt-1">{centerName.en}</span>
+              <span className="font-amiri text-[30px] lg:text-[42px] text-secondary leading-none">{centerName.ar}</span>
+              <span className="font-cormorant text-[10px] lg:text-[13px] text-secondary-light tracking-[2px] mt-1">{centerName.en}</span>
             </button>
           )}
         </div>
 
         {/* Arabic Title */}
-        <h1
-          className="font-amiri text-[34px] sm:text-[40px] md:text-[58px] lg:text-[76px] text-secondary leading-[1.2] mb-4 rtl"
-        >
+        <h1 className="font-amiri text-[34px] sm:text-[40px] md:text-[58px] lg:text-[76px] text-secondary leading-[1.2] mb-4 rtl">
           أسماءُ اللهِ الحُسنى
         </h1>
 
         {/* English Subtitle */}
-        <h2
-          className="font-cormorant text-lg md:text-xl lg:text-2xl text-secondary-light mb-6 font-normal tracking-[2px]"
-        >
+        <h2 className="font-cormorant text-lg md:text-xl lg:text-2xl text-secondary-light mb-6 font-normal tracking-[2px]">
           The 99 Beautiful Names of Allah
         </h2>
 
@@ -167,9 +170,7 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
 
         {/* Search Bar */}
         <div className="flex justify-center w-full max-w-[500px] items-center gap-2 md:gap-3 mb-10">
-          <div
-            className="flex items-center bg-white/[0.08] rounded-full border border-secondary/30 px-3 py-1.5 flex-1 min-w-0"
-          >
+          <div className="flex items-center bg-white/[0.08] rounded-full border border-secondary/30 px-3 py-1.5 flex-1 min-w-0">
             <input
               type="text"
               placeholder="ابحث عن اسم..."
@@ -228,7 +229,7 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
           </div>
         </button>
 
-        {/* Still, symmetrically-placed featured name cards (desktop only) */}
+        {/* Featured-name plaques inside the mihrab arch (desktop only) */}
         {HERO_CORNERS.map(({ idx, pos }) => {
           const name = names[idx];
           if (!name) return null;
@@ -236,13 +237,24 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
             <button
               key={idx}
               onClick={() => onOpenName(idx)}
-              className={`hidden lg:flex flex-col items-center absolute ${pos} rounded-2xl px-6 py-4 text-center backdrop-blur-sm z-[1] border border-secondary/25 bg-secondary/10 hover:bg-secondary/20 hover:border-secondary/50 transition-colors duration-300 cursor-pointer`}
+              className={`hidden lg:block absolute ${pos} w-[168px] h-[260px] z-[1] bg-transparent border-none cursor-pointer group`}
             >
-              <span className="font-amiri text-[28px] text-secondary mb-1">
-                {name.ar}
-              </span>
-              <span className="font-cormorant text-[13px] text-secondary-light opacity-80">
-                {name.en}
+              <Image
+                src="/ornament3.webp"
+                alt=""
+                aria-hidden
+                width={168}
+                height={260}
+                className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none transition-transform duration-300 group-hover:scale-[1.04]"
+              />
+              {/* text sits inside the arch body (opening spans ~38%–92% vertically) */}
+              <span className="absolute left-[15%] right-[15%] top-[38%] bottom-[8%] flex flex-col items-center justify-center text-center">
+                <span className="font-amiri text-[30px] leading-tight text-secondary transition-colors duration-300 group-hover:text-secondary-light">
+                  {name.ar}
+                </span>
+                <span className="font-cormorant text-[11px] leading-[1.3] text-secondary-light/85 mt-1.5">
+                  {name.en}
+                </span>
               </span>
             </button>
           );

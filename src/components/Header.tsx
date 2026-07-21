@@ -53,7 +53,7 @@ export default function Header({ onNavigate, active }: HeaderProps) {
   }
 
   return (
-    <header className="sticky top-0 z-50 bg-cream-light border-b border-secondary/30 shadow-[0_2px_16px_rgba(6,32,23,0.07)]">
+    <header className="sticky top-0 z-50 bg-primary-dark border-b border-secondary/30 shadow-[0_2px_16px_rgba(6,32,23,0.07)]">
       <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-2.5 md:py-5 flex items-center gap-3 lg:gap-5">
         {/* Logo — crown emblem in a circular badge, like the reference */}
         <div onClick={() => handleNav('home')} className="flex items-center gap-2.5 md:gap-3 cursor-pointer shrink-0">
@@ -62,8 +62,8 @@ export default function Header({ onNavigate, active }: HeaderProps) {
               className="w-full h-full object-contain" />
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="font-amiri text-base md:text-lg font-bold text-primary">التاج الأسنى</span>
-            <span className="font-cormorant text-[9px] md:text-[10px] tracking-[2px] text-secondary-dark uppercase">Al Taj Al Asna</span>
+            <span className="font-amiri text-base md:text-lg font-bold text-[#c19a45]">التاج الأسنى</span>
+            <span className="font-cormorant text-[9px] md:text-[10px] tracking-[2px] text-[#c19a45] uppercase">Al Taj Al Asna</span>
           </div>
         </div>
 
