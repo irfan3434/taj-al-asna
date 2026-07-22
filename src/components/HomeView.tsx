@@ -96,11 +96,75 @@ const spinKeyframes = `
 }
 `;
 
+/** A featured name inside the mihrab-arch ornament (ornament3). */
+function HeroArchName({
+  ar,
+  en,
+  onClick,
+  className = '',
+}: {
+  ar: string;
+  en: string;
+  onClick: () => void;
+  className?: string;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`bg-transparent border-none cursor-pointer group ${className}`}
+    >
+      <Image
+        src="/ornament3.webp"
+        alt=""
+        aria-hidden
+        width={168}
+        height={260}
+        className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none transition-transform duration-300 group-hover:scale-[1.04]"
+      />
+      {/* text sits inside the arch body (opening spans ~38%–92% vertically) */}
+      <span className="absolute left-[15%] right-[15%] top-[38%] bottom-[8%] flex flex-col items-center justify-center text-center">
+        <span className="font-amiri text-[26px] md:text-[30px] leading-tight text-secondary transition-colors duration-300 group-hover:text-secondary-light">
+          {ar}
+        </span>
+        <span className="font-cormorant text-[10px] md:text-[11px] leading-[1.3] text-secondary-light/85 mt-1.5">
+          {en}
+        </span>
+      </span>
+    </button>
+  );
+}
+
+/** One animated stat in the counters band (owns its own IntersectionObserver counter). */
+function AnimatedCounterItem({
+  target,
+  suffix,
+  label,
+  enLabel,
+}: {
+  target: number;
+  suffix: string;
+  label: string;
+  enLabel: string;
+}) {
+  const { value, ref } = useAnimatedCounter(target);
+  return (
+    <div ref={ref} className="flex flex-col items-center">
+      <div className="font-cormorant text-[32px] md:text-[40px] lg:text-[52px] font-bold text-secondary leading-none">
+        {value}
+        {suffix}
+      </div>
+      <div className="w-8 h-px bg-secondary/40 my-3" />
+      <div className="font-naskh text-sm lg:text-base text-text-light rtl">{label}</div>
+      <div className="font-cormorant text-[11px] lg:text-xs text-secondary-light/70 uppercase tracking-[1.5px] mt-1">
+        {enLabel}
+      </div>
+    </div>
+  );
+}
+
 export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProps) {
   const [query, setQuery] = useState('');
   const centerName = names[HERO_CENTER_IDX];
-
-  const counters = COUNTERS.map((c) => useAnimatedCounter(c.target));
 
   const handleSearch = () => {
     onNavigate('names');
@@ -130,7 +194,7 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
         />
 
         {/* Name of Light inside the ornamental mandala */}
-        <div className="relative flex items-center justify-center w-[240px] h-[240px] sm:w-[280px] sm:h-[280px] lg:w-[340px] lg:h-[340px] mb-6 lg:mb-8">
+        <div className="relative flex items-center justify-center w-[180px] h-[180px] sm:w-[220px] sm:h-[220px] lg:w-[340px] lg:h-[340px] mb-6 lg:mb-8">
           <Image
             src="/ornament1.webp"
             alt=""
@@ -144,8 +208,8 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
               onClick={() => onOpenName(HERO_CENTER_IDX)}
               className="translate-y-2 relative z-[1] flex flex-col items-center justify-center bg-transparent border-none cursor-pointer"
             >
-              <span className="font-amiri text-[30px] lg:text-[42px] text-secondary leading-none">{centerName.ar}</span>
-              <span className="font-cormorant text-[10px] lg:text-[13px] text-secondary-light tracking-[2px] mt-1">{centerName.en}</span>
+              <span className="font-amiri text-[20px] sm:text-[30px] lg:text-[42px] text-secondary leading-none">{centerName.ar}</span>
+              <span className="font-cormorant text-[8px] sm:text-[11px] lg:text-[13px] text-secondary-light tracking-[2px] mt-1.5">{centerName.en}</span>
             </button>
           )}
         </div>
@@ -162,7 +226,7 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
 
         {/* Description */}
         <p
-          className="font-naskh text-base lg:text-lg text-text-light max-w-[500px] mx-auto mb-8 leading-[1.8] rtl opacity-85"
+          className="font-naskh text-base lg:text-lg text-text-light max-w-[500px] mx-auto mb-8 leading-[1.8] rtl opacity-85 text-center"
         >
           اكتشف أسماء الله الحسنى التسعة والتسعين، تعرّف على معانيها العميقة، وتأمّل في
           جمالها وكمالها. رحلة إيمانية تقرّبك إلى الله.
@@ -189,7 +253,7 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
         </div>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col md:flex-row gap-4 mb-12 lg:mb-16">
+        <div className="flex flex-col md:flex-row gap-4 mb-10 lg:mb-16">
           <button
             onClick={() => onNavigate('names')}
             className="bg-secondary text-primary-dark border-none rounded-full px-9 py-3.5 text-base font-naskh cursor-pointer font-semibold hover:bg-secondary-light transition-colors duration-300"
@@ -229,34 +293,35 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
           </div>
         </button>
 
-        {/* Featured-name plaques inside the mihrab arch (desktop only) */}
+        {/* Featured-name arches — mobile & tablet (2×2 grid, below the CTAs) */}
+        <div className="grid grid-cols-2 gap-x-5 gap-y-1 w-full max-w-[340px] mx-auto mt-6 mb-6 lg:hidden">
+          {HERO_CORNERS.map(({ idx }) => {
+            const name = names[idx];
+            if (!name) return null;
+            return (
+              <HeroArchName
+                key={idx}
+                ar={name.ar}
+                en={name.en}
+                onClick={() => onOpenName(idx)}
+                className="relative w-full aspect-[168/260]"
+              />
+            );
+          })}
+        </div>
+
+        {/* Featured-name arches — desktop (flanking the hero) */}
         {HERO_CORNERS.map(({ idx, pos }) => {
           const name = names[idx];
           if (!name) return null;
           return (
-            <button
+            <HeroArchName
               key={idx}
+              ar={name.ar}
+              en={name.en}
               onClick={() => onOpenName(idx)}
-              className={`hidden lg:block absolute ${pos} w-[168px] h-[260px] z-[1] bg-transparent border-none cursor-pointer group`}
-            >
-              <Image
-                src="/ornament3.webp"
-                alt=""
-                aria-hidden
-                width={168}
-                height={260}
-                className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none transition-transform duration-300 group-hover:scale-[1.04]"
-              />
-              {/* text sits inside the arch body (opening spans ~38%–92% vertically) */}
-              <span className="absolute left-[15%] right-[15%] top-[38%] bottom-[8%] flex flex-col items-center justify-center text-center">
-                <span className="font-amiri text-[30px] leading-tight text-secondary transition-colors duration-300 group-hover:text-secondary-light">
-                  {name.ar}
-                </span>
-                <span className="font-cormorant text-[11px] leading-[1.3] text-secondary-light/85 mt-1.5">
-                  {name.en}
-                </span>
-              </span>
-            </button>
+              className={`hidden lg:block absolute ${pos} w-[168px] h-[260px] z-[1]`}
+            />
           );
         })}
 
@@ -299,19 +364,13 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-8 md:gap-y-10 gap-x-3 md:gap-x-6 lg:gap-8 text-center">
             {COUNTERS.map((counter, i) => (
-              <div key={i} ref={counters[i].ref} className="flex flex-col items-center">
-                <div className="font-cormorant text-[32px] md:text-[40px] lg:text-[52px] font-bold text-secondary leading-none">
-                  {counters[i].value}
-                  {counter.suffix}
-                </div>
-                <div className="w-8 h-px bg-secondary/40 my-3" />
-                <div className="font-naskh text-sm lg:text-base text-text-light rtl">
-                  {counter.label}
-                </div>
-                <div className="font-cormorant text-[11px] lg:text-xs text-secondary-light/70 uppercase tracking-[1.5px] mt-1">
-                  {counter.enLabel}
-                </div>
-              </div>
+              <AnimatedCounterItem
+                key={i}
+                target={counter.target}
+                suffix={counter.suffix}
+                label={counter.label}
+                enLabel={counter.enLabel}
+              />
             ))}
           </div>
         </div>
