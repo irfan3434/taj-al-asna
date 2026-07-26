@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { NameData, QuranRef } from '@/data/names';
+import { useLang } from '@/i18n/language';
 
 interface DetailViewProps {
   name: NameData;
@@ -18,6 +19,8 @@ export default function DetailView({
   onOpenName,
   onGoBack,
 }: DetailViewProps) {
+  const { t, isAr } = useLang();
+  const heading = isAr ? 'font-amiri' : 'font-cormorant';
   const [playing, setPlaying] = useState(false);
 
   const currentIndex = names.findIndex((n) => n.n === name.n);
@@ -49,10 +52,10 @@ export default function DetailView({
         {/* Back button */}
         <button
           onClick={onGoBack}
-          className="relative z-[1] inline-flex items-center gap-2 bg-transparent border-none text-secondary font-amiri text-base cursor-pointer mb-3 p-0"
+          className="relative z-[1] inline-flex items-center gap-2 bg-transparent border-none text-secondary font-naskh text-base cursor-pointer mb-3 p-0"
         >
-          <span className="text-lg">&rarr;</span>
-          <span>كل الأسماء</span>
+          <span className="text-lg" aria-hidden>{isAr ? '→' : '←'}</span>
+          <span>{t({ ar: 'كل الأسماء', en: 'All Names' })}</span>
         </button>
 
         {/* Center content */}
@@ -79,7 +82,7 @@ export default function DetailView({
 
           {/* Verified content badge */}
           <div className="inline-flex items-center gap-1.5 bg-secondary/10 border border-secondary/40 rounded-full px-3.5 py-1 mb-4 font-naskh text-[11px] md:text-xs text-secondary-light">
-            <span aria-hidden>✓</span> محتوى موثّق ومُراجع علمياً
+            <span aria-hidden>✓</span> {t({ ar: 'محتوى موثّق ومُراجع علمياً', en: 'Verified & scholarly-reviewed content' })}
           </div>
 
           {/* Ornamental divider */}
@@ -94,7 +97,7 @@ export default function DetailView({
             onClick={() => setPlaying(!playing)}
             className="inline-flex items-center gap-2.5 bg-gradient-to-br from-secondary to-secondary-dark border-none rounded-full px-6 py-2.5 cursor-pointer text-white font-amiri text-[15px] mb-8"
           >
-            <span>استمع للتلاوة</span>
+            <span>{t({ ar: 'استمع للتلاوة', en: 'Listen to the recitation' })}</span>
             {/* Equalizer bars */}
             <span className="inline-flex items-end gap-0.5 h-4">
               {[0, 1, 2, 3].map((i) => (
@@ -141,10 +144,10 @@ export default function DetailView({
             <span className="h-px w-6 bg-secondary/50" />
             <span className="font-cormorant text-xs uppercase tracking-[2px] text-secondary-dark">Meaning</span>
           </div>
-          <h2 className="font-amiri text-[26px] text-primary mb-4">
-            المعنى والدلالة
+          <h2 className={`${heading} text-[26px] text-primary mb-4`}>
+            {t({ ar: 'المعنى والدلالة', en: 'Meaning & Significance' })}
           </h2>
-          <p className="text-lg leading-[2] text-text-body font-amiri">
+          <p className="text-lg leading-[2] text-text-body font-amiri" dir="rtl">
             {name.da}
           </p>
         </div>
@@ -154,12 +157,12 @@ export default function DetailView({
           <div className="font-cormorant text-xs uppercase tracking-[2px] text-secondary mb-2">
             In the Qur&apos;an
           </div>
-          <h2 className="font-amiri text-[26px] text-text-hero mb-5">
-            شواهد من القرآن الكريم
+          <h2 className={`${heading} text-[26px] text-text-hero mb-5`}>
+            {t({ ar: 'شواهد من القرآن الكريم', en: 'Evidence from the Noble Qur’an' })}
           </h2>
 
           {quranRef?.phrase && (
-            <div className="font-amiri text-[21px] md:text-[27px] leading-[2] border-r-[3px] border-secondary pr-4 md:pr-5 mb-5 text-text-hero">
+            <div className="font-amiri text-[21px] md:text-[27px] leading-[2] border-r-[3px] border-secondary pr-4 md:pr-5 mb-5 text-text-hero" dir="rtl">
               {quranRef.phrase}
             </div>
           )}
@@ -178,7 +181,7 @@ export default function DetailView({
           )}
 
           {quranRef?.note && (
-            <p className="text-[15px] text-text-subtle leading-[1.8] font-amiri">
+            <p className="text-[15px] text-text-subtle leading-[1.8] font-amiri" dir="rtl">
               {quranRef.note}
             </p>
           )}
@@ -190,11 +193,13 @@ export default function DetailView({
             <span className="h-px w-6 bg-secondary/50" />
             <span className="font-cormorant text-xs uppercase tracking-[2px] text-secondary-dark">Reflection</span>
           </div>
-          <h2 className="font-amiri text-[26px] text-primary mb-4">
-            وقفة تأمل
+          <h2 className={`${heading} text-[26px] text-primary mb-4`}>
+            {t({ ar: 'وقفة تأمل', en: 'A Moment of Reflection' })}
           </h2>
-          <p className="text-lg leading-[2] text-text-body font-amiri">
-            {`معرفةُ الله باسمه «${strippedName}» تملأ القلب يقيناً وطمأنينة، وتدعو العبد إلى التخلّق بأثر هذا الاسم في حياته وسلوكه.`}
+          <p className="text-lg leading-[2] text-text-body font-amiri" dir={isAr ? 'rtl' : 'ltr'}>
+            {isAr
+              ? `معرفةُ الله باسمه «${strippedName}» تملأ القلب يقيناً وطمأنينة، وتدعو العبد إلى التخلّق بأثر هذا الاسم في حياته وسلوكه.`
+              : `Knowing Allah by His name “${strippedName}” fills the heart with certainty and tranquillity, and calls the servant to embody the effect of this name in their life and conduct.`}
           </p>
         </div>
 
@@ -210,8 +215,8 @@ export default function DetailView({
 
         {/* Related Names Card */}
         <div>
-          <h2 className="font-amiri text-[26px] text-primary mb-[18px] text-center">
-            أسماء ذات صلة
+          <h2 className={`${heading} text-[26px] text-primary mb-[18px] text-center`}>
+            {t({ ar: 'أسماء ذات صلة', en: 'Related Names' })}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3.5">
             {relatedIndices.map((idx) => {

@@ -1,6 +1,7 @@
 'use client';
 
 import { LibraryItem } from '@/data/library';
+import { useLang } from '@/i18n/language';
 
 interface LibraryDetailViewProps {
   item: LibraryItem;
@@ -8,6 +9,14 @@ interface LibraryDetailViewProps {
 }
 
 export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewProps) {
+  const { t, isAr } = useLang();
+
+  const stats = [
+    { val: t({ ar: item.stat1, en: item.stat1En }), label: t({ ar: 'المحتوى', en: 'Content' }) },
+    { val: t({ ar: item.stat2, en: item.stat2En }), label: t({ ar: 'الإتاحة', en: 'Availability' }) },
+    { val: t({ ar: item.stat3, en: item.stat3En }), label: t({ ar: 'التحديث', en: 'Updates' }) },
+  ];
+
   return (
     <main>
       {/* Hero */}
@@ -19,9 +28,9 @@ export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewP
           {/* Back button */}
           <button
             onClick={onGoBack}
-            className="bg-white/[0.07] border border-secondary/30 text-secondary-light rounded-[10px] px-4 py-2 font-naskh text-sm cursor-pointer hover:bg-white/[0.12] transition-colors"
+            className="bg-white/[0.07] border border-secondary/30 text-secondary-light rounded-[10px] px-4 py-2 font-naskh text-sm cursor-pointer hover:bg-white/[0.12] transition-colors inline-flex items-center gap-2"
           >
-            &rarr; المكتبة المعرفية
+            <span aria-hidden>{isAr ? '→' : '←'}</span> {t({ ar: 'المكتبة المعرفية', en: 'Knowledge Library' })}
           </button>
 
           {/* Icon + Title */}
@@ -33,13 +42,13 @@ export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewP
 
             <div className="flex-1 min-w-[240px]">
               <span className="inline-block bg-primary-dark/80 text-secondary font-mono text-xs px-3 py-1 rounded-lg mb-2">
-                {item.kind}
+                {t({ ar: item.kind, en: item.kindEn })}
               </span>
-              <div className="font-amiri text-[28px] md:text-[38px] text-text-hero leading-[1.2]">
-                {item.ar}
+              <div className={`${isAr ? 'font-amiri' : 'font-cormorant'} text-[28px] md:text-[38px] text-text-hero leading-[1.2]`}>
+                {t({ ar: item.ar, en: item.en })}
               </div>
               <div className="font-cormorant text-base tracking-[2px] text-secondary mt-0.5">
-                {item.en}
+                {isAr ? item.en : item.ar}
               </div>
             </div>
           </div>
@@ -51,8 +60,10 @@ export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewP
         {/* Main content */}
         <div>
           <div className="font-cormorant text-xs uppercase tracking-[3px] text-secondary-dark mb-2">Overview</div>
-          <p className="text-lg leading-[2] text-text-dark mb-[26px]">{item.about}</p>
-          <h3 className="font-amiri text-2xl text-primary mb-4">المحتوى</h3>
+          <p className="text-lg leading-[2] text-text-dark mb-[26px]">{t({ ar: item.about, en: item.aboutEn })}</p>
+          <h3 className={`${isAr ? 'font-amiri' : 'font-cormorant'} text-2xl text-primary mb-4`}>
+            {t({ ar: 'المحتوى', en: 'Contents' })}
+          </h3>
 
           <div className="flex flex-col gap-2.5">
             {item.entries.map((ent, i) => (
@@ -64,10 +75,16 @@ export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewP
                   {item.entryIcon}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm md:text-base font-semibold text-text-body group-hover:text-primary transition-colors">{ent.t}</div>
+                  <div className="text-sm md:text-base font-semibold text-text-body group-hover:text-primary transition-colors">
+                    {t({ ar: ent.t, en: ent.tEn })}
+                  </div>
                 </div>
-                <div className="shrink-0 font-cormorant text-xs md:text-sm text-secondary-dark hidden min-[400px]:block">{ent.meta}</div>
-                <span className="shrink-0 text-secondary-dark opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 hidden md:inline" aria-hidden>&larr;</span>
+                <div className="shrink-0 font-cormorant text-xs md:text-sm text-secondary-dark hidden min-[400px]:block">
+                  {t({ ar: ent.meta, en: ent.metaEn })}
+                </div>
+                <span className="shrink-0 text-secondary-dark opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 hidden md:inline" aria-hidden>
+                  {isAr ? '←' : '→'}
+                </span>
               </div>
             ))}
           </div>
@@ -80,11 +97,7 @@ export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewP
           </div>
 
           <div className="flex flex-col gap-[18px] mt-[18px]">
-            {[
-              { val: item.stat1, label: 'المحتوى' },
-              { val: item.stat2, label: 'الإتاحة' },
-              { val: item.stat3, label: 'التحديث' },
-            ].map((s, i) => (
+            {stats.map((s, i) => (
               <div key={i}>
                 <div className="font-cormorant text-[28px] font-bold text-secondary-light">{s.val}</div>
                 <div className="text-[13px] text-text-subtle">{s.label}</div>
@@ -93,7 +106,7 @@ export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewP
           </div>
 
           <button className="w-full mt-6 bg-gradient-to-br from-secondary-light to-secondary text-primary-dark border-none rounded-xl py-[13px] font-naskh text-[15px] font-bold cursor-pointer hover:opacity-90 transition-opacity">
-            ابدأ الآن
+            {t({ ar: 'ابدأ الآن', en: 'Start now' })}
           </button>
         </aside>
       </section>

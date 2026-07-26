@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useLang } from '@/i18n/language';
 
 interface NamesViewProps {
   names: Array<{ n: number; ar: string; tr: string; en: string; da: string }>;
@@ -8,6 +9,7 @@ interface NamesViewProps {
 }
 
 export default function NamesView({ names, onOpenName }: NamesViewProps) {
+  const { t, isAr } = useLang();
   const [namesQuery, setNamesQuery] = useState('');
 
   const filteredNames = names.filter((name) => {
@@ -27,8 +29,8 @@ export default function NamesView({ names, onOpenName }: NamesViewProps) {
         <div className="font-cormorant text-sm uppercase text-secondary-dark tracking-[2px] mb-3">
           The Knowledge Engine
         </div>
-        <h1 className="font-amiri text-[30px] md:text-[44px] text-primary m-0 leading-[1.3]">
-          الأسماء الحسنى التسعة والتسعون
+        <h1 className={`${isAr ? 'font-amiri' : 'font-cormorant'} text-[30px] md:text-[44px] text-primary m-0 leading-[1.3]`}>
+          {t({ ar: 'الأسماء الحسنى التسعة والتسعون', en: 'The Ninety-Nine Beautiful Names' })}
         </h1>
       </div>
 
@@ -52,7 +54,7 @@ export default function NamesView({ names, onOpenName }: NamesViewProps) {
           type="text"
           value={namesQuery}
           onChange={(e) => setNamesQuery(e.target.value)}
-          placeholder="Search by name, transliteration, or meaning..."
+          placeholder={t({ ar: 'ابحث بالاسم أو النطق أو المعنى...', en: 'Search by name, transliteration, or meaning...' })}
           className="flex-1 border-none outline-none bg-transparent text-sm text-primary font-cormorant placeholder:text-text-muted/70"
         />
         <span className="text-[13px] text-secondary-dark shrink-0 font-cormorant font-semibold tabular-nums">

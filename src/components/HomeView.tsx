@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import { useLang, Bi } from '@/i18n/language';
 
 interface HomeViewProps {
   onNavigate: (view: string) => void;
@@ -18,35 +19,50 @@ const HERO_CORNERS: { idx: number; pos: string }[] = [
 ];
 const FEATURED_NAMES_INDICES = [0, 1, 2, 3, 4, 7, 16, 18];
 
-const COUNTERS = [
-  { target: 99, label: 'اسمًا من أسماء الله', enLabel: 'Divine Names', suffix: '' },
-  { target: 100, label: 'مسلم حول العالم', enLabel: 'Muslims Worldwide', suffix: 'M+' },
-  { target: 200, label: 'مرجع ومصدر', enLabel: 'References & Sources', suffix: '+' },
-  { target: 10, label: 'لغة مدعومة', enLabel: 'Supported Languages', suffix: '+' },
+const COUNTERS: { target: number; suffix: string; label: Bi }[] = [
+  { target: 99, suffix: '', label: { ar: 'اسمًا من أسماء الله', en: 'Divine Names' } },
+  { target: 100, suffix: 'M+', label: { ar: 'مسلم حول العالم', en: 'Muslims Worldwide' } },
+  { target: 200, suffix: '+', label: { ar: 'مرجع ومصدر', en: 'References & Sources' } },
+  { target: 10, suffix: '+', label: { ar: 'لغة مدعومة', en: 'Supported Languages' } },
 ];
 
-const PATHWAYS = [
+const PATHWAYS: { icon: string; title: Bi; description: Bi; view: string }[] = [
   {
     icon: '☆',
-    arTitle: 'تعلّم وتأمّل',
-    enTitle: 'Learn & Reflect',
-    description: 'تعرّف على أسماء الله الحسنى، معانيها العميقة، وكيف تتجلّى في حياتنا اليومية.',
+    title: { ar: 'تعلّم وتأمّل', en: 'Learn & Reflect' },
+    description: {
+      ar: 'تعرّف على أسماء الله الحسنى، معانيها العميقة، وكيف تتجلّى في حياتنا اليومية.',
+      en: "Get to know Allah's Beautiful Names, their deep meanings, and how they appear in our everyday lives.",
+    },
     view: 'names',
   },
   {
     icon: '✦',
-    arTitle: 'اسأل المساعد',
-    enTitle: 'Ask the Assistant',
-    description: 'اطرح أسئلتك حول أسماء الله الحسنى واحصل على إجابات مدعومة بالمصادر الموثوقة.',
+    title: { ar: 'اسأل المساعد', en: 'Ask the Assistant' },
+    description: {
+      ar: 'اطرح أسئلتك حول أسماء الله الحسنى واحصل على إجابات مدعومة بالمصادر الموثوقة.',
+      en: "Ask your questions about Allah's Beautiful Names and receive answers grounded in trusted sources.",
+    },
     view: 'assistant',
   },
   {
     icon: '❖',
-    arTitle: 'استكشف المنظومة',
-    enTitle: 'The Ecosystem',
-    description: 'اكتشف الروابط والعلاقات بين أسماء الله الحسنى في منظومة متكاملة ومترابطة.',
-    view: 'ecosystem',
+    title: { ar: 'استكشف المنظومة', en: 'The Ecosystem' },
+    description: {
+      ar: 'اكتشف الروابط والعلاقات بين أسماء الله الحسنى في منظومة متكاملة ومترابطة.',
+      en: "Discover the connections between Allah's Names within one integrated, interconnected ecosystem.",
+    },
+    view: 'eco',
   },
+];
+
+const JOURNEY_STEPS: { icon: string; label: Bi }[] = [
+  { icon: '✧', label: { ar: 'الاكتشاف', en: 'Discovery' } },
+  { icon: '✦', label: { ar: 'التعلّم', en: 'Learning' } },
+  { icon: '❖', label: { ar: 'التفاعل', en: 'Engagement' } },
+  { icon: '◈', label: { ar: 'التخصيص', en: 'Personalization' } },
+  { icon: '✺', label: { ar: 'التطبيق', en: 'Practice' } },
+  { icon: '∞', label: { ar: 'أثر دائم', en: 'Lasting Impact' } },
 ];
 
 function useAnimatedCounter(target: number, duration: number = 1400) {
@@ -135,18 +151,9 @@ function HeroArchName({
 }
 
 /** One animated stat in the counters band (owns its own IntersectionObserver counter). */
-function AnimatedCounterItem({
-  target,
-  suffix,
-  label,
-  enLabel,
-}: {
-  target: number;
-  suffix: string;
-  label: string;
-  enLabel: string;
-}) {
+function AnimatedCounterItem({ target, suffix, label }: { target: number; suffix: string; label: Bi }) {
   const { value, ref } = useAnimatedCounter(target);
+  const { t } = useLang();
   return (
     <div ref={ref} className="flex flex-col items-center">
       <div className="font-cormorant text-[32px] md:text-[40px] lg:text-[52px] font-bold text-secondary leading-none">
@@ -154,17 +161,16 @@ function AnimatedCounterItem({
         {suffix}
       </div>
       <div className="w-8 h-px bg-secondary/40 my-3" />
-      <div className="font-naskh text-sm lg:text-base text-text-light rtl">{label}</div>
-      <div className="font-cormorant text-[11px] lg:text-xs text-secondary-light/70 uppercase tracking-[1.5px] mt-1">
-        {enLabel}
-      </div>
+      <div className="font-naskh text-sm lg:text-base text-text-light">{t(label)}</div>
     </div>
   );
 }
 
 export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProps) {
+  const { t, isAr } = useLang();
   const [query, setQuery] = useState('');
   const centerName = names[HERO_CENTER_IDX];
+  const heading = isAr ? 'font-amiri' : 'font-cormorant';
 
   const handleSearch = () => {
     onNavigate('names');
@@ -175,6 +181,8 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
       handleSearch();
     }
   };
+
+  const mascotGreeting = t({ ar: 'مرحباً! ماذا تودّ أن تتعلّم اليوم؟', en: 'Welcome! What would you like to learn today?' });
 
   return (
     <>
@@ -214,22 +222,22 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
           )}
         </div>
 
-        {/* Arabic Title */}
-        <h1 className="font-amiri text-[34px] sm:text-[40px] md:text-[58px] lg:text-[76px] text-secondary leading-[1.2] mb-4 rtl">
-          أسماءُ اللهِ الحُسنى
+        {/* Primary Title */}
+        <h1 className={`${heading} text-[34px] sm:text-[40px] md:text-[58px] lg:text-[76px] text-secondary leading-[1.2] mb-4`}>
+          {t({ ar: 'أسماءُ اللهِ الحُسنى', en: 'The 99 Beautiful Names of Allah' })}
         </h1>
 
-        {/* English Subtitle */}
-        <h2 className="font-cormorant text-lg md:text-xl lg:text-2xl text-secondary-light mb-6 font-normal tracking-[2px]">
-          The 99 Beautiful Names of Allah
+        {/* Secondary line (opposite language) */}
+        <h2 className={`${isAr ? 'font-cormorant tracking-[2px]' : 'font-amiri'} text-lg md:text-xl lg:text-2xl text-secondary-light mb-6 font-normal`}>
+          {t({ ar: 'The 99 Beautiful Names of Allah', en: 'أسماءُ اللهِ الحُسنى' })}
         </h2>
 
         {/* Description */}
-        <p
-          className="font-naskh text-base lg:text-lg text-text-light max-w-[500px] mx-auto mb-8 leading-[1.8] rtl opacity-85 text-center"
-        >
-          اكتشف أسماء الله الحسنى التسعة والتسعين، تعرّف على معانيها العميقة، وتأمّل في
-          جمالها وكمالها. رحلة إيمانية تقرّبك إلى الله.
+        <p className="font-naskh text-base lg:text-lg text-text-light max-w-[500px] mx-auto mb-8 leading-[1.8] opacity-85 text-center">
+          {t({
+            ar: 'اكتشف أسماء الله الحسنى التسعة والتسعين، تعرّف على معانيها العميقة، وتأمّل في جمالها وكمالها. رحلة إيمانية تقرّبك إلى الله.',
+            en: 'Discover the ninety-nine Beautiful Names of Allah, learn their profound meanings, and reflect on their beauty and perfection — a journey of faith that draws you nearer to Allah.',
+          })}
         </p>
 
         {/* Search Bar */}
@@ -237,18 +245,18 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
           <div className="flex items-center bg-white/[0.08] rounded-full border border-secondary/30 px-3 py-1.5 flex-1 min-w-0">
             <input
               type="text"
-              placeholder="ابحث عن اسم..."
+              placeholder={t({ ar: 'ابحث عن اسم...', en: 'Search for a name...' })}
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="w-full min-w-0 bg-transparent border-none outline-none text-text-light text-base font-naskh rtl placeholder:text-text-light/50"
+              className="w-full min-w-0 bg-transparent border-none outline-none text-text-light text-base font-naskh placeholder:text-text-light/50"
             />
           </div>
           <button
             onClick={handleSearch}
             className="bg-secondary text-primary-dark border-none rounded-full px-5 md:px-8 py-[7px] text-[15px] font-naskh cursor-pointer font-semibold hover:bg-secondary-light transition-colors duration-300 shrink-0"
           >
-            بحث
+            {t({ ar: 'بحث', en: 'Search' })}
           </button>
         </div>
 
@@ -258,36 +266,35 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
             onClick={() => onNavigate('names')}
             className="bg-secondary text-primary-dark border-none rounded-full px-9 py-3.5 text-base font-naskh cursor-pointer font-semibold hover:bg-secondary-light transition-colors duration-300"
           >
-            استكشف الأسماء
+            {t({ ar: 'استكشف الأسماء', en: 'Explore the Names' })}
           </button>
           <button
             onClick={() => onNavigate('assistant')}
             className="bg-transparent text-secondary border-2 border-secondary rounded-full px-9 py-3.5 text-base font-naskh cursor-pointer font-semibold hover:text-secondary-light hover:border-secondary-light transition-all duration-300"
           >
-            اسأل المساعد
+            {t({ ar: 'اسأل المساعد', en: 'Ask the Assistant' })}
           </button>
         </div>
 
         {/* Abdullah — mobile version, in normal flow so it never overlaps */}
         <button
           onClick={() => onNavigate('assistant')}
-          aria-label="اسأل المساعد — ماذا تودّ أن تتعلّم اليوم؟"
+          aria-label={mascotGreeting}
           className="md:hidden flex items-end gap-2 -mt-4 bg-transparent border-none cursor-pointer [animation:taj-mascot-in_0.7s_ease-out_0.4s_both]"
         >
           <div className="[animation:taj-mascot-idle_4s_ease-in-out_2s_infinite] shrink-0">
             <Image
               src="/abdullah.webp"
-              alt="عبدالله — المرشد المعرفي"
+              alt={t({ ar: 'عبدالله — المرشد المعرفي', en: 'Abdullah — the knowledge guide' })}
               width={84}
               height={84}
               className="w-[80px] h-[80px] object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.35)]"
             />
           </div>
           <div
-            dir="rtl"
-            className="relative mb-5 bg-cream-light text-primary-dark font-naskh text-[13px] leading-[1.7] px-3.5 py-2 rounded-2xl border border-secondary/50 shadow-[0_8px_24px_rgba(6,32,23,0.35)] max-w-[200px] text-right [animation:taj-bubble-in_0.5s_ease-out_1.2s_both]"
+            className="relative mb-5 bg-cream-light text-primary-dark font-naskh text-[13px] leading-[1.7] px-3.5 py-2 rounded-2xl border border-secondary/50 shadow-[0_8px_24px_rgba(6,32,23,0.35)] max-w-[210px] text-center [animation:taj-bubble-in_0.5s_ease-out_1.2s_both]"
           >
-            مرحباً! ماذا تودّ أن تتعلّم اليوم؟
+            {mascotGreeting}
             {/* tail — points toward Abdullah (image sits on the right in RTL) */}
             <span className="absolute -right-[7px] bottom-3 w-3 h-3 bg-cream-light border-r border-t border-secondary/50 rotate-45" aria-hidden />
           </div>
@@ -325,26 +332,25 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
           );
         })}
 
-        {/* Abdullah — the knowledge guide (opens the Assistant) */}
+        {/* Abdullah — desktop guide (opens the Assistant) */}
         <button
           onClick={() => onNavigate('assistant')}
-          aria-label="اسأل المساعد — ماذا تودّ أن تتعلّم اليوم؟"
+          aria-label={mascotGreeting}
           className="hidden md:flex md:flex-row-reverse absolute bottom-4 right-4 lg:bottom-25 lg:right-50 z-[2] items-end gap-2.5 bg-transparent border-none cursor-pointer group [animation:taj-mascot-in_0.7s_ease-out_0.4s_both]"
         >
           <div className="[animation:taj-mascot-idle_4s_ease-in-out_2s_infinite] transition-transform duration-300 group-hover:scale-105">
             <Image
               src="/abdullah.webp"
-              alt="عبدالله — المرشد المعرفي" 
+              alt={t({ ar: 'عبدالله — المرشد المعرفي', en: 'Abdullah — the knowledge guide' })}
               width={150}
               height={150}
               className="w-[150px] h-[150px] lg:w-[150px] lg:h-[150px] object-contain drop-shadow-[0_10px_24px_rgba(0,0,0,0.35)]"
             />
           </div>
           <div
-            dir="rtl"
             className="relative mb-8 lg:mb-10 bg-cream-light text-primary-dark font-naskh text-sm lg:text-[15px] px-4 py-2.5 rounded-2xl border border-secondary/50 shadow-[0_8px_24px_rgba(6,32,23,0.35)] whitespace-nowrap transition-colors duration-300 group-hover:border-secondary [animation:taj-bubble-in_0.5s_ease-out_1.2s_both]"
           >
-            مرحباً! ماذا تودّ أن تتعلّم اليوم؟
+            {mascotGreeting}
             {/* bubble tail — points toward Abdullah (on the right) */}
             <span className="absolute -right-[7px] bottom-3.5 w-3 h-3 bg-cream-light border-r border-t border-secondary/50 rotate-45" aria-hidden />
           </div>
@@ -358,19 +364,13 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
             <div className="font-cormorant text-xs lg:text-sm uppercase tracking-[4px] text-secondary">
               By The Numbers
             </div>
-            <h2 className="font-amiri text-[26px] lg:text-[34px] text-secondary-light mt-2 rtl">
-              أثرٌ يتجاوز الحدود
+            <h2 className={`${heading} text-[26px] lg:text-[34px] text-secondary-light mt-2`}>
+              {t({ ar: 'أثرٌ يتجاوز الحدود', en: 'Impact Beyond Borders' })}
             </h2>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-8 md:gap-y-10 gap-x-3 md:gap-x-6 lg:gap-8 text-center">
             {COUNTERS.map((counter, i) => (
-              <AnimatedCounterItem
-                key={i}
-                target={counter.target}
-                suffix={counter.suffix}
-                label={counter.label}
-                enLabel={counter.enLabel}
-              />
+              <AnimatedCounterItem key={i} target={counter.target} suffix={counter.suffix} label={counter.label} />
             ))}
           </div>
         </div>
@@ -383,8 +383,8 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
             <div className="font-cormorant text-xs lg:text-sm uppercase tracking-[4px] text-secondary-dark">
               Begin Your Journey
             </div>
-            <h2 className="font-amiri text-[30px] lg:text-[40px] text-primary mt-2 rtl">
-              اختر مسارك
+            <h2 className={`${heading} text-[30px] lg:text-[40px] text-primary mt-2`}>
+              {t({ ar: 'اختر مسارك', en: 'Choose Your Path' })}
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
@@ -402,24 +402,26 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
                   {pathway.icon}
                 </div>
 
-                {/* Arabic Title */}
-                <h3 className="font-amiri text-[24px] lg:text-[28px] text-primary-dark mb-2 rtl">
-                  {pathway.arTitle}
+                {/* Title */}
+                <h3 className={`${heading} text-[24px] lg:text-[28px] text-primary-dark mb-2`}>
+                  {t(pathway.title)}
                 </h3>
 
-                {/* English Subtitle */}
-                <div className="font-cormorant text-sm text-secondary-dark mb-4 uppercase tracking-[1.5px]">
-                  {pathway.enTitle}
-                </div>
+                {/* English label (shown in Arabic mode as a sub-label) */}
+                {isAr && (
+                  <div className="font-cormorant text-sm text-secondary-dark mb-4 uppercase tracking-[1.5px]">
+                    {pathway.title.en}
+                  </div>
+                )}
 
                 {/* Description */}
-                <p className="font-naskh text-[15px] text-primary-mid leading-[1.9] rtl opacity-80 mb-5">
-                  {pathway.description}
+                <p className="font-naskh text-[15px] text-primary-mid leading-[1.9] opacity-80 mb-5">
+                  {t(pathway.description)}
                 </p>
 
                 {/* Explore hint — reveals on hover */}
                 <span className="font-naskh text-sm text-secondary-dark inline-flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  استكشف <span aria-hidden>←</span>
+                  {t({ ar: 'استكشف', en: 'Explore' })} <span aria-hidden>{isAr ? '←' : '→'}</span>
                 </span>
               </div>
             ))}
@@ -434,25 +436,18 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
             <div className="font-cormorant text-xs lg:text-sm uppercase tracking-[4px] text-secondary-dark">
               Your Journey
             </div>
-            <h2 className="font-amiri text-[26px] md:text-[32px] text-primary mt-2 rtl">
-              رحلتك المعرفية معنا
+            <h2 className={`${heading} text-[26px] md:text-[32px] text-primary mt-2`}>
+              {t({ ar: 'رحلتك المعرفية معنا', en: 'Your Journey With Us' })}
             </h2>
           </div>
 
-          <div className="grid grid-cols-3 lg:grid-cols-6 gap-y-6 gap-x-2 md:gap-4 text-center rtl">
-            {[
-              { icon: '✧', ar: 'الاكتشاف' },
-              { icon: '✦', ar: 'التعلّم' },
-              { icon: '❖', ar: 'التفاعل' },
-              { icon: '◈', ar: 'التخصيص' },
-              { icon: '✺', ar: 'التطبيق' },
-              { icon: '∞', ar: 'أثر دائم' },
-            ].map((step, i) => (
+          <div className="grid grid-cols-3 lg:grid-cols-6 gap-y-6 gap-x-2 md:gap-4 text-center">
+            {JOURNEY_STEPS.map((step, i) => (
               <div key={i} className="flex flex-col items-center gap-2">
                 <div className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-primary-dark to-primary ring-1 ring-secondary/30 flex items-center justify-center text-lg text-secondary">
                   {step.icon}
                 </div>
-                <span className="font-naskh text-[12px] md:text-sm text-primary-dark">{step.ar}</span>
+                <span className="font-naskh text-[12px] md:text-sm text-primary-dark">{t(step.label)}</span>
               </div>
             ))}
           </div>
@@ -462,8 +457,8 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
               onClick={() => onNavigate('about')}
               className="group bg-transparent border-none text-secondary-dark font-naskh text-sm md:text-[15px] cursor-pointer inline-flex items-center gap-2 hover:text-primary transition-colors duration-300"
             >
-              تعرّف على رحلتك كاملة
-              <span className="inline-block group-hover:-translate-x-1 transition-transform duration-300" aria-hidden>←</span>
+              {t({ ar: 'تعرّف على رحلتك كاملة', en: 'See your full journey' })}
+              <span className="inline-block group-hover:-translate-x-1 transition-transform duration-300" aria-hidden>{isAr ? '←' : '→'}</span>
             </button>
           </div>
         </div>
@@ -473,21 +468,21 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
       <section className="bg-primary-mid px-5 py-16 lg:py-24">
         <div className="max-w-[1100px] mx-auto">
           {/* Header */}
-          <div className="flex flex-wrap justify-between items-end gap-3 mb-10 rtl">
+          <div className="flex flex-wrap justify-between items-end gap-3 mb-10">
             <div>
               <div className="font-cormorant text-xs lg:text-sm uppercase tracking-[4px] text-secondary">
                 Featured
               </div>
-              <h2 className="font-amiri text-[26px] md:text-[30px] lg:text-[40px] text-secondary-light mt-2">
-                أسماء مختارة
+              <h2 className={`${heading} text-[26px] md:text-[30px] lg:text-[40px] text-secondary-light mt-2`}>
+                {t({ ar: 'أسماء مختارة', en: 'Featured Names' })}
               </h2>
             </div>
             <button
               onClick={() => onNavigate('names')}
               className="group bg-transparent border-none text-secondary-light font-naskh text-[15px] cursor-pointer flex items-center gap-2 hover:text-secondary transition-colors duration-300 shrink-0"
             >
-              عرض الكل
-              <span className="inline-block group-hover:-translate-x-1 transition-transform duration-300" aria-hidden>←</span>
+              {t({ ar: 'عرض الكل', en: 'View all' })}
+              <span className="inline-block group-hover:-translate-x-1 transition-transform duration-300" aria-hidden>{isAr ? '←' : '→'}</span>
             </button>
           </div>
 
@@ -508,7 +503,7 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
                   </div>
 
                   {/* Arabic Name */}
-                  <div className="font-amiri text-[26px] md:text-[34px] lg:text-[46px] text-secondary mb-3 mt-2 leading-[1.2] rtl">
+                  <div className="font-amiri text-[26px] md:text-[34px] lg:text-[46px] text-secondary mb-3 mt-2 leading-[1.2]">
                     {name.ar}
                   </div>
 

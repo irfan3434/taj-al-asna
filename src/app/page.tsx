@@ -14,10 +14,20 @@ import AboutView from '@/components/AboutView';
 import WaqfView from '@/components/WaqfView';
 import { names, refsByN } from '@/data/names';
 import { libraryData, LibraryItem } from '@/data/library';
+import { LanguageProvider, useLang } from '@/i18n/language';
 
 type View = 'home' | 'names' | 'detail' | 'library' | 'libdetail' | 'assistant' | 'eco' | 'about' | 'waqf';
 
 export default function Page() {
+  return (
+    <LanguageProvider>
+      <AppShell />
+    </LanguageProvider>
+  );
+}
+
+function AppShell() {
+  const { dir } = useLang();
   const [view, setView] = useState<View>('home');
   const [selectedNameIndex, setSelectedNameIndex] = useState<number>(0);
   const [selectedLib, setSelectedLib] = useState<LibraryItem | null>(null);
@@ -40,7 +50,7 @@ export default function Page() {
   }
 
   return (
-    <div dir="rtl" className="font-naskh text-text-body bg-cream min-h-screen overflow-x-hidden">
+    <div dir={dir} className="font-naskh text-text-body bg-cream min-h-screen overflow-x-hidden">
       <Header onNavigate={navigate} active={view} />
 
       {view === 'home' && (
