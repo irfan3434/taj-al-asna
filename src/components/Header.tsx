@@ -1,16 +1,12 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 import { useLang, Bi } from '@/i18n/language';
 
 type View = 'home' | 'names' | 'library' | 'assistant' | 'eco' | 'about' | 'waqf';
-
-interface HeaderProps {
-  onNavigate: (view: View) => void;
-  /** current view — used to mark the active pill (detail pages map to their parent tab) */
-  active?: string;
-}
 
 const navItems: { view: View; label: Bi; highlight?: boolean }[] = [
   { view: 'home', label: { ar: 'الرئيسية', en: 'Home' } },
@@ -22,22 +18,24 @@ const navItems: { view: View; label: Bi; highlight?: boolean }[] = [
   { view: 'waqf', label: { ar: 'الوقف والأثر', en: 'Waqf & Impact' }, highlight: true },
 ];
 
-/** map sub-views to their parent nav tab */
-function parentView(view?: string): string | undefined {
-  if (view === 'detail') return 'names';
-  if (view === 'libdetail') return 'library';
-  return view;
+/** URL for a nav tab: home is the SPA root, the rest are ?v= views on it (real routes come later). */
+function hrefFor(view: View): string {
+  return view === 'home' ? '/' : `/?v=${view}`;
 }
 
-export default function Header({ onNavigate, active }: HeaderProps) {
+export default function Header() {
   const { lang, setLang, t } = useLang();
   const [menuOpen, setMenuOpen] = useState(false);
-  const current = parentView(active);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  function handleNav(view: View) {
-    onNavigate(view);
-    setMenuOpen(false);
-  }
+  // Derive the active tab from the URL: /name/* pages belong to "The Names";
+  // the home SPA reports its section via ?v=; future real routes use the path.
+  const current: string = pathname.startsWith('/name')
+    ? 'names'
+    : pathname === '/'
+      ? searchParams.get('v') || 'home'
+      : pathname.slice(1);
 
   function pillClasses(view: View, highlight?: boolean) {
     const base =
@@ -74,7 +72,7 @@ export default function Header({ onNavigate, active }: HeaderProps) {
     <header className="sticky top-0 z-50 bg-primary-dark border-b border-secondary/30 shadow-[0_2px_16px_rgba(6,32,23,0.07)]">
       <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-2.5 md:py-5 flex items-center gap-3 lg:gap-5">
         {/* Logo — crown emblem in a circular badge */}
-        <div onClick={() => handleNav('home')} className="flex items-center gap-2.5 md:gap-3 cursor-pointer shrink-0">
+        <Link href="/" onClick={() => setMenuOpen(false)} className="flex items-center gap-2.5 md:gap-3 cursor-pointer shrink-0">
           <div className="w-11 h-11 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full bg-primary-dark ring-2 ring-secondary/60 flex items-center justify-center p-1.5 md:p-2">
             <Image src="/logo.webp" alt={t({ ar: 'شعار التاج الأسنى', en: 'Taj Al Asna logo' })} width={44} height={40}
               className="w-full h-full object-contain" />
@@ -87,14 +85,14 @@ export default function Header({ onNavigate, active }: HeaderProps) {
               {t({ ar: 'Al Taj Al Asna', en: 'The 99 Names of Allah' })}
             </span>
           </div>
-        </div>
+        </Link>
 
         {/* Pill Nav — desktop */}
         <nav className="hidden lg:flex flex-wrap items-center gap-3 xl:gap-5 flex-1 justify-center">
           {navItems.map(({ view, label, highlight }) => (
-            <button key={view} onClick={() => handleNav(view)} className={pillClasses(view, highlight)}>
+            <Link key={view} href={hrefFor(view)} className={pillClasses(view, highlight)}>
               {t(label)}
-            </button>
+            </Link>
           ))}
         </nav>
 
@@ -103,10 +101,10 @@ export default function Header({ onNavigate, active }: HeaderProps) {
 
         {/* Actions — xl and up */}
         <div className="hidden xl:flex items-center gap-2.5 shrink-0">
-          <button onClick={() => handleNav('names')} title={t({ ar: 'بحث', en: 'Search' })}
+          <Link href="/?v=names" title={t({ ar: 'بحث', en: 'Search' })}
             className="w-[38px] h-[38px] rounded-full bg-transparent border border-secondary/50 text-secondary-dark cursor-pointer grid place-items-center text-base hover:bg-secondary/10 transition-colors">
             &#x2315;
-          </button>
+          </Link>
           <LangToggle />
         </div>
 
@@ -133,7 +131,7 @@ export default function Header({ onNavigate, active }: HeaderProps) {
           {navItems.map(({ view, label, highlight }) => {
             const isActive = current === view;
             return (
-              <button key={view} onClick={() => handleNav(view)}
+              <Link key={view} href={hrefFor(view)} onClick={() => setMenuOpen(false)}
                 className={`border-none cursor-pointer font-naskh font-semibold text-[15px] py-3 px-5 rounded-lg text-start transition-colors duration-200 ${
                   isActive
                     ? 'bg-primary text-secondary-light'
@@ -142,15 +140,15 @@ export default function Header({ onNavigate, active }: HeaderProps) {
                       : 'bg-secondary text-primary-dark hover:bg-secondary-light'
                 }`}>
                 {t(label)}
-              </button>
+              </Link>
             );
           })}
           {/* Mobile actions row */}
           <div className="flex items-center gap-3 mt-2 pt-3 border-t border-secondary/30 px-1">
-            <button onClick={() => handleNav('names')} title={t({ ar: 'بحث', en: 'Search' })}
+            <Link href="/?v=names" onClick={() => setMenuOpen(false)} title={t({ ar: 'بحث', en: 'Search' })}
               className="w-9 h-9 rounded-full bg-transparent border border-secondary/50 text-secondary-dark cursor-pointer grid place-items-center text-sm">
               &#x2315;
-            </button>
+            </Link>
             <LangToggle small />
           </div>
         </nav>

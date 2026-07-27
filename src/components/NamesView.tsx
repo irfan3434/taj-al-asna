@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useLang } from '@/i18n/language';
 
 interface NamesViewProps {
@@ -8,15 +9,27 @@ interface NamesViewProps {
   onOpenName: (index: number) => void;
 }
 
+/** Drop Arabic diacritics (harakat/tanween/shadda/sukoon) so "الرحمن" matches "الرَّحْمَن". */
+const stripAr = (s: string) => s.replace(/[ًٌٍَُِّْ]/g, '');
+
 export default function NamesView({ names, onOpenName }: NamesViewProps) {
   const { t, isAr } = useLang();
-  const [namesQuery, setNamesQuery] = useState('');
+  const searchParams = useSearchParams();
+  const incomingQuery = searchParams.get('q') || '';
+  const [namesQuery, setNamesQuery] = useState(incomingQuery);
+
+  // Seed the box when arriving from the hero search (?q=...).
+  useEffect(() => {
+    setNamesQuery(incomingQuery);
+  }, [incomingQuery]);
 
   const filteredNames = names.filter((name) => {
-    if (!namesQuery.trim()) return true;
-    const q = namesQuery.trim().toLowerCase();
+    const raw = namesQuery.trim();
+    if (!raw) return true;
+    const q = raw.toLowerCase();
+    const qAr = stripAr(raw);
     return (
-      name.ar.includes(q) ||
+      stripAr(name.ar).includes(qAr) ||
       name.tr.toLowerCase().includes(q) ||
       name.en.toLowerCase().includes(q)
     );
@@ -68,7 +81,7 @@ export default function NamesView({ names, onOpenName }: NamesViewProps) {
           <NameCard
             key={name.n}
             name={name}
-            onClick={() => onOpenName(name.n)}
+            onClick={() => onOpenName(names.indexOf(name))}
           />
         ))}
       </div>

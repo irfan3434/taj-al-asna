@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { useLang, Bi } from '@/i18n/language';
 
 interface HomeViewProps {
-  onNavigate: (view: string) => void;
+  onNavigate: (view: string, query?: string) => void;
   onOpenName: (index: number) => void;
   names: Array<{ n: number; ar: string; tr: string; en: string; da: string }>;
 }
@@ -173,7 +173,7 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
   const heading = isAr ? 'font-amiri' : 'font-cormorant';
 
   const handleSearch = () => {
-    onNavigate('names');
+    onNavigate('names', query.trim());
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {

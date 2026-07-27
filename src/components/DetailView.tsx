@@ -1,23 +1,20 @@
 'use client';
 
 import React, { useState } from 'react';
-import { NameData, QuranRef } from '@/data/names';
+import Link from 'next/link';
+import { NameData, QuranRef, nameSlug } from '@/data/names';
 import { useLang } from '@/i18n/language';
 
 interface DetailViewProps {
   name: NameData;
   quranRef?: QuranRef;
   names: NameData[];
-  onOpenName: (index: number) => void;
-  onGoBack: () => void;
 }
 
 export default function DetailView({
   name,
   quranRef,
   names,
-  onOpenName,
-  onGoBack,
 }: DetailViewProps) {
   const { t, isAr } = useLang();
   const heading = isAr ? 'font-amiri' : 'font-cormorant';
@@ -50,13 +47,13 @@ export default function DetailView({
         />
 
         {/* Back button */}
-        <button
-          onClick={onGoBack}
+        <Link
+          href="/?v=names"
           className="relative z-[1] inline-flex items-center gap-2 bg-transparent border-none text-secondary font-naskh text-base cursor-pointer mb-3 p-0"
         >
           <span className="text-lg" aria-hidden>{isAr ? '→' : '←'}</span>
           <span>{t({ ar: 'كل الأسماء', en: 'All Names' })}</span>
-        </button>
+        </Link>
 
         {/* Center content */}
         <div className="relative z-[1] text-center">
@@ -120,18 +117,20 @@ export default function DetailView({
 
           {/* Prev / Next navigation */}
           <div className="flex justify-center gap-[18px]">
-            <button
-              onClick={() => onOpenName(prevIndex)}
+            <Link
+              href={`/name/${nameSlug(names[prevIndex])}`}
+              aria-label={t({ ar: 'الاسم السابق', en: 'Previous name' })}
               className="w-10 h-10 rounded-full border border-secondary/30 bg-white/[0.06] text-secondary text-[22px] cursor-pointer flex items-center justify-center hover:bg-white/10 transition-colors"
             >
               &lsaquo;
-            </button>
-            <button
-              onClick={() => onOpenName(nextIndex)}
+            </Link>
+            <Link
+              href={`/name/${nameSlug(names[nextIndex])}`}
+              aria-label={t({ ar: 'الاسم التالي', en: 'Next name' })}
               className="w-10 h-10 rounded-full border border-secondary/30 bg-white/[0.06] text-secondary text-[22px] cursor-pointer flex items-center justify-center hover:bg-white/10 transition-colors"
             >
               &rsaquo;
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -223,10 +222,10 @@ export default function DetailView({
               const related = names[idx];
               if (!related) return null;
               return (
-                <div
+                <Link
                   key={related.n}
-                  onClick={() => onOpenName(idx)}
-                  className="group relative bg-cream-light border border-border rounded-[14px] px-3 pt-5 pb-4 text-center cursor-pointer overflow-hidden transition-all duration-[250ms] ease-out hover:-translate-y-1 hover:border-secondary hover:shadow-[0_12px_28px_#0d463418]"
+                  href={`/name/${nameSlug(related)}`}
+                  className="group relative block bg-cream-light border border-border rounded-[14px] px-3 pt-5 pb-4 text-center cursor-pointer overflow-hidden transition-all duration-[250ms] ease-out hover:-translate-y-1 hover:border-secondary hover:shadow-[0_12px_28px_#0d463418]"
                 >
                   <div className="absolute bottom-0 inset-x-0 h-1 bg-secondary scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-300" />
                   <div className="font-cormorant text-[11px] text-secondary-dark mb-1.5">
@@ -241,7 +240,7 @@ export default function DetailView({
                   <div className="text-xs text-text-muted">
                     {related.en}
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

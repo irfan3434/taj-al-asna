@@ -215,3 +215,31 @@ export const refsByN: Record<number, QuranRef> = {
   98:{phrase:'',cites:[{ar:'الجن ١٠',en:'72:10'}],note:'الرشيد بالاشتقاق من «الرشد»، وثبت في حديث الأسماء.'},
   99:{phrase:'',cites:[],note:'ثبت في حديث الأسماء الحسنى، ودلّ القرآن على معناه بكثرة ذكر الصبر والحلم.'},
 };
+
+/** Turn a transliteration into a URL-safe slug, e.g. "Ar-Rahman" → "ar-rahman". */
+export function slugify(input: string): string {
+  return input
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+/** number → slug, and slug → name. Built once, with collisions disambiguated by name number. */
+export const slugByN: Record<number, string> = {};
+export const nameBySlug: Record<string, NameData> = {};
+
+(() => {
+  const used = new Set<string>();
+  for (const name of names) {
+    let slug = slugify(name.tr);
+    if (used.has(slug)) slug = `${slug}-${name.n}`;
+    used.add(slug);
+    slugByN[name.n] = slug;
+    nameBySlug[slug] = name;
+  }
+})();
+
+/** Stable, URL-safe slug for a given name (e.g. used in /name/[slug] links). */
+export function nameSlug(name: NameData): string {
+  return slugByN[name.n];
+}
