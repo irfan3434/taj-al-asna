@@ -11,9 +11,9 @@ interface LibraryViewProps {
 function LibCard({ item, onOpen }: { item: LibraryItem; onOpen: () => void }) {
   const { t, isAr } = useLang();
   return (
-    <div
+    <button
       onClick={onOpen}
-      className="group cursor-pointer bg-cream-light border border-border rounded-[18px] overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:border-secondary hover:shadow-[0_18px_40px_rgba(13,70,52,0.09)]"
+      className="group cursor-pointer w-full text-start bg-cream-light border border-border rounded-[18px] overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:border-secondary hover:shadow-[0_18px_40px_rgba(13,70,52,0.09)]"
     >
       {/* Banner */}
       <div className="h-32 bg-[repeating-linear-gradient(135deg,var(--color-primary)_0_14px,var(--color-primary-accent)_14px_28px)] grid place-items-center relative overflow-hidden">
@@ -38,7 +38,7 @@ function LibCard({ item, onOpen }: { item: LibraryItem; onOpen: () => void }) {
           <span className="font-cormorant text-lg transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">&nearr;</span>
         </div>
       </div>
-    </div>
+    </button>
   );
 }
 

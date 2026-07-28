@@ -64,10 +64,12 @@ export default function EcosystemView() {
             const active = i === selected;
             const pos = ecoPositions[i];
             return (
-              <div
+              <button
                 key={i}
                 onClick={() => setSelected(i)}
-                className="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer"
+                aria-pressed={active}
+                aria-label={t({ ar: node.ar, en: node.tr })}
+                className="absolute -translate-x-1/2 -translate-y-1/2 cursor-pointer bg-transparent border-none p-0"
                 style={{ left: pos.l, top: pos.t }}
               >
                 <div
@@ -88,7 +90,7 @@ export default function EcosystemView() {
                     {t({ ar: node.ar, en: node.tr })}
                   </div>
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>

@@ -2,7 +2,12 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useLang, Bi } from '@/i18n/language';
+import { nameSlug } from '@/data/names';
+
+/** URL for a home section: home is the SPA root, the rest are ?v= views. */
+const hrefForView = (v: string) => (v === 'home' ? '/' : `/?v=${v}`);
 
 interface HomeViewProps {
   onNavigate: (view: string, query?: string) => void;
@@ -389,10 +394,10 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {PATHWAYS.map((pathway, i) => (
-              <div
+              <Link
                 key={i}
-                onClick={() => onNavigate(pathway.view)}
-                className="group relative bg-cream-light rounded-[20px] px-6 py-10 lg:px-8 lg:py-12 text-center cursor-pointer border border-border overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:border-secondary/50 shadow-[0_4px_16px_rgba(6,32,23,0.05)] hover:shadow-[0_16px_48px_rgba(6,32,23,0.14)]"
+                href={hrefForView(pathway.view)}
+                className="group relative block bg-cream-light rounded-[20px] px-6 py-10 lg:px-8 lg:py-12 text-center cursor-pointer border border-border overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:border-secondary/50 shadow-[0_4px_16px_rgba(6,32,23,0.05)] hover:shadow-[0_16px_48px_rgba(6,32,23,0.14)]"
               >
                 {/* Top accent line — grows on hover */}
                 <div className="absolute top-0 inset-x-0 h-1 bg-secondary scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-300" />
@@ -423,7 +428,7 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
                 <span className="font-naskh text-sm text-secondary-dark inline-flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   {t({ ar: 'استكشف', en: 'Explore' })} <span aria-hidden>{isAr ? '←' : '→'}</span>
                 </span>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
@@ -492,10 +497,10 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
               const name = names[nameIdx];
               if (!name) return null;
               return (
-                <div
+                <Link
                   key={nameIdx}
-                  onClick={() => onOpenName(nameIdx)}
-                  className="group relative bg-[linear-gradient(145deg,var(--color-primary),var(--color-primary-dark))] rounded-[20px] px-3 py-6 md:px-4 md:py-7 lg:px-6 lg:py-9 text-center cursor-pointer border border-secondary/20 transition-all duration-300 hover:-translate-y-1.5 hover:border-secondary/60 hover:shadow-[0_10px_36px_rgba(193,154,69,0.2)]"
+                  href={`/name/${nameSlug(name)}`}
+                  className="group relative block bg-[linear-gradient(145deg,var(--color-primary),var(--color-primary-dark))] rounded-[20px] px-3 py-6 md:px-4 md:py-7 lg:px-6 lg:py-9 text-center cursor-pointer border border-secondary/20 transition-all duration-300 hover:-translate-y-1.5 hover:border-secondary/60 hover:shadow-[0_10px_36px_rgba(193,154,69,0.2)]"
                 >
                   {/* Number badge */}
                   <div className="absolute top-2.5 right-2.5 md:top-3 md:right-3 w-6 h-6 md:w-7 md:h-7 rounded-full border border-secondary/40 flex items-center justify-center font-cormorant text-[10px] md:text-[11px] text-secondary-dark group-hover:border-secondary group-hover:text-secondary transition-colors duration-300">
@@ -516,7 +521,7 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
                   <div className="font-cormorant text-xs lg:text-[13px] text-text-light opacity-75">
                     {name.en}
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

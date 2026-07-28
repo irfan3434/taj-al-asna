@@ -61,7 +61,7 @@ function Shell() {
       )}
 
       {view === 'names' && (
-        <NamesView names={names} onOpenName={openName} />
+        <NamesView names={names} />
       )}
 
       {view === 'library' && (

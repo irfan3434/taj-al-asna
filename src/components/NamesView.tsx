@@ -1,18 +1,19 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useLang } from '@/i18n/language';
+import { nameSlug } from '@/data/names';
 
 interface NamesViewProps {
   names: Array<{ n: number; ar: string; tr: string; en: string; da: string }>;
-  onOpenName: (index: number) => void;
 }
 
 /** Drop Arabic diacritics (harakat/tanween/shadda/sukoon) so "الرحمن" matches "الرَّحْمَن". */
 const stripAr = (s: string) => s.replace(/[ًٌٍَُِّْ]/g, '');
 
-export default function NamesView({ names, onOpenName }: NamesViewProps) {
+export default function NamesView({ names }: NamesViewProps) {
   const { t, isAr } = useLang();
   const searchParams = useSearchParams();
   const incomingQuery = searchParams.get('q') || '';
@@ -81,7 +82,7 @@ export default function NamesView({ names, onOpenName }: NamesViewProps) {
           <NameCard
             key={name.n}
             name={name}
-            onClick={() => onOpenName(names.indexOf(name))}
+            href={`/name/${nameSlug(name)}`}
           />
         ))}
       </div>
@@ -91,15 +92,15 @@ export default function NamesView({ names, onOpenName }: NamesViewProps) {
 
 function NameCard({
   name,
-  onClick,
+  href,
 }: {
   name: { n: number; ar: string; tr: string; en: string };
-  onClick: () => void;
+  href: string;
 }) {
   return (
-    <div
-      onClick={onClick}
-      className="group relative bg-cream-light border border-border rounded-2xl px-2.5 pt-6 pb-4 md:px-[18px] md:pb-5 text-center cursor-pointer overflow-hidden transition-all duration-[250ms] ease-out hover:-translate-y-1 hover:shadow-[0_16px_34px_#0d463418] hover:border-secondary"
+    <Link
+      href={href}
+      className="group relative block bg-cream-light border border-border rounded-2xl px-2.5 pt-6 pb-4 md:px-[18px] md:pb-5 text-center cursor-pointer overflow-hidden transition-all duration-[250ms] ease-out hover:-translate-y-1 hover:shadow-[0_16px_34px_#0d463418] hover:border-secondary"
     >
       {/* Bottom accent — grows on hover */}
       <div className="absolute bottom-0 inset-x-0 h-1 bg-secondary scale-x-0 group-hover:scale-x-100 origin-center transition-transform duration-300" />
@@ -123,6 +124,6 @@ function NameCard({
       <div className="text-[13px] text-text-muted">
         {name.en}
       </div>
-    </div>
+    </Link>
   );
 }
