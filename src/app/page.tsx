@@ -61,7 +61,8 @@ function Shell() {
       )}
 
       {view === 'names' && (
-        <NamesView names={names} />
+        // Re-key on the incoming query so the search box re-seeds from ?q= on a fresh search.
+        <NamesView key={searchParams.get('q') ?? ''} names={names} />
       )}
 
       {view === 'library' && (

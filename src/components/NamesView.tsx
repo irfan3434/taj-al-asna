@@ -1,40 +1,23 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useLang } from '@/i18n/language';
 import { nameSlug } from '@/data/names';
+import { searchNames } from '@/lib/search';
 
 interface NamesViewProps {
   names: Array<{ n: number; ar: string; tr: string; en: string; da: string }>;
 }
 
-/** Drop Arabic diacritics (harakat/tanween/shadda/sukoon) so "الرحمن" matches "الرَّحْمَن". */
-const stripAr = (s: string) => s.replace(/[ًٌٍَُِّْ]/g, '');
-
 export default function NamesView({ names }: NamesViewProps) {
   const { t, isAr } = useLang();
   const searchParams = useSearchParams();
-  const incomingQuery = searchParams.get('q') || '';
-  const [namesQuery, setNamesQuery] = useState(incomingQuery);
+  // Seeded once from the hero search (?q=...); the parent re-keys this view when q changes.
+  const [namesQuery, setNamesQuery] = useState(searchParams.get('q') || '');
 
-  // Seed the box when arriving from the hero search (?q=...).
-  useEffect(() => {
-    setNamesQuery(incomingQuery);
-  }, [incomingQuery]);
-
-  const filteredNames = names.filter((name) => {
-    const raw = namesQuery.trim();
-    if (!raw) return true;
-    const q = raw.toLowerCase();
-    const qAr = stripAr(raw);
-    return (
-      stripAr(name.ar).includes(qAr) ||
-      name.tr.toLowerCase().includes(q) ||
-      name.en.toLowerCase().includes(q)
-    );
-  });
+  const filteredNames = namesQuery.trim() ? searchNames(names, namesQuery) : names;
 
   return (
     <div className="max-w-[1240px] mx-auto px-4 md:px-7 pt-8 md:pt-12 pb-16 md:pb-[90px]">

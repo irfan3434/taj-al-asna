@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useLang, Bi } from '@/i18n/language';
 import { nameSlug } from '@/data/names';
+import HeroSearch from '@/components/HeroSearch';
 
 /** URL for a home section: home is the SPA root, the rest are ?v= views. */
 const hrefForView = (v: string) => (v === 'home' ? '/' : `/?v=${v}`);
@@ -173,19 +174,8 @@ function AnimatedCounterItem({ target, suffix, label }: { target: number; suffix
 
 export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProps) {
   const { t, isAr } = useLang();
-  const [query, setQuery] = useState('');
   const centerName = names[HERO_CENTER_IDX];
   const heading = isAr ? 'font-amiri' : 'font-cormorant';
-
-  const handleSearch = () => {
-    onNavigate('names', query.trim());
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    }
-  };
 
   const mascotGreeting = t({ ar: 'مرحباً! ماذا تودّ أن تتعلّم اليوم؟', en: 'Welcome! What would you like to learn today?' });
 
@@ -245,25 +235,8 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
           })}
         </p>
 
-        {/* Search Bar */}
-        <div className="flex justify-center w-full max-w-[500px] items-center gap-2 md:gap-3 mb-10">
-          <div className="flex items-center bg-white/[0.08] rounded-full border border-secondary/30 px-3 py-1.5 flex-1 min-w-0">
-            <input
-              type="text"
-              placeholder={t({ ar: 'ابحث عن اسم...', en: 'Search for a name...' })}
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={handleKeyDown}
-              className="w-full min-w-0 bg-transparent border-none outline-none text-text-light text-base font-naskh placeholder:text-text-light/50"
-            />
-          </div>
-          <button
-            onClick={handleSearch}
-            className="bg-secondary text-primary-dark border-none rounded-full px-5 md:px-8 py-[7px] text-[15px] font-naskh cursor-pointer font-semibold hover:bg-secondary-light transition-colors duration-300 shrink-0"
-          >
-            {t({ ar: 'بحث', en: 'Search' })}
-          </button>
-        </div>
+        {/* Search Bar with live typeahead suggestions */}
+        <HeroSearch names={names} onSubmit={(q) => onNavigate('names', q)} />
 
         {/* CTA Buttons */}
         <div className="flex flex-col md:flex-row gap-4 mb-10 lg:mb-16">
