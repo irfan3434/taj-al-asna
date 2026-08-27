@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { NameData, QuranRef, nameSlug } from '@/data/names';
 import { useLang } from '@/i18n/language';
@@ -18,7 +18,39 @@ export default function DetailView({
 }: DetailViewProps) {
   const { t, isAr } = useLang();
   const heading = isAr ? 'font-amiri' : 'font-cormorant';
+
+  //Audio state and ref
   const [playing, setPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  // 1. Keep track of the previous name ID
+  const [prevNameId, setPrevNameId] = useState(name.n);
+
+  if (name.n !== prevNameId) {
+    setPrevNameId(name.n);
+    setPlaying(false);
+  }
+
+  // Reset audio state when the name changes (e.g., when user clicks Next/Prev)
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current.load(); 
+    }
+  }, [name.n]);
+
+  // Play/Pause logic
+  const toggleAudio = () => {
+    if (!audioRef.current) return;
+    
+    if (playing) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setPlaying(!playing);
+  };
 
   const currentIndex = names.findIndex((n) => n.n === name.n);
   const prevIndex = (currentIndex - 1 + 99) % 99;
@@ -35,6 +67,14 @@ export default function DetailView({
 
   return (
     <div>
+      {/* Hidden Audio Element */}
+      {/* Change name.n to nameSlug(name) if your files are named by slug instead of numbers */}
+      <audio 
+        ref={audioRef}
+        src={`/audio/${name.n}.mp3`} 
+        onEnded={() => setPlaying(false)}
+      />
+
       {/* Hero Banner */}
       <div className="relative bg-[radial-gradient(120%_120%_at_50%_-10%,_#0d4634,_#082a1f_55%,_#061d16)] px-4 md:px-7 py-[30px] overflow-hidden">
         {/* Crosshatch overlay */}
@@ -91,7 +131,7 @@ export default function DetailView({
 
           {/* Play button */}
           <button
-            onClick={() => setPlaying(!playing)}
+            onClick={toggleAudio}
             className="inline-flex items-center gap-2.5 bg-gradient-to-br from-secondary to-secondary-dark border-none rounded-full px-6 py-2.5 cursor-pointer text-white font-amiri text-[15px] mb-8"
           >
             <span>{t({ ar: 'استمع للتلاوة', en: 'Listen to the recitation' })}</span>

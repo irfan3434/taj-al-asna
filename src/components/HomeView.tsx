@@ -422,10 +422,10 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
           <div className="grid grid-cols-3 lg:grid-cols-6 gap-y-6 gap-x-2 md:gap-4 text-center">
             {JOURNEY_STEPS.map((step, i) => (
               <div key={i} className="flex flex-col items-center gap-2">
-                <div className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-primary-dark to-primary ring-1 ring-secondary/30 flex items-center justify-center text-lg text-secondary">
+                <div className="w-18 h-18 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-primary-dark to-primary ring-1 ring-secondary/30 flex items-center justify-center text-lg text-secondary">
                   {step.icon}
                 </div>
-                <span className="font-naskh text-[12px] md:text-sm text-primary-dark">{t(step.label)}</span>
+                <span className="font-naskh text-[12px] md:text-[18px] text-primary-dark">{t(step.label)}</span>
               </div>
             ))}
           </div>
