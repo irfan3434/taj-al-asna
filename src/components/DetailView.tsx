@@ -49,7 +49,7 @@ export default function DetailView({
     } else {
       audioRef.current.play();
     }
-    setPlaying(!playing);
+    setPlaying(!playing);  
   };
 
   const currentIndex = names.findIndex((n) => n.n === name.n);
@@ -67,7 +67,7 @@ export default function DetailView({
 
   return (
     <div>
-      {/* Hidden Audio Element */}
+      
       {/* Change name.n to nameSlug(name) if your files are named by slug instead of numbers */}
       <audio 
         ref={audioRef}
