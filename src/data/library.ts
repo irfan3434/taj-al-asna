@@ -101,6 +101,9 @@ export const libraryData: LibraryItem[] = [
       { t: 'البصير', meta: 'فيديو', tEn: 'Al-Basir', metaEn: 'Video', section: 'animated', lang: 'ar', video: '0a9a206f109d658fecdd5bca050e33e0' },
       { t: 'القدوس', meta: 'فيديو', tEn: 'Al-Qudus', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'fbecad8e394bb4effbfa793d7715fee3' },
       { t: 'القهار', meta: 'فيديو', tEn: 'Al-Qahar', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'd3f3b6ad64f2abc65b1fa1765e2246ff' },
+      { t: 'السلام', meta: 'فيديو', tEn: 'Al-Salam', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'dd4da6d240acd4261094f545487ec971' },
+      { t: 'العليم', meta: 'فيديو', tEn: 'Al-Aleem', metaEn: 'Video', section: 'animated', lang: 'ar', video: '0174f5eb51c17c905fcd5cb4980a0a55' },
+      { t: 'العدل', meta: 'فيديو', tEn: 'Al-Adl', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'cbbea06e96cf1bb1492449d6bf734ef9' },
 
       // English
       { t: 'الكبير', meta: 'فيديو', tEn: 'Al-Kabir', metaEn: 'Video', section: 'animated', lang: 'en', video: 'af28e4b16b4cc6134bd719d90b9ced4e' },
@@ -119,6 +122,7 @@ export const libraryData: LibraryItem[] = [
 
       { t: 'الشكور', meta: 'فيديو', tEn: 'Al-Shakoor', metaEn: 'Video', section: 'real', lang: 'ar', video: 'fd4b128a8ed2659546cbb100c77834f5' },
       { t: 'العلي', meta: 'فيديو', tEn: 'Al-Alee', metaEn: 'Video', section: 'real', lang: 'ar', video: '85c1fb8062edf5706c3d67675c5b2c63' },
+      { t: 'الحفيظ', meta: 'فيديو', tEn: 'Al-Hafiz', metaEn: 'Video', section: 'real', lang: 'ar', video: '2ee8f8569f8349ff41c61e2aac575fff' },
 
       // English
        { t: 'الكبير', meta: 'فيديو', tEn: 'Al-Kabeer', metaEn: 'Video', section: 'real', lang: 'en', video: 'a66740739b741ee76d586f9723789f21' },
