@@ -1,7 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import { LibraryItem } from '@/data/library';
 import { useLang } from '@/i18n/language';
+import { streamConfigured } from '@/lib/stream';
+import VideoModal from './VideoModal';
 
 interface LibraryDetailViewProps {
   item: LibraryItem;
@@ -10,6 +13,10 @@ interface LibraryDetailViewProps {
 
 export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewProps) {
   const { t, isAr } = useLang();
+
+  const [video, setVideo] = useState<{ uid: string; title: string } | null>(null);
+  const configured = streamConfigured();
+  const firstVideo = configured ? item.entries.find((e) => e.video) : undefined;
 
   const stats = [
     { val: t({ ar: item.stat1, en: item.stat1En }), label: t({ ar: 'المحتوى', en: 'Content' }) },
@@ -66,27 +73,43 @@ export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewP
           </h3>
 
           <div className="flex flex-col gap-2.5">
-            {item.entries.map((ent, i) => (
-              <div
-                key={i}
-                className="group flex items-center gap-3 md:gap-4 bg-cream-light border border-border rounded-[14px] px-3.5 md:px-[18px] py-3.5 md:py-4 cursor-pointer transition-all duration-200 hover:border-secondary hover:shadow-[0_6px_20px_rgba(13,70,52,0.07)] hover:bg-cream-warm/40"
-              >
-                <div className="shrink-0 w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-primary to-primary-mid grid place-items-center text-secondary-light text-sm md:text-base transition-transform duration-200 group-hover:scale-105">
-                  {item.entryIcon}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm md:text-base font-semibold text-text-body group-hover:text-primary transition-colors">
-                    {t({ ar: ent.t, en: ent.tEn })}
+            {item.entries.map((ent, i) => {
+              const title = t({ ar: ent.t, en: ent.tEn });
+              const playable = Boolean(ent.video) && configured;
+              const rowClass =
+                'group flex items-center gap-3 md:gap-4 bg-cream-light border border-border rounded-[14px] px-3.5 md:px-[18px] py-3.5 md:py-4 cursor-pointer transition-all duration-200 hover:border-secondary hover:shadow-[0_6px_20px_rgba(13,70,52,0.07)] hover:bg-cream-warm/40 text-start w-full';
+              const inner = (
+                <>
+                  <div className="shrink-0 w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-primary to-primary-mid grid place-items-center text-secondary-light text-sm md:text-base transition-transform duration-200 group-hover:scale-105">
+                    {playable ? '▶' : item.entryIcon}
                   </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm md:text-base font-semibold text-text-body group-hover:text-primary transition-colors">
+                      {title}
+                    </div>
+                  </div>
+                  <div className="shrink-0 font-cormorant text-xs md:text-sm text-secondary-dark hidden min-[400px]:block">
+                    {t({ ar: ent.meta, en: ent.metaEn })}
+                  </div>
+                  <span className="shrink-0 text-secondary-dark opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 hidden md:inline" aria-hidden>
+                    {playable ? '▶' : isAr ? '←' : '→'}
+                  </span>
+                </>
+              );
+              return playable ? (
+                <button
+                  key={i}
+                  onClick={() => setVideo({ uid: ent.video as string, title })}
+                  className={rowClass}
+                >
+                  {inner}
+                </button>
+              ) : (
+                <div key={i} className={rowClass}>
+                  {inner}
                 </div>
-                <div className="shrink-0 font-cormorant text-xs md:text-sm text-secondary-dark hidden min-[400px]:block">
-                  {t({ ar: ent.meta, en: ent.metaEn })}
-                </div>
-                <span className="shrink-0 text-secondary-dark opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200 hidden md:inline" aria-hidden>
-                  {isAr ? '←' : '→'}
-                </span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -105,11 +128,21 @@ export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewP
             ))}
           </div>
 
-          <button className="w-full mt-6 bg-gradient-to-br from-secondary-light to-secondary text-primary-dark border-none rounded-xl py-[13px] font-naskh text-[15px] font-bold cursor-pointer hover:opacity-90 transition-opacity">
-            {t({ ar: 'ابدأ الآن', en: 'Start now' })}
+          <button
+            onClick={() =>
+              firstVideo?.video &&
+              setVideo({ uid: firstVideo.video, title: t({ ar: firstVideo.t, en: firstVideo.tEn }) })
+            }
+            className="w-full mt-6 bg-gradient-to-br from-secondary-light to-secondary text-primary-dark border-none rounded-xl py-[13px] font-naskh text-[15px] font-bold cursor-pointer hover:opacity-90 transition-opacity"
+          >
+            {t({ ar: firstVideo ? 'شاهد الآن' : 'ابدأ الآن', en: firstVideo ? 'Watch now' : 'Start now' })}
           </button>
         </aside>
       </section>
+
+      {video && (
+        <VideoModal uid={video.uid} title={video.title} onClose={() => setVideo(null)} />
+      )}
     </main>
   );
 }

@@ -3,6 +3,8 @@ export interface LibraryEntry {
   meta: string;
   tEn: string;
   metaEn: string;
+  /** Cloudflare Stream video UID. Leave '' until you have it; entries play once it's set. */
+  video?: string;
 }
 
 export interface LibraryItem {
@@ -34,12 +36,13 @@ export const libraryData: LibraryItem[] = [
     about: 'سلسلة تعليمية مرئية تتناول كل اسمٍ من أسماء الله الحسنى بالشرح والتدبّر، وتربط المعنى بحياة المسلم اليومية. مقدّمة من نخبةٍ من العلماء والمتخصصين، ومدقّقة شرعياً قبل النشر.',
     aboutEn: "An educational video series covering each of Allah's Beautiful Names with explanation and reflection, connecting meaning to daily Muslim life. Presented by a select group of scholars and specialists, and religiously verified before publishing.",
     stat1: '٩٩ حلقة', stat1En: '99 episodes', stat2: '١٠+ لغات', stat2En: '10+ languages', stat3: 'محدّثة أسبوعياً', stat3En: 'Updated weekly',
+    // 👇 Beautiful Names Series — paste each episode's Cloudflare Stream UID into `video`.
     entries: [
-      { t: 'الحلقة ١ — الرحمن الرحيم', meta: '١٤:٢٠', tEn: 'Episode 1 — Ar-Rahman, Ar-Raheem', metaEn: '14:20' },
-      { t: 'الحلقة ٢ — الملك القدوس السلام', meta: '١٢:٤٥', tEn: 'Episode 2 — Al-Malik, Al-Quddus, As-Salam', metaEn: '12:45' },
-      { t: 'الحلقة ٣ — العزيز الجبار المتكبر', meta: '١٥:١٠', tEn: 'Episode 3 — Al-Aziz, Al-Jabbar, Al-Mutakabbir', metaEn: '15:10' },
-      { t: 'الحلقة ٤ — الخالق البارئ المصوّر', meta: '١٦:٣٠', tEn: 'Episode 4 — Al-Khaliq, Al-Bari, Al-Musawwir', metaEn: '16:30' },
-      { t: 'الحلقة ٥ — الغفّار الغفور التوّاب', meta: '١٣:٠٥', tEn: 'Episode 5 — Al-Ghaffar, Al-Ghafur, At-Tawwab', metaEn: '13:05' },
+      { t: 'الحلقة ١ — الرحمن الرحيم', meta: '١٤:٢٠', tEn: 'Episode 1 — Ar-Rahman, Ar-Raheem', metaEn: '14:20', video: '' },
+      { t: 'الحلقة ٢ — الملك القدوس السلام', meta: '١٢:٤٥', tEn: 'Episode 2 — Al-Malik, Al-Quddus, As-Salam', metaEn: '12:45', video: '' },
+      { t: 'الحلقة ٣ — العزيز الجبار المتكبر', meta: '١٥:١٠', tEn: 'Episode 3 — Al-Aziz, Al-Jabbar, Al-Mutakabbir', metaEn: '15:10', video: '' },
+      { t: 'الحلقة ٤ — الخالق البارئ المصوّر', meta: '١٦:٣٠', tEn: 'Episode 4 — Al-Khaliq, Al-Bari, Al-Musawwir', metaEn: '16:30', video: '' },
+      { t: 'الحلقة ٥ — الغفّار الغفور التوّاب', meta: '١٣:٠٥', tEn: 'Episode 5 — Al-Ghaffar, Al-Ghafur, At-Tawwab', metaEn: '13:05', video: '' },
     ],
   },
   {
@@ -82,12 +85,13 @@ export const libraryData: LibraryItem[] = [
     about: 'ركنٌ مصمّم خصّيصاً للأطفال يقدّم أسماء الله الحسنى بأسلوبٍ قصصي تفاعلي محبّب وآمن، مع رسوم وألعاب تعليمية تغرس المعنى في القلوب الصغيرة.',
     aboutEn: "A corner designed specially for children, presenting Allah's Beautiful Names in a beloved, safe, interactive storytelling style, with illustrations and educational games that plant meaning in young hearts.",
     stat1: 'للأعمار ٦+', stat1En: 'Ages 6+', stat2: 'محتوى آمن', stat2En: 'Safe content', stat3: 'ألعاب تعليمية', stat3En: 'Educational games',
+    // 👇 Children's Corner — paste the Cloudflare Stream UID for each video entry.
     entries: [
-      { t: 'قصة: الله الرزّاق يطعم الطير', meta: 'قصة', tEn: 'Story: Ar-Razzaq feeds the birds', metaEn: 'Story' },
+      { t: 'المنشئ للخلق على غير مثال سابق، المبدع لصور الموجودات', meta: 'البارئ', tEn: 'The Creator who brings into being without precedent, the Originator of the forms of all that exists.', metaEn: 'Creator', video: '4055ff668512c7eda505e5b28f21bf38' },
       { t: 'لعبة: طابِق الاسم بمعناه', meta: 'لعبة', tEn: 'Game: match the Name to its meaning', metaEn: 'Game' },
-      { t: 'نشيد: أسماء ربي الحسنى', meta: 'نشيد', tEn: "Nasheed: my Lord's Beautiful Names", metaEn: 'Nasheed' },
+      { t: 'نشيد: أسماء ربي الحسنى', meta: 'نشيد', tEn: "Nasheed: my Lord's Beautiful Names", metaEn: 'Nasheed', video: '' },
       { t: 'تلوين: حديقة الأسماء', meta: 'نشاط', tEn: 'Coloring: the garden of Names', metaEn: 'Activity' },
-      { t: 'قصة: الله الحفيظ يحرسنا', meta: 'قصة', tEn: 'Story: Al-Hafiz watches over us', metaEn: 'Story' },
+      { t: 'قصة: الله الحفيظ يحرسنا', meta: 'قصة', tEn: 'Story: Al-Hafiz watches over us', metaEn: 'Story', video: '' },
     ],
   },
   {
