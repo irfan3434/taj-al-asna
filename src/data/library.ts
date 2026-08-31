@@ -95,10 +95,21 @@ export const libraryData: LibraryItem[] = [
       { t: 'الجبار', meta: 'فيديو', tEn: 'Al-Jabbar', metaEn: 'Video', lang: 'ar', video: '8ba07c529fb68c95765d03f1ba9f84b3' },
       { t: 'الباسط', meta: 'فيديو', tEn: 'Al-Basit', metaEn: 'Video', lang: 'ar', video: '34eb9c5cedc8955cdb2e5a2b0b8e3613' },
       { t: 'البصير', meta: 'فيديو', tEn: 'Al-Basir', metaEn: 'Video', lang: 'ar', video: '0a9a206f109d658fecdd5bca050e33e0' },
+      { t: 'القدوس', meta: 'فيديو', tEn: 'Al-Qudus', metaEn: 'Video', lang: 'ar', video: 'fbecad8e394bb4effbfa793d7715fee3' },
+      { t: 'القهار', meta: 'فيديو', tEn: 'Al-Qahar', metaEn: 'Video', lang: 'ar', video: 'd3f3b6ad64f2abc65b1fa1765e2246ff' },
+
       // English
       { t: 'الكبير', meta: 'فيديو', tEn: 'Al-Kabir', metaEn: 'Video', lang: 'en', video: 'af28e4b16b4cc6134bd719d90b9ced4e' },
+      { t: 'البصير', meta: 'فيديو', tEn: 'Al-Basir', metaEn: 'Video', lang: 'en', video: 'c92c4c1257eb85a615255de7a7bb3fd9' },
+      { t: 'الباسط', meta: 'فيديو', tEn: 'Al-Basit', metaEn: 'Video', lang: 'en', video: '82d8e23325d05a21bd16b00cdc61db38' },
+      { t: 'الجبار', meta: 'فيديو', tEn: 'Al-Jabbar', metaEn: 'Video', lang: 'en', video: '2b8c2348a3a319ca04d00db61d1cc6f7' },
+      { t: 'البارئ', meta: 'فيديو', tEn: 'Al-Bari', metaEn: 'Video', lang: 'en', video: 'ae73160691431a6a9c81eef3e98d8d3e' },
       // Urdu
       { t: 'الغفور', meta: 'فيديو', tEn: 'Al-Ghafur', metaEn: 'Video', lang: 'ur', video: '57ceb90dd54124f4fd19851e115295b5' },
+      { t: 'البارئ', meta: 'فيديو', tEn: 'Al-Bari', metaEn: 'Video', lang: 'ur', video: '49e32d2d4d6f6df292cf779026073a94' },
+      { t: 'الباسط', meta: 'فيديو', tEn: 'Al-Basit', metaEn: 'Video', lang: 'ur', video: '4892b86164ac773d705a0b7fad57f35e' },
+      { t: 'البصير', meta: 'فيديو', tEn: 'Al-Basir', metaEn: 'Video', lang: 'ur', video: '0f8c5765d142e1d47fb42895a260fbb7' },
+      { t: 'الجبار', meta: 'فيديو', tEn: 'Al-Jabbar', metaEn: 'Video', lang: 'ur', video: '756a9e2eafa788fab0097c7988461162' }
     ],
   },
   {
