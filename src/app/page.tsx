@@ -36,11 +36,12 @@ function Shell() {
   }, [view]);
 
   function navigate(v: string, query?: string) {
+    // Always include ?v= (even for home) so navigation is a search-param change the SPA
+    // re-renders reliably — a bare `/` from a ?v= view can fail to update the view.
     const params = new URLSearchParams();
-    if (v !== 'home') params.set('v', v);
+    params.set('v', v);
     if (query && query.trim()) params.set('q', query.trim());
-    const qs = params.toString();
-    router.push(qs ? `/?${qs}` : '/');
+    router.push(`/?${params.toString()}`);
   }
 
   // `index` is the 0-based position in the `names` array.

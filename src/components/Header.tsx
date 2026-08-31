@@ -18,13 +18,36 @@ const navItems: { view: View; label: Bi; highlight?: boolean }[] = [
   { view: 'waqf', label: { ar: 'الوقف والأثر', en: 'Waqf & Impact' }, highlight: true },
 ];
 
-/** URL for a nav tab: home is the SPA root, the rest are ?v= views on it (real routes come later). */
+/** URL for a nav tab. Always the ?v= form (even home) so header nav is a search-param CHANGE,
+ *  which the SPA re-renders reliably. Navigating to a bare `/` from a ?v= view can fail to update. */
 function hrefFor(view: View): string {
-  return view === 'home' ? '/' : `/?v=${view}`;
+  return `/?v=${view}`;
+}
+
+function LangToggle({ small }: { small?: boolean }) {
+  const { lang, setLang } = useLang();
+  return (
+    <div className={`flex items-center border border-secondary/50 rounded-[20px] overflow-hidden font-cormorant font-semibold ${small ? 'text-xs' : 'text-[13px]'}`}>
+      <button
+        onClick={() => setLang('ar')}
+        aria-pressed={lang === 'ar'}
+        className={`${small ? 'px-3 py-[5px]' : 'px-3.5 py-1.5'} transition-colors ${lang === 'ar' ? 'bg-secondary text-primary-dark' : 'text-secondary-dark hover:bg-secondary/10'}`}
+      >
+        ع
+      </button>
+      <button
+        onClick={() => setLang('en')}
+        aria-pressed={lang === 'en'}
+        className={`${small ? 'px-2.5 py-[5px]' : 'px-2.5 py-1.5'} transition-colors ${lang === 'en' ? 'bg-secondary text-primary-dark' : 'text-secondary-dark hover:bg-secondary/10'}`}
+      >
+        EN
+      </button>
+    </div>
+  );
 }
 
 export default function Header() {
-  const { lang, setLang, t } = useLang();
+  const { t } = useLang();
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -49,30 +72,11 @@ export default function Header() {
     return `${base} bg-secondary text-primary-dark hover:bg-secondary-light hover:-translate-y-0.5 hover:shadow-[0_4px_12px_rgba(193,154,69,0.4)]`;
   }
 
-  const LangToggle = ({ small }: { small?: boolean }) => (
-    <div className={`flex items-center border border-secondary/50 rounded-[20px] overflow-hidden font-cormorant font-semibold ${small ? 'text-xs' : 'text-[13px]'}`}>
-      <button
-        onClick={() => setLang('ar')}
-        aria-pressed={lang === 'ar'}
-        className={`${small ? 'px-3 py-[5px]' : 'px-3.5 py-1.5'} transition-colors ${lang === 'ar' ? 'bg-secondary text-primary-dark' : 'text-secondary-dark hover:bg-secondary/10'}`}
-      >
-        ع
-      </button>
-      <button
-        onClick={() => setLang('en')}
-        aria-pressed={lang === 'en'}
-        className={`${small ? 'px-2.5 py-[5px]' : 'px-2.5 py-1.5'} transition-colors ${lang === 'en' ? 'bg-secondary text-primary-dark' : 'text-secondary-dark hover:bg-secondary/10'}`}
-      >
-        EN
-      </button>
-    </div>
-  );
-
   return (
     <header className="sticky top-0 z-50 bg-primary-dark border-b border-secondary/30 shadow-[0_2px_16px_rgba(6,32,23,0.07)]">
       <div className="max-w-[1400px] mx-auto px-4 md:px-6 py-2.5 md:py-5 flex items-center gap-3 lg:gap-5">
         {/* Logo — crown emblem in a circular badge */}
-        <Link href="/" onClick={() => setMenuOpen(false)} className="flex items-center gap-2.5 md:gap-3 cursor-pointer shrink-0">
+        <Link href={hrefFor('home')} onClick={() => setMenuOpen(false)} className="flex items-center gap-2.5 md:gap-3 cursor-pointer shrink-0">
           <div className="w-11 h-11 md:w-12 md:h-12 lg:w-14 lg:h-14 rounded-full bg-primary-dark ring-2 ring-secondary/60 flex items-center justify-center p-1.5 md:p-2">
             <Image src="/logo.webp" alt={t({ ar: 'شعار التاج الأسنى', en: 'Taj Al Asna logo' })} width={44} height={40}
               className="w-full h-full object-contain" />
