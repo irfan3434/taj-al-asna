@@ -35,7 +35,7 @@ function LibCard({ item, onOpen }: { item: LibraryItem; onOpen: () => void }) {
         <div className="text-sm text-text-muted leading-[1.7] mt-1.5">{t({ ar: item.desc, en: item.descEn })}</div>
         <div className="flex justify-between items-center mt-3.5 text-[13px] text-secondary-dark">
           <span>{t({ ar: item.meta, en: item.metaEn })}</span>
-          <span className="font-cormorant text-lg transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">&nearr;</span>
+          <span className="font-cormorant text-lg transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">↗</span>
         </div>
       </div>
     </button>
