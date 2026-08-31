@@ -11,12 +11,23 @@ interface LibraryDetailViewProps {
   onGoBack: () => void;
 }
 
+const LANG_TABS: { id: 'ar' | 'en' | 'ur'; ar: string; en: string }[] = [
+  { id: 'ar', ar: 'العربية', en: 'Arabic' },
+  { id: 'en', ar: 'الإنجليزية', en: 'English' },
+  { id: 'ur', ar: 'الأردية', en: 'Urdu' },
+];
+
 export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewProps) {
   const { t, isAr } = useLang();
 
   const [video, setVideo] = useState<{ uid: string; title: string } | null>(null);
+  const [activeLang, setActiveLang] = useState<'ar' | 'en' | 'ur'>('ar');
   const configured = streamConfigured();
-  const firstVideo = configured ? item.entries.find((e) => e.video) : undefined;
+
+  // Items whose entries carry a `lang` (the kids corner) render as Arabic / English / Urdu tabs.
+  const tabbed = item.entries.some((e) => e.lang);
+  const visibleEntries = tabbed ? item.entries.filter((e) => e.lang === activeLang) : item.entries;
+  const firstVideo = configured ? visibleEntries.find((e) => e.video) : undefined;
 
   const stats = [
     { val: t({ ar: item.stat1, en: item.stat1En }), label: t({ ar: 'المحتوى', en: 'Content' }) },
@@ -72,8 +83,32 @@ export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewP
             {t({ ar: 'المحتوى', en: 'Contents' })}
           </h3>
 
+          {tabbed && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              {LANG_TABS.map((tab) => {
+                const active = tab.id === activeLang;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveLang(tab.id)}
+                    className={`rounded-full px-5 py-2 font-naskh text-sm font-semibold transition-colors ${
+                      active ? 'bg-primary text-secondary-light' : 'bg-cream-warm text-primary hover:bg-secondary/15'
+                    }`}
+                  >
+                    {t({ ar: tab.ar, en: tab.en })}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
           <div className="flex flex-col gap-2.5">
-            {item.entries.map((ent, i) => {
+            {visibleEntries.length === 0 && (
+              <div className="bg-cream-light border border-dashed border-border rounded-[14px] px-4 py-8 text-center text-text-muted font-naskh text-sm">
+                {t({ ar: 'لا توجد فيديوهات في هذه اللغة بعد.', en: 'No videos in this language yet.' })}
+              </div>
+            )}
+            {visibleEntries.map((ent, i) => {
               const title = t({ ar: ent.t, en: ent.tEn });
               const playable = Boolean(ent.video) && configured;
               const rowClass =

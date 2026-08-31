@@ -5,6 +5,8 @@ export interface LibraryEntry {
   metaEn: string;
   /** Cloudflare Stream video UID. Leave '' until you have it; entries play once it's set. */
   video?: string;
+  /** Video language — groups the entry into the Arabic / English / Urdu tabs (kids corner). */
+  lang?: 'ar' | 'en' | 'ur';
 }
 
 export interface LibraryItem {
@@ -85,15 +87,18 @@ export const libraryData: LibraryItem[] = [
     about: 'ركنٌ مصمّم خصّيصاً للأطفال يقدّم أسماء الله الحسنى بأسلوبٍ قصصي تفاعلي محبّب وآمن، مع رسوم وألعاب تعليمية تغرس المعنى في القلوب الصغيرة.',
     aboutEn: "A corner designed specially for children, presenting Allah's Beautiful Names in a beloved, safe, interactive storytelling style, with illustrations and educational games that plant meaning in young hearts.",
     stat1: 'للأعمار ٦+', stat1En: 'Ages 6+', stat2: 'محتوى آمن', stat2En: 'Safe content', stat3: 'ألعاب تعليمية', stat3En: 'Educational games',
-    // 👇 Children's Corner — paste the Cloudflare Stream UID for each video entry.
+    // 👇 Children's Corner — three language tabs. Set `lang` to 'ar' | 'en' | 'ur' and paste the
+    //    Cloudflare Stream UID into `video`. Copy a line to add more videos under any language.
     entries: [
-      { t: 'البارئ', meta: 'البارئ', tEn: 'The Creator', metaEn: 'The Creator', video: '4055ff668512c7eda505e5b28f21bf38' },
-      { t: 'الجبار', meta: 'الجبار ', tEn: 'The Almighty', metaEn: 'The Almighty', video: '8ba07c529fb68c95765d03f1ba9f84b3' },
-      { t: 'الباسط', meta: 'الباسط ', tEn: 'Al-Basit', metaEn: 'Al-Basit', video: '34eb9c5cedc8955cdb2e5a2b0b8e3613' },
-      { t: 'البصير', meta: 'البصير', tEn: 'Al-Basir', metaEn: 'Al-Basir', video: '0a9a206f109d658fecdd5bca050e33e0' },
-      { t: 'الغفور اردو', meta: 'الغفور اردو', tEn: 'Al-Ghafur', metaEn: 'Al-Ghafur', video: '57ceb90dd54124f4fd19851e115295b5' },
-      { t: 'الكبير بالانجليزي', meta: 'الكبير بالانجليزي', tEn: 'Al-Kabir', metaEn: 'Al-Kabir', video: 'af28e4b16b4cc6134bd719d90b9ced4e' }
-
+      // Arabic
+      { t: 'البارئ', meta: 'فيديو', tEn: 'Al-Bari', metaEn: 'Video', lang: 'ar', video: '4055ff668512c7eda505e5b28f21bf38' },
+      { t: 'الجبار', meta: 'فيديو', tEn: 'Al-Jabbar', metaEn: 'Video', lang: 'ar', video: '8ba07c529fb68c95765d03f1ba9f84b3' },
+      { t: 'الباسط', meta: 'فيديو', tEn: 'Al-Basit', metaEn: 'Video', lang: 'ar', video: '34eb9c5cedc8955cdb2e5a2b0b8e3613' },
+      { t: 'البصير', meta: 'فيديو', tEn: 'Al-Basir', metaEn: 'Video', lang: 'ar', video: '0a9a206f109d658fecdd5bca050e33e0' },
+      // English
+      { t: 'الكبير', meta: 'فيديو', tEn: 'Al-Kabir', metaEn: 'Video', lang: 'en', video: 'af28e4b16b4cc6134bd719d90b9ced4e' },
+      // Urdu
+      { t: 'الغفور', meta: 'فيديو', tEn: 'Al-Ghafur', metaEn: 'Video', lang: 'ur', video: '57ceb90dd54124f4fd19851e115295b5' },
     ],
   },
   {
