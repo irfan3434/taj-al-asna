@@ -108,6 +108,10 @@ export const libraryData: LibraryItem[] = [
       { t: 'الحليم', meta: 'فيديو', tEn: 'Al-Halim', metaEn: 'Video', section: 'animated', lang: 'ar', video: '49f870e4ff60ba3f10068ea5c8d71505' },
       { t: 'الخافض', meta: 'فيديو', tEn: 'Al-Khafidh', metaEn: 'Video', section: 'animated', lang: 'ar', video: '0972ff5199b6d6bcd6021aa268fb358f' },
       { t: 'الخالق', meta: 'فيديو', tEn: 'Al-Khaliq', metaEn: 'Video', section: 'animated', lang: 'ar', video: '1d6979317e0da40a74f264c221aff2c1' },
+      { t: 'الخبير', meta: 'فيديو', tEn: 'Al-Khabir', metaEn: 'Video', section: 'animated', lang: 'ar', video: '4401d9128454d11e39955cd29a3f1204' },
+      { t: 'الرافع', meta: 'فيديو', tEn: 'Al-Rafeh', metaEn: 'Video', section: 'animated', lang: 'ar', video: '0bd2fbd268ac136290f77dbcae622738' },
+      { t: 'الرحمن', meta: 'فيديو', tEn: 'Al-Rahman', metaEn: 'Video', section: 'animated', lang: 'ar', video: '57be168ce871f25293932519c92f8987' },
+      { t: 'الرحيم', meta: 'فيديو', tEn: 'Al-Raheem', metaEn: 'Video', section: 'animated', lang: 'ar', video: '0c6a8ea519cd3a2d64907b1438273d4a' },
 
       // English
       { t: 'الكبير', meta: 'فيديو', tEn: 'Al-Kabir', metaEn: 'Video', section: 'animated', lang: 'en', video: 'af28e4b16b4cc6134bd719d90b9ced4e' },
