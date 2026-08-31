@@ -76,7 +76,7 @@ function Shell() {
       )}
 
       {view === 'assistant' && (
-        <AssistantView names={names} />
+        <AssistantView />
       )}
 
       {view === 'eco' && (

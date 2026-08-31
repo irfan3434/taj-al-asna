@@ -172,12 +172,69 @@ function AnimatedCounterItem({ target, suffix, label }: { target: number; suffix
   );
 }
 
+/** Rotating dhikr the mascot recites — Arabic, with an English rendering for EN mode. */
+const MASCOT_DHIKR: Bi[] = [
+  { ar: 'صلِّي على النبي ﷺ', en: 'Send blessings upon the Prophet ﷺ' },
+  { ar: 'أستغفر الله وأتوب إليه', en: "I seek Allah's forgiveness and turn to Him in repentance" },
+  {
+    ar: 'سبحان الله وبحمده، سبحان الله العظيم.',
+    en: 'Glory be to Allah and praise Him; glory be to Allah the Magnificent.',
+  },
+  {
+    ar: 'اللهم اغفر لنا وارحمنا وتب علينا، إنك أنت التواب الرحيم.',
+    en: 'O Allah, forgive us, have mercy on us, and accept our repentance — indeed You are the Ever-Relenting, the Most Merciful.',
+  },
+];
+
+const MASCOT_VISIBLE_MS = 6000; // hold each message on screen
+const MASCOT_HIDDEN_MS = 2000; // gap between messages
+const MASCOT_ENTRANCE_MS = 500; // initial delay so the first appearance animates
+
+/**
+ * Drives the mascot's dhikr loop: appear → hold 10s → disappear → wait 5s → next → repeat.
+ * One timer for the whole app, so the mobile and desktop mascots stay in sync.
+ */
+function useMascotCycle() {
+  const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    const after = (ms: number, fn: () => void) => {
+      timers.push(setTimeout(() => { if (alive) fn(); }, ms));
+    };
+
+    const show = (i: number) => {
+      setIndex(i);
+      setVisible(true);
+      after(MASCOT_VISIBLE_MS, () => {
+        setVisible(false);
+        after(MASCOT_HIDDEN_MS, () => show((i + 1) % MASCOT_DHIKR.length));
+      });
+    };
+
+    after(MASCOT_ENTRANCE_MS, () => show(0));
+    return () => {
+      alive = false;
+      timers.forEach(clearTimeout);
+    };
+  }, []);
+
+  return { dhikr: MASCOT_DHIKR[index], visible };
+}
+
 export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProps) {
   const { t, isAr } = useLang();
   const centerName = names[HERO_CENTER_IDX];
   const heading = isAr ? 'font-amiri' : 'font-cormorant';
 
-  const mascotGreeting = t({ ar: 'مرحباً! ماذا تودّ أن تتعلّم اليوم؟', en: 'Welcome! What would you like to learn today?' });
+  const { dhikr: mascotDhikr, visible: mascotVisible } = useMascotCycle();
+  const mascotDir = isAr ? 'rtl' : 'ltr';
+  const mascotBubbleFont = isAr ? 'font-naskh' : 'font-cormorant';
+  const mascotAnim = mascotVisible
+    ? 'opacity-100 translate-y-0 scale-100'
+    : 'opacity-0 translate-y-4 scale-95 pointer-events-none';
 
   return (
     <>
@@ -254,29 +311,29 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
           </button>
         </div>
 
-        {/* Abdullah — mobile version, in normal flow so it never overlaps */}
-        <button
-          onClick={() => onNavigate('assistant')}
-          aria-label={mascotGreeting}
-          className="md:hidden flex items-end gap-2 -mt-4 bg-transparent border-none cursor-pointer [animation:taj-mascot-in_0.7s_ease-out_0.4s_both]"
+        {/* Abdullah — mobile dhikr companion (in normal flow so it never overlaps) */}
+        <div
+          aria-hidden={!mascotVisible}
+          className={`md:hidden flex items-end gap-2 -mt-4 transition-all duration-500 ease-out ${mascotAnim}`}
         >
           <div className="[animation:taj-mascot-idle_4s_ease-in-out_2s_infinite] shrink-0">
             <Image
               src="/abdullah.webp"
-              alt={t({ ar: 'عبدالله — المرشد المعرفي', en: 'Abdullah — the knowledge guide' })}
+              alt={t({ ar: 'عبدالله', en: 'Abdullah' })}
               width={84}
               height={84}
               className="w-[80px] h-[80px] object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.35)]"
             />
           </div>
           <div
-            className="relative mb-5 bg-cream-light text-primary-dark font-naskh text-[13px] leading-[1.7] px-3.5 py-2 rounded-2xl border border-secondary/50 shadow-[0_8px_24px_rgba(6,32,23,0.35)] max-w-[210px] text-center [animation:taj-bubble-in_0.5s_ease-out_1.2s_both]"
+            dir={mascotDir}
+            className={`relative mb-5 bg-cream-light text-primary-dark ${mascotBubbleFont} text-[13px] leading-[1.9] px-3.5 py-2 rounded-2xl border border-secondary/50 shadow-[0_8px_24px_rgba(6,32,23,0.35)] max-w-[210px] text-center`}
           >
-            {mascotGreeting}
+            {t(mascotDhikr)}
             {/* tail — points toward Abdullah (image sits on the right in RTL) */}
             <span className="absolute -right-[7px] bottom-3 w-3 h-3 bg-cream-light border-r border-t border-secondary/50 rotate-45" aria-hidden />
           </div>
-        </button>
+        </div>
 
         {/* Featured-name arches — mobile & tablet (2×2 grid, below the CTAs) */}
         <div className="grid grid-cols-2 gap-x-5 gap-y-1 w-full max-w-[340px] mx-auto mt-6 mb-6 lg:hidden">
@@ -310,29 +367,29 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
           );
         })}
 
-        {/* Abdullah — desktop guide (opens the Assistant) */}
-        <button
-          onClick={() => onNavigate('assistant')}
-          aria-label={mascotGreeting}
-          className="hidden md:flex md:flex-row-reverse absolute bottom-4 right-4 lg:bottom-25 lg:right-50 z-[2] items-end gap-2.5 bg-transparent border-none cursor-pointer group [animation:taj-mascot-in_0.7s_ease-out_0.4s_both]"
+        {/* Abdullah — desktop dhikr companion */}
+        <div
+          aria-hidden={!mascotVisible}
+          className={`hidden md:flex md:flex-row-reverse absolute bottom-4 right-4 lg:bottom-25 lg:right-50 z-[2] items-end gap-2.5 transition-all duration-500 ease-out ${mascotAnim}`}
         >
-          <div className="[animation:taj-mascot-idle_4s_ease-in-out_2s_infinite] transition-transform duration-300 group-hover:scale-105">
+          <div className="[animation:taj-mascot-idle_4s_ease-in-out_2s_infinite]">
             <Image
               src="/abdullah.webp"
-              alt={t({ ar: 'عبدالله — المرشد المعرفي', en: 'Abdullah — the knowledge guide' })}
+              alt={t({ ar: 'عبدالله', en: 'Abdullah' })}
               width={150}
               height={150}
               className="w-[150px] h-[150px] lg:w-[150px] lg:h-[150px] object-contain drop-shadow-[0_10px_24px_rgba(0,0,0,0.35)]"
             />
           </div>
           <div
-            className="relative mb-8 lg:mb-10 bg-cream-light text-primary-dark font-naskh text-sm lg:text-[15px] px-4 py-2.5 rounded-2xl border border-secondary/50 shadow-[0_8px_24px_rgba(6,32,23,0.35)] whitespace-nowrap transition-colors duration-300 group-hover:border-secondary [animation:taj-bubble-in_0.5s_ease-out_1.2s_both]"
+            dir={mascotDir}
+            className={`relative mb-8 lg:mb-10 bg-cream-light text-primary-dark ${mascotBubbleFont} text-sm lg:text-[15px] leading-[1.9] px-4 py-2.5 rounded-2xl border border-secondary/50 shadow-[0_8px_24px_rgba(6,32,23,0.35)] max-w-[240px] text-center`}
           >
-            {mascotGreeting}
+            {t(mascotDhikr)}
             {/* bubble tail — points toward Abdullah (on the right) */}
             <span className="absolute -right-[7px] bottom-3.5 w-3 h-3 bg-cream-light border-r border-t border-secondary/50 rotate-45" aria-hidden />
           </div>
-        </button>
+        </div>
       </section>
 
       {/* Counters Section */}

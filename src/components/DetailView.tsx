@@ -134,7 +134,7 @@ export default function DetailView({
             onClick={toggleAudio}
             className="inline-flex items-center gap-2.5 bg-gradient-to-br from-secondary to-secondary-dark border-none rounded-full px-6 py-2.5 cursor-pointer text-white font-amiri text-[15px] mb-8"
           >
-            <span>{t({ ar: 'استمع للتلاوة', en: 'Listen to the recitation' })}</span>
+            <span>{t({ ar: 'استمع', en: 'Listen to the recitation' })}</span>
             {/* Equalizer bars */}
             <span className="inline-flex items-end gap-0.5 h-4">
               {[0, 1, 2, 3].map((i) => (
