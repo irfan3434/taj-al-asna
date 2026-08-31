@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import HomeView from '@/components/HomeView';
 import NamesView from '@/components/NamesView';
@@ -29,11 +29,14 @@ function Shell() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const view = (searchParams.get('v') as View) || 'home';
-  const [selectedLib, setSelectedLib] = useState<LibraryItem | null>(null);
+  // Library detail is URL-driven (?v=libdetail&lib=<item id>) so it survives re-renders/reloads
+  // instead of relying on click-time state that gets lost on navigation.
+  const libId = searchParams.get('lib');
+  const selectedLib = libId ? libraryData.find((i) => i.id === libId) ?? null : null;
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [view]);
+  }, [view, libId]);
 
   function navigate(v: string, query?: string) {
     // Always include ?v= (even for home) so navigation is a search-param change the SPA
@@ -51,8 +54,7 @@ function Shell() {
   }
 
   function openLib(item: LibraryItem) {
-    setSelectedLib(item);
-    router.push('/?v=libdetail');
+    router.push(`/?v=libdetail&lib=${item.id}`);
   }
 
   return (
