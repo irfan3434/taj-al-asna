@@ -187,7 +187,7 @@ const MASCOT_DHIKR: Bi[] = [
 ];
 
 const MASCOT_VISIBLE_MS = 6000; // hold each message on screen
-const MASCOT_HIDDEN_MS = 2000; // gap between messages
+const MASCOT_HIDDEN_MS = 15000; // gap between messages
 const MASCOT_ENTRANCE_MS = 500; // initial delay so the first appearance animates
 
 /**

@@ -14,7 +14,7 @@ interface LibraryDetailViewProps {
 const LANG_TABS: { id: 'ar' | 'en' | 'ur'; ar: string; en: string }[] = [
   { id: 'ar', ar: 'العربية', en: 'Arabic' },
   { id: 'en', ar: 'الإنجليزية', en: 'English' },
-  { id: 'ur', ar: 'الأردية', en: 'Urdu' },
+  { id: 'ur', ar: 'اردو', en: 'Urdu' },
 ];
 
 export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewProps) {
