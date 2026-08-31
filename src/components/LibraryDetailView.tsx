@@ -11,6 +11,12 @@ interface LibraryDetailViewProps {
   onGoBack: () => void;
 }
 
+const SECTION_TABS: { id: 'animated' | 'real' | 'complete'; ar: string; en: string }[] = [
+  { id: 'animated', ar: 'رسوم متحركة', en: 'Animated Videos' },
+  { id: 'real', ar: 'فيديوهات حقيقية', en: 'Real Videos' },
+  { id: 'complete', ar: 'الفيديو الكامل', en: 'Complete Video' },
+];
+
 const LANG_TABS: { id: 'ar' | 'en' | 'ur'; ar: string; en: string }[] = [
   { id: 'ar', ar: 'العربية', en: 'Arabic' },
   { id: 'en', ar: 'الإنجليزية', en: 'English' },
@@ -21,12 +27,18 @@ export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewP
   const { t, isAr } = useLang();
 
   const [video, setVideo] = useState<{ uid: string; title: string } | null>(null);
+  const [activeSection, setActiveSection] = useState<'animated' | 'real' | 'complete'>('animated');
   const [activeLang, setActiveLang] = useState<'ar' | 'en' | 'ur'>('ar');
   const configured = streamConfigured();
 
-  // Items whose entries carry a `lang` (the kids corner) render as Arabic / English / Urdu tabs.
+  // The kids corner has two levels of tabs: main section (Animated/Real/Complete) × language.
+  const sectioned = item.entries.some((e) => e.section);
   const tabbed = item.entries.some((e) => e.lang);
-  const visibleEntries = tabbed ? item.entries.filter((e) => e.lang === activeLang) : item.entries;
+  const visibleEntries = item.entries.filter((e) => {
+    if (sectioned && e.section !== activeSection) return false;
+    if (tabbed && e.lang !== activeLang) return false;
+    return true;
+  });
   const firstVideo = configured ? visibleEntries.find((e) => e.video) : undefined;
 
   const stats = [
@@ -83,6 +95,26 @@ export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewP
             {t({ ar: 'المحتوى', en: 'Contents' })}
           </h3>
 
+          {sectioned && (
+            <div className="flex flex-wrap gap-1 mb-4 border-b border-border">
+              {SECTION_TABS.map((sec) => {
+                const active = sec.id === activeSection;
+                return (
+                  <button
+                    key={sec.id}
+                    onClick={() => setActiveSection(sec.id)}
+                    className={`relative px-4 py-2.5 font-naskh text-sm md:text-base font-semibold transition-colors ${
+                      active ? 'text-primary' : 'text-text-muted hover:text-primary'
+                    }`}
+                  >
+                    {t({ ar: sec.ar, en: sec.en })}
+                    {active && <span className="absolute inset-x-2 -bottom-px h-[3px] rounded-full bg-secondary" />}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
           {tabbed && (
             <div className="flex flex-wrap gap-2 mb-4">
               {LANG_TABS.map((tab) => {
@@ -105,7 +137,7 @@ export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewP
           <div className="flex flex-col gap-2.5">
             {visibleEntries.length === 0 && (
               <div className="bg-cream-light border border-dashed border-border rounded-[14px] px-4 py-8 text-center text-text-muted font-naskh text-sm">
-                {t({ ar: 'لا توجد فيديوهات في هذه اللغة بعد.', en: 'No videos in this language yet.' })}
+                {t({ ar: 'لا توجد فيديوهات هنا بعد.', en: 'No videos here yet.' })}
               </div>
             )}
             {visibleEntries.map((ent, i) => {
