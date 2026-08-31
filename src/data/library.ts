@@ -87,11 +87,13 @@ export const libraryData: LibraryItem[] = [
     stat1: 'للأعمار ٦+', stat1En: 'Ages 6+', stat2: 'محتوى آمن', stat2En: 'Safe content', stat3: 'ألعاب تعليمية', stat3En: 'Educational games',
     // 👇 Children's Corner — paste the Cloudflare Stream UID for each video entry.
     entries: [
-      { t: 'المنشئ للخلق على غير مثال سابق، المبدع لصور الموجودات', meta: 'البارئ', tEn: 'The Creator who brings into being without precedent, the Originator of the forms of all that exists.', metaEn: 'Creator', video: '4055ff668512c7eda505e5b28f21bf38' },
-      { t: 'لعبة: طابِق الاسم بمعناه', meta: 'لعبة', tEn: 'Game: match the Name to its meaning', metaEn: 'Game' },
-      { t: 'نشيد: أسماء ربي الحسنى', meta: 'نشيد', tEn: "Nasheed: my Lord's Beautiful Names", metaEn: 'Nasheed', video: '' },
-      { t: 'تلوين: حديقة الأسماء', meta: 'نشاط', tEn: 'Coloring: the garden of Names', metaEn: 'Activity' },
-      { t: 'قصة: الله الحفيظ يحرسنا', meta: 'قصة', tEn: 'Story: Al-Hafiz watches over us', metaEn: 'Story', video: '' },
+      { t: 'البارئ', meta: 'البارئ', tEn: 'The Creator', metaEn: 'The Creator', video: '4055ff668512c7eda505e5b28f21bf38' },
+      { t: 'الجبار', meta: 'الجبار ', tEn: 'The Almighty', metaEn: 'The Almighty', video: '8ba07c529fb68c95765d03f1ba9f84b3' },
+      { t: 'الباسط', meta: 'الباسط ', tEn: 'Al-Basit', metaEn: 'Al-Basit', video: '34eb9c5cedc8955cdb2e5a2b0b8e3613' },
+      { t: 'البصير', meta: 'البصير', tEn: 'Al-Basir', metaEn: 'Al-Basir', video: '0a9a206f109d658fecdd5bca050e33e0' },
+      { t: 'الغفور اردو', meta: 'الغفور اردو', tEn: 'Al-Ghafur', metaEn: 'Al-Ghafur', video: '57ceb90dd54124f4fd19851e115295b5' },
+      { t: 'الكبير بالانجليزي', meta: 'الكبير بالانجليزي', tEn: 'Al-Kabir', metaEn: 'Al-Kabir', video: 'af28e4b16b4cc6134bd719d90b9ced4e' }
+
     ],
   },
   {
