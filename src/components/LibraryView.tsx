@@ -1,19 +1,19 @@
 'use client';
 
+import Link from 'next/link';
 import { LibraryItem } from '@/data/library';
 import { useLang } from '@/i18n/language';
 
 interface LibraryViewProps {
   items: LibraryItem[];
-  onOpenItem: (item: LibraryItem) => void;
 }
 
-function LibCard({ item, onOpen }: { item: LibraryItem; onOpen: () => void }) {
+function LibCard({ item }: { item: LibraryItem }) {
   const { t, isAr } = useLang();
   return (
-    <button
-      onClick={onOpen}
-      className="group cursor-pointer w-full text-start bg-cream-light border border-border rounded-[18px] overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:border-secondary hover:shadow-[0_18px_40px_rgba(13,70,52,0.09)]"
+    <Link
+      href={`/library/${item.id}`}
+      className="group cursor-pointer block w-full text-start bg-cream-light border border-border rounded-[18px] overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:border-secondary hover:shadow-[0_18px_40px_rgba(13,70,52,0.09)]"
     >
       {/* Banner */}
       <div className="h-32 bg-[repeating-linear-gradient(135deg,var(--color-primary)_0_14px,var(--color-primary-accent)_14px_28px)] grid place-items-center relative overflow-hidden">
@@ -38,11 +38,11 @@ function LibCard({ item, onOpen }: { item: LibraryItem; onOpen: () => void }) {
           <span className="font-cormorant text-lg transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">↗</span>
         </div>
       </div>
-    </button>
+    </Link>
   );
 }
 
-export default function LibraryView({ items, onOpenItem }: LibraryViewProps) {
+export default function LibraryView({ items }: LibraryViewProps) {
   const { t, isAr } = useLang();
   return (
     <main className="max-w-[1180px] mx-auto px-4 md:px-7 pt-8 md:pt-12 pb-16 md:pb-[90px]">
@@ -65,7 +65,7 @@ export default function LibraryView({ items, onOpenItem }: LibraryViewProps) {
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {items.map((item) => (
-          <LibCard key={item.id} item={item} onOpen={() => onOpenItem(item)} />
+          <LibCard key={item.id} item={item} />
         ))}
       </div>
     </main>

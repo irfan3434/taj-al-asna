@@ -2,9 +2,10 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { useLang, Bi } from '@/i18n/language';
+import { viewHref } from '@/lib/nav';
 
 type View = 'home' | 'names' | 'library' | 'assistant' | 'eco' | 'about' | 'waqf';
 
@@ -18,10 +19,9 @@ const navItems: { view: View; label: Bi; highlight?: boolean }[] = [
   { view: 'waqf', label: { ar: 'الوقف والأثر', en: 'Waqf & Impact' }, highlight: true },
 ];
 
-/** URL for a nav tab. Always the ?v= form (even home) so header nav is a search-param CHANGE,
- *  which the SPA re-renders reliably. Navigating to a bare `/` from a ?v= view can fail to update. */
+/** URL for a nav tab — every section is a real route now. */
 function hrefFor(view: View): string {
-  return `/?v=${view}`;
+  return viewHref(view);
 }
 
 function LangToggle({ small }: { small?: boolean }) {
@@ -50,15 +50,17 @@ export default function Header() {
   const { t } = useLang();
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
-  // Derive the active tab from the URL: /name/* pages belong to "The Names";
-  // the home SPA reports its section via ?v=; future real routes use the path.
-  const current: string = pathname.startsWith('/name')
-    ? 'names'
-    : pathname === '/'
-      ? searchParams.get('v') || 'home'
-      : pathname.slice(1);
+  // Active tab derived purely from the path — every section is a real route now.
+  // (/names and /name/* both belong to "The Names".)
+  const current: string =
+    pathname.startsWith('/name') ? 'names'
+    : pathname.startsWith('/library') ? 'library'
+    : pathname.startsWith('/assistant') ? 'assistant'
+    : pathname.startsWith('/ecosystem') ? 'eco'
+    : pathname.startsWith('/about') ? 'about'
+    : pathname.startsWith('/waqf') ? 'waqf'
+    : 'home';
 
   function pillClasses(view: View, highlight?: boolean) {
     const base =
@@ -105,7 +107,7 @@ export default function Header() {
 
         {/* Actions — xl and up */}
         <div className="hidden xl:flex items-center gap-2.5 shrink-0">
-          <Link href="/?v=names" title={t({ ar: 'بحث', en: 'Search' })}
+          <Link href={hrefFor('names')} title={t({ ar: 'بحث', en: 'Search' })}
             className="w-[38px] h-[38px] rounded-full bg-transparent border border-secondary/50 text-secondary-dark cursor-pointer grid place-items-center text-base hover:bg-secondary/10 transition-colors">
             &#x2315;
           </Link>
@@ -149,7 +151,7 @@ export default function Header() {
           })}
           {/* Mobile actions row */}
           <div className="flex items-center gap-3 mt-2 pt-3 border-t border-secondary/30 px-1">
-            <Link href="/?v=names" onClick={() => setMenuOpen(false)} title={t({ ar: 'بحث', en: 'Search' })}
+            <Link href={hrefFor('names')} onClick={() => setMenuOpen(false)} title={t({ ar: 'بحث', en: 'Search' })}
               className="w-9 h-9 rounded-full bg-transparent border border-secondary/50 text-secondary-dark cursor-pointer grid place-items-center text-sm">
               &#x2315;
             </Link>

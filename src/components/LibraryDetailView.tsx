@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { LibraryItem } from '@/data/library';
 import { useLang } from '@/i18n/language';
 import { streamConfigured, streamThumbnail } from '@/lib/stream';
@@ -8,7 +9,6 @@ import VideoModal from './VideoModal';
 
 interface LibraryDetailViewProps {
   item: LibraryItem;
-  onGoBack: () => void;
 }
 
 const SECTION_TABS: { id: 'animated' | 'real' | 'complete'; ar: string; en: string }[] = [
@@ -23,7 +23,7 @@ const LANG_TABS: { id: 'ar' | 'en' | 'ur'; ar: string; en: string }[] = [
   { id: 'ur', ar: 'اردو', en: 'Urdu' },
 ];
 
-export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewProps) {
+export default function LibraryDetailView({ item }: LibraryDetailViewProps) {
   const { t, isAr } = useLang();
 
   const [video, setVideo] = useState<{ uid: string; title: string } | null>(null);
@@ -58,12 +58,12 @@ export default function LibraryDetailView({ item, onGoBack }: LibraryDetailViewP
 
         <div className="relative max-w-[980px] mx-auto">
           {/* Back button */}
-          <button
-            onClick={onGoBack}
+          <Link
+            href="/library"
             className="bg-white/[0.07] border border-secondary/30 text-secondary-light rounded-[10px] px-4 py-2 font-naskh text-sm cursor-pointer hover:bg-white/[0.12] transition-colors inline-flex items-center gap-2"
           >
             <span aria-hidden>{isAr ? '→' : '←'}</span> {t({ ar: 'المكتبة المعرفية', en: 'Knowledge Library' })}
-          </button>
+          </Link>
 
           {/* Icon + Title */}
           <div className="flex gap-4 md:gap-[22px] items-center mt-5 flex-wrap">

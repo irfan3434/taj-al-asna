@@ -1,10 +1,8 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useLang, Bi } from '@/i18n/language';
-
-interface WaqfViewProps {
-  onNavigate: (view: string) => void;
-}
+import { viewHref } from '@/lib/nav';
 
 const WAQF_CYCLE: { icon: string; label: Bi; desc: Bi }[] = [
   { icon: '◈', label: { ar: 'الوقف التأسيسي', en: 'Founding Endowment' }, desc: { ar: 'وقف رأس المال لتحقيق أثرٍ دائمٍ لا ينقطع.', en: 'Endowing capital for perpetual, uninterrupted impact.' } },
@@ -34,7 +32,8 @@ const IMPACT_CHIPS: Bi[] = [
   { ar: 'أثر يبقى لأجيالٍ قادمة', en: 'Impact that lasts for generations to come' },
 ];
 
-export default function WaqfView({ onNavigate }: WaqfViewProps) {
+export default function WaqfView() {
+  const router = useRouter();
   const { t, isAr } = useLang();
   const heading = isAr ? 'font-amiri' : 'font-cormorant';
 
@@ -189,7 +188,7 @@ export default function WaqfView({ onNavigate }: WaqfViewProps) {
             </span>
           </div>
           <button
-            onClick={() => onNavigate('eco')}
+            onClick={() => router.push(viewHref('eco'))}
             className="mt-6 bg-transparent border-none text-secondary-light font-naskh text-sm cursor-pointer hover:text-secondary transition-colors duration-300"
           >
             {t({ ar: 'استكشف المنظومة المتكاملة ←', en: 'Explore the integrated ecosystem →' })}

@@ -88,7 +88,7 @@ export default function DetailView({
 
         {/* Back button */}
         <Link
-          href="/?v=names"
+          href="/names"
           className="relative z-[1] inline-flex items-center gap-2 bg-transparent border-none text-secondary font-naskh text-base cursor-pointer mb-3 p-0"
         >
           <span className="text-lg" aria-hidden>{isAr ? '→' : '←'}</span>

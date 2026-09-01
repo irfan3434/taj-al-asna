@@ -6,9 +6,7 @@ import Link from 'next/link';
 import { useLang, Bi } from '@/i18n/language';
 import { nameSlug } from '@/data/names';
 import HeroSearch from '@/components/HeroSearch';
-
-/** URL for a home section: home is the SPA root, the rest are ?v= views. */
-const hrefForView = (v: string) => (v === 'home' ? '/' : `/?v=${v}`);
+import { viewHref } from '@/lib/nav';
 
 interface HomeViewProps {
   onNavigate: (view: string, query?: string) => void;
@@ -426,7 +424,7 @@ export default function HomeView({ onNavigate, onOpenName, names }: HomeViewProp
             {PATHWAYS.map((pathway, i) => (
               <Link
                 key={i}
-                href={hrefForView(pathway.view)}
+                href={viewHref(pathway.view)}
                 className="group relative block bg-cream-light rounded-[20px] px-6 py-10 lg:px-8 lg:py-12 text-center cursor-pointer border border-border overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:border-secondary/50 shadow-[0_4px_16px_rgba(6,32,23,0.05)] hover:shadow-[0_16px_48px_rgba(6,32,23,0.14)]"
               >
                 {/* Top accent line — grows on hover */}

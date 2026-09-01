@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import "./app.css";
 import { LanguageProvider } from "@/i18n/language";
 import AppFrame from "@/components/AppFrame";
@@ -63,7 +62,7 @@ const siteJsonLd = {
         "@type": "SearchAction",
         target: {
           "@type": "EntryPoint",
-          urlTemplate: `${SITE_URL}/?v=names&q={search_term_string}`,
+          urlTemplate: `${SITE_URL}/names?q={search_term_string}`,
         },
         "query-input": "required name=search_term_string",
       },
@@ -99,11 +98,7 @@ export default function RootLayout({
         />
         <LanguageProvider>
           <AppFrame>
-            {/* Header reads the URL (?v= / /name/*) to highlight the active tab,
-                so it must sit inside a Suspense boundary. */}
-            <Suspense fallback={<div className="h-[68px] md:h-[96px]" />}>
-              <Header />
-            </Suspense>
+            <Header />
             {children}
             <Footer />
           </AppFrame>

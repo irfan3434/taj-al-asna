@@ -1,10 +1,8 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { useLang, Bi } from '@/i18n/language';
-
-interface AboutViewProps {
-  onNavigate: (view: string) => void;
-}
+import { viewHref } from '@/lib/nav';
 
 const NEED_STATS: { num: string; suffix: Bi; label: Bi }[] = [
   { num: '2.0', suffix: { ar: ' مليار', en: 'B' }, label: { ar: 'مسلم حول العالم', en: 'Muslims Worldwide' } },
@@ -37,7 +35,8 @@ const METHODOLOGY: { icon: string; label: Bi; desc: Bi }[] = [
   { icon: '✓', label: { ar: 'ضبط الجودة', en: 'Quality Control' }, desc: { ar: 'معايير صارمة للدقة والاعتماد والتحديث.', en: 'Strict standards for accuracy, accreditation and updates.' } },
 ];
 
-export default function AboutView({ onNavigate }: AboutViewProps) {
+export default function AboutView() {
+  const router = useRouter();
   const { t, isAr } = useLang();
   const heading = isAr ? 'font-amiri' : 'font-cormorant';
 
@@ -193,13 +192,13 @@ export default function AboutView({ onNavigate }: AboutViewProps) {
           </h2>
           <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center mt-7">
             <button
-              onClick={() => onNavigate('names')}
+              onClick={() => router.push(viewHref('names'))}
               className="bg-secondary text-primary-dark rounded-full px-8 py-3 font-naskh text-[15px] font-semibold cursor-pointer border-none hover:bg-secondary-light transition-colors duration-300"
             >
               {t({ ar: 'ابدأ رحلتك المعرفية', en: 'Start Your Journey' })}
             </button>
             <button
-              onClick={() => onNavigate('waqf')}
+              onClick={() => router.push(viewHref('waqf'))}
               className="bg-transparent text-secondary border-2 border-secondary rounded-full px-8 py-3 font-naskh text-[15px] font-semibold cursor-pointer hover:text-secondary-light hover:border-secondary-light transition-all duration-300"
             >
               {t({ ar: 'تعرّف على الوقف والأثر', en: 'Explore Waqf & Impact' })}

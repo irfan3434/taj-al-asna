@@ -27,11 +27,13 @@ const STORAGE_KEY = 'taj-lang';
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>('ar');
 
-  // hydrate from storage on mount
+  // Hydrate from storage on mount. localStorage isn't available during SSR, so this must
+  // run in an effect (can't seed useState without a hydration mismatch) — hence the disable.
   useEffect(() => {
     const saved = (typeof window !== 'undefined'
       ? (localStorage.getItem(STORAGE_KEY) as Lang | null)
       : null);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (saved === 'ar' || saved === 'en') setLangState(saved);
   }, []);
 
