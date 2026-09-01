@@ -13,12 +13,14 @@ export const runtime = 'nodejs';
  *   RAG_API_KEY   shared secret sent as x-api-key (optional but recommended)
  */
 export async function POST(req: NextRequest) {
-  const base = process.env.RAG_API_URL?.replace(/\/+$/, '');
-  const key = process.env.RAG_API_KEY;
+  const rawUrl = process.env.RAG_API_URL?.trim();
+  const key = process.env.RAG_API_KEY?.trim();
 
-  if (!base) {
+  if (!rawUrl) {
     return Response.json({ error: 'not_configured' }, { status: 503 });
   }
+  // Tolerate a missing scheme or trailing slash in the env value (common paste mistake).
+  const base = (/^https?:\/\//i.test(rawUrl) ? rawUrl : `https://${rawUrl}`).replace(/\/+$/, '');
 
   let body: { text?: unknown; lang?: unknown };
   try {
@@ -43,8 +45,11 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({ text, lang, stream: true }),
     });
-  } catch {
-    return Response.json({ error: 'upstream_unreachable' }, { status: 502 });
+  } catch (err) {
+    return Response.json(
+      { error: 'upstream_unreachable', detail: err instanceof Error ? err.message : String(err) },
+      { status: 502 },
+    );
   }
 
   if (!upstream.ok || !upstream.body) {

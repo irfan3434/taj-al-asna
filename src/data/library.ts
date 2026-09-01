@@ -88,7 +88,7 @@ export const libraryData: LibraryItem[] = [
     descEn: "Safe, interactive content that endears children to their Lord's Names.",
     about: 'ركنٌ مصمّم خصّيصاً للأطفال يقدّم أسماء الله الحسنى بأسلوبٍ قصصي تفاعلي محبّب وآمن، مع رسوم وألعاب تعليمية تغرس المعنى في القلوب الصغيرة.',
     aboutEn: "A corner designed specially for children, presenting Allah's Beautiful Names in a beloved, safe, interactive storytelling style, with illustrations and educational games that plant meaning in young hearts.",
-    stat1: 'للأعمار ٦+', stat1En: 'Ages 6+', stat2: 'محتوى آمن', stat2En: 'Safe content', stat3: 'ألعاب تعليمية', stat3En: 'Educational games',
+    stat1: 'للأعمار ٦+', stat1En: 'Ages 6+', stat2: 'محتوى آمن', stat2En: 'Safe content', stat3: 'مقاطع فيديو تعليمية', stat3En: 'Educational Videos',
     // 👇 Children's Corner — two levels: main `section` ('animated' | 'real' | 'complete') × `lang`
     //    ('ar' | 'en' | 'ur'). Copy a line and set section + lang + the Cloudflare `video` UID.
     //    Real & Complete start empty — add lines with section: 'real' or section: 'complete'.
