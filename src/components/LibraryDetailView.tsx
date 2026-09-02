@@ -200,6 +200,29 @@ export default function LibraryDetailView({ item }: LibraryDetailViewProps) {
               )}
               {visibleEntries.map((ent, i) => {
                 const title = t({ ar: ent.t, en: ent.tEn });
+
+                // Audio entry → inline HTML5 player card.
+                if (ent.audio) {
+                  return (
+                    <div key={i} className="bg-cream-light border border-border rounded-[14px] px-3.5 md:px-[18px] py-3.5 md:py-4">
+                      <div className="flex items-center gap-3 md:gap-4 mb-3">
+                        <div className="shrink-0 w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-primary to-primary-mid grid place-items-center text-secondary-light text-sm md:text-base">
+                          {item.entryIcon}
+                        </div>
+                        <div className="flex-1 min-w-0 text-sm md:text-base font-semibold text-text-body truncate">
+                          {title}
+                        </div>
+                        <div className="shrink-0 font-cormorant text-xs md:text-sm text-secondary-dark hidden min-[400px]:block">
+                          {t({ ar: ent.meta, en: ent.metaEn })}
+                        </div>
+                      </div>
+                      <audio controls preload="metadata" src={ent.audio} className="w-full">
+                        {t({ ar: 'متصفحك لا يدعم تشغيل الصوت.', en: 'Your browser does not support audio playback.' })}
+                      </audio>
+                    </div>
+                  );
+                }
+
                 const playable = Boolean(ent.video) && configured;
                 const rowClass =
                   'group flex items-center gap-3 md:gap-4 bg-cream-light border border-border rounded-[14px] px-3.5 md:px-[18px] py-3.5 md:py-4 cursor-pointer transition-all duration-200 hover:border-secondary hover:shadow-[0_6px_20px_rgba(13,70,52,0.07)] hover:bg-cream-warm/40 text-start w-full';

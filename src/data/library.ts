@@ -9,6 +9,8 @@ export interface LibraryEntry {
   lang?: 'ar' | 'en' | 'ur';
   /** Main section (kids corner, two-level): Animated / Real / Complete video. */
   section?: 'animated' | 'real' | 'complete';
+  /** Public path to an audio file (e.g. '/audio/foo.mp3') — renders an inline audio player. */
+  audio?: string;
 }
 
 export interface LibraryItem {
@@ -67,18 +69,14 @@ export const libraryData: LibraryItem[] = [
   },
   {
     id: 'audio', ar: 'تلاوات وتأمّلات صوتية', en: 'Audio & Reflections', icon: '♪',
-    kind: 'صوتيات', kindEn: 'Audio', meta: '١٢٠ مقطعاً', metaEn: '120 tracks', entryIcon: '♪',
+    kind: 'صوتيات', kindEn: 'Audio', meta: 'مسارات صوتية أصلية', metaEn: 'Genuine tracks', entryIcon: '♪',
     desc: 'مكتبة صوتية للذكر والتأمّل في أسماء الله الحسنى.',
     descEn: "An audio library for remembrance and reflection on Allah's Beautiful Names.",
     about: 'مكتبةٌ صوتية تجمع تلاوات الآيات المتضمّنة للأسماء الحسنى، وتأمّلاتٍ هادئة تعين على الحضور والخشوع. مناسبة للاستماع في كل وقت.',
     aboutEn: 'An audio library gathering recitations of verses that contain the Beautiful Names, along with calm reflections that aid presence and humility. Suitable for listening at any time.',
     stat1: '١٢٠ مقطعاً', stat1En: '120 tracks', stat2: 'جودة عالية', stat2En: 'High quality', stat3: 'تحميل متاح', stat3En: 'Download available',
     entries: [
-      { t: 'ترتيل سورة الحشر (الأسماء الحسنى)', meta: '٠٤:٣٠', tEn: 'Recitation of Surah Al-Hashr (the Beautiful Names)', metaEn: '04:30' },
-      { t: 'تأمّل في اسم «الرحمن»', meta: '٠٦:١٥', tEn: 'Reflection on the name “Ar-Rahman”', metaEn: '06:15' },
-      { t: 'تأمّل في اسم «الحيّ القيّوم»', meta: '٠٥:٤٠', tEn: 'Reflection on “Al-Hayy, Al-Qayyum”', metaEn: '05:40' },
-      { t: 'ذكر «يا لطيف» — جلسة هدوء', meta: '١٠:٠٠', tEn: 'Dhikr “Ya Latif” — a calm session', metaEn: '10:00' },
-      { t: 'تأمّل في اسم «النور»', meta: '٠٧:٢٠', tEn: 'Reflection on the name “An-Nur”', metaEn: '07:20' },
+      { t: 'التاج الأسنى-مقدمة', meta: '٠٤:٣٠', tEn: 'Introduction to the Beautiful Names', metaEn: '04:30', audio: '/audio/Introduction-tajalasna.mp3' },
     ],
   },
   {
@@ -112,6 +110,11 @@ export const libraryData: LibraryItem[] = [
       { t: 'الرافع', meta: 'فيديو', tEn: 'Al-Rafeh', metaEn: 'Video', section: 'animated', lang: 'ar', video: '0bd2fbd268ac136290f77dbcae622738' },
       { t: 'الرحمن', meta: 'فيديو', tEn: 'Al-Rahman', metaEn: 'Video', section: 'animated', lang: 'ar', video: '57be168ce871f25293932519c92f8987' },
       { t: 'الرحيم', meta: 'فيديو', tEn: 'Al-Raheem', metaEn: 'Video', section: 'animated', lang: 'ar', video: '0c6a8ea519cd3a2d64907b1438273d4a' },
+      { t: 'الخالق', meta: 'فيديو', tEn: 'Al-Khaliq', metaEn: 'Video', section: 'animated', lang: 'ar', video: '1d6979317e0da40a74f264c221aff2c1' },
+      { t: 'الغفار', meta: 'فيديو', tEn: 'Al-Ghafaar', metaEn: 'Video', section: 'animated', lang: 'ar', video: '97608631f6a00c2a7606191ec5f13041' },
+      { t: 'العزيز', meta: 'فيديو', tEn: 'Al-Aziz', metaEn: 'Video', section: 'animated', lang: 'ar', video: '7cb24878a5ad162c4ae634d1c4f0d303' },
+      { t: 'الرزاق', meta: 'فيديو', tEn: 'Al-Razzaq', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'cad44993ba077306b142fd27c27a6141' },
+      { t: 'السميع', meta: 'فيديو', tEn: 'Al-Sami', metaEn: 'Video', section: 'animated', lang: 'ar', video: '69c62c090194f5b5b79818667050992a' },
 
       // English
       { t: 'الكبير', meta: 'فيديو', tEn: 'Al-Kabir', metaEn: 'Video', section: 'animated', lang: 'en', video: 'af28e4b16b4cc6134bd719d90b9ced4e' },
