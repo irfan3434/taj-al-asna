@@ -119,6 +119,10 @@ export const libraryData: LibraryItem[] = [
       { t: 'القابض', meta: 'فيديو', tEn: 'Al-Qaabiz', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'c6f4591a97becfbc5e436e1d8590b0f9' },
       { t: 'اللطيف', meta: 'فيديو', tEn: 'Al-Lateef', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'd547143db143d5d460c7a6c06a3f3ca7' },
       { t: 'المتكبر', meta: 'فيديو', tEn: 'Al-Mutakabbir', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'bc62937a220b3c04b140a8c2d147a364' },
+      { t: 'المذل', meta: 'فيديو', tEn: 'Al-Muzill', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'd60291fa91716ba1b93cf456d2fdcead' },
+      { t: 'المصور', meta: 'فيديو', tEn: 'Al-Musawwar', metaEn: 'Video', section: 'animated', lang: 'ar', video: '643e354aa37f24a0df447cba71a74431' },
+      { t: 'المعز', meta: 'فيديو', tEn: 'Al-Muizz', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'f3c305ba1acb7ab163bc62d06987f7c2' },
+      { t: 'الملك', meta: 'فيديو', tEn: 'Al-Malik', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'bdc5e438e7ffd1d778a1689bc1731161' },
       
 
       // English
