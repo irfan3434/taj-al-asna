@@ -123,6 +123,9 @@ export const libraryData: LibraryItem[] = [
       { t: 'المصور', meta: 'فيديو', tEn: 'Al-Musawwar', metaEn: 'Video', section: 'animated', lang: 'ar', video: '643e354aa37f24a0df447cba71a74431' },
       { t: 'المعز', meta: 'فيديو', tEn: 'Al-Muizz', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'f3c305ba1acb7ab163bc62d06987f7c2' },
       { t: 'الملك', meta: 'فيديو', tEn: 'Al-Malik', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'bdc5e438e7ffd1d778a1689bc1731161' },
+      { t: 'المهيمن', meta: 'فيديو', tEn: 'Al-Muhaymin', metaEn: 'Video', section: 'animated', lang: 'ar', video: '2771ae5ffea8bf360d2a31c3956b39c9' },
+      { t: 'المؤمن', meta: 'فيديو', tEn: 'Al-Mumin', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'c81acd3792a7dd91bacd999ff2c32598' },
+      { t: 'الوهاب', meta: 'فيديو', tEn: 'Al-Wahhab', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'e82a39e8d0130cd45f239d31ba3f67c2' },
       
 
       // English
