@@ -122,6 +122,18 @@ export const libraryData: LibraryItem[] = [
       { t: 'الرؤوف', meta: 'فيديو', tEn: 'Al-Rouf', metaEn: 'Video', section: 'animated', lang: 'ar', video: '8c77bd09f73174f9f9990792235b3d62' },
       { t: 'الرافع', meta: 'فيديو', tEn: 'Al-Raafi', metaEn: 'Video', section: 'animated', lang: 'ar', video: '5c9b483b03e1142e313926a1aa9da28d' },
       { t: 'الرحمن', meta: 'فيديو', tEn: 'Al-Rahman', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'c0d0a1ab182ba5f5e8506ed1d539c117' },
+      { t: 'الرحيم', meta: 'فيديو', tEn: 'Al-Raheem', metaEn: 'Video', section: 'animated', lang: 'ar', video: '01657c4f4ab035d1aa0840e7e815d8ec' },
+      { t: 'الرزاق', meta: 'فيديو', tEn: 'Al-Razzaq', metaEn: 'Video', section: 'animated', lang: 'ar', video: '5ad1173231517b89df8ee433e86050a3' },
+      { t: 'الرشيد', meta: 'فيديو', tEn: 'Al-Rasheed', metaEn: 'Video', section: 'animated', lang: 'ar', video: '08053106706fcc0c50ff3f8e3f8bd5fc' },
+      { t: 'الرقيب', meta: 'فيديو', tEn: 'Al-Raqeeb', metaEn: 'Video', section: 'animated', lang: 'ar', video: '5ca27cfff91e97f241a6ef58c5d95980' },
+      { t: 'السلام', meta: 'فيديو', tEn: 'As-Salaam', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'be5face69d3246ffdffe8dcd91ed5ee6' },
+      { t: 'السميع', meta: 'فيديو', tEn: 'Al-Samee', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'd7a8ee2747b4b59bfc64458aa015ad7d' },
+      { t: 'الشكور', meta: 'فيديو', tEn: 'Al-Shakoor', metaEn: 'Video', section: 'animated', lang: 'ar', video: '69d7c13497c4ff7e87ad7896720e3786' },
+      { t: 'الشهيد', meta: 'فيديو', tEn: 'Al-Shaheed', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'f5a0da11469baad87f39ff9c630cb264' },
+      { t: 'الصبور', meta: 'فيديو', tEn: 'Al-Saboor', metaEn: 'Video', section: 'animated', lang: 'ar', video: '90a20038fcee0ad6080b5727057ce99a' },
+      { t: 'الصمد', meta: 'فيديو', tEn: 'Al-Samad', metaEn: 'Video', section: 'animated', lang: 'ar', video: '0a2d5e83cd68959b82b835a00a43eedc' },
+      { t: 'الضار', meta: 'فيديو', tEn: 'Al-Dhaar', metaEn: 'Video', section: 'animated', lang: 'ar', video: '0d81018f33ff4188acabc67a08abf1aa' },
+
      
 
       // English
