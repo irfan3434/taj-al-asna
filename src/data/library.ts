@@ -143,8 +143,19 @@ export const libraryData: LibraryItem[] = [
       { t: 'الغفار', meta: 'فيديو', tEn: 'Al-Ghafaar', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'f98afedc27b3f711863d1050adc8f352' },
       { t: 'الغفور', meta: 'فيديو', tEn: 'Al-Ghafur', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'fe1438a607552835534ade900a12cd9e' },
       { t: 'الغني', meta: 'فيديو', tEn: 'Al-Ghani', metaEn: 'Video', section: 'animated', lang: 'ar', video: '77a1d02e62ecce2c77bf19695ea670e6' },
+      { t: 'الفتاح', meta: 'فيديو', tEn: 'Al-Fathah', metaEn: 'Video', section: 'animated', lang: 'ar', video: '8e60348a47b2f2065b4034c8afe1f6ca' },
+      { t: 'القابض', meta: 'فيديو', tEn: 'Al-Qabid', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'd57e1399a171ef69c14349a438cfb0c1' },
+      { t: 'القادر', meta: 'فيديو', tEn: 'Al-Qadir', metaEn: 'Video', section: 'animated', lang: 'ar', video: '7ee0299ef357ae5adb3712da74766d17' },
+      { t: 'القدوس', meta: 'فيديو', tEn: 'Al-Quddus', metaEn: 'Video', section: 'animated', lang: 'ar', video: '3adb814f295506c0eefdcad242a77e7e' },
+      { t: 'القهار', meta: 'فيديو', tEn: 'Al-Qahhar', metaEn: 'Video', section: 'animated', lang: 'ar', video: '123d83b28830998b51b58f3ac824de22' },
+      { t: 'القوي', meta: 'فيديو', tEn: 'Al-Quwwi', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'e967b56692d6686f1fb7193055a3147e' },
+      { t: 'القيوم', meta: 'فيديو', tEn: 'Al-Qayyum', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'a31adad2f3fa01b920618d711d379f6c' },
+      { t: 'الكبير', meta: 'فيديو', tEn: 'Al-Kabeer', metaEn: 'Video', section: 'animated', lang: 'ar', video: '356d392deab97ebffcfe4732b984bfcd' },
+      { t: 'الكريم', meta: 'فيديو', tEn: 'Al-Kareem', metaEn: 'Video', section: 'animated', lang: 'ar', video: '740c85864f4db71d139d6d015bfaa88f' },
+      { t: 'اللطيف', meta: 'فيديو', tEn: 'Al-Latif', metaEn: 'Video', section: 'animated', lang: 'ar', video: '3b0398e774887a1ce713e5bc2954a2f1' },
      // { t: '', meta: 'فيديو', tEn: '', metaEn: 'Video', section: 'animated', lang: 'ar', video: '' },
-     // { t: '', meta: 'فيديو', tEn: '', metaEn: 'Video', section: 'animated', lang: 'ar', video: '' },
+     // { t: '', meta: 'فيديو', tEn: '', metaEn: 'Video', section: 'animated', lang: 'ar', video: '' }
+
 
      
 
