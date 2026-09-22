@@ -133,6 +133,18 @@ export const libraryData: LibraryItem[] = [
       { t: 'الصبور', meta: 'فيديو', tEn: 'Al-Saboor', metaEn: 'Video', section: 'animated', lang: 'ar', video: '90a20038fcee0ad6080b5727057ce99a' },
       { t: 'الصمد', meta: 'فيديو', tEn: 'Al-Samad', metaEn: 'Video', section: 'animated', lang: 'ar', video: '0a2d5e83cd68959b82b835a00a43eedc' },
       { t: 'الضار', meta: 'فيديو', tEn: 'Al-Dhaar', metaEn: 'Video', section: 'animated', lang: 'ar', video: '0d81018f33ff4188acabc67a08abf1aa' },
+      { t: 'الظاهر', meta: 'فيديو', tEn: 'Al-Zahir', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'bd44a3737ef5de1ce72ff9e7e8f144d5' },
+      { t: 'العدل', meta: 'فيديو', tEn: 'Al-Adl', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'a463c116906e7975941b6840cbf66622' },
+      { t: 'العزيز', meta: 'فيديو', tEn: 'Al-Aziz', metaEn: 'Video', section: 'animated', lang: 'ar', video: '7a23e764a9f59ba47c5c5941b6bc5846' },
+      { t: 'العظيم', meta: 'فيديو', tEn: 'Al-Azeem', metaEn: 'Video', section: 'animated', lang: 'ar', video: '8c281df64d46b7a2a3bdfa509c73c24d' },
+      { t: 'العفو', meta: 'فيديو', tEn: 'Al-Afu', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'e1a3ddec65df84855695378d15c854da' },
+      { t: 'العلي', meta: 'فيديو', tEn: 'Al-Ali', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'fe16f15c9236bff693fd51276d38f6a8' },
+      { t: 'العليم', meta: 'فيديو', tEn: 'Al-Aleem', metaEn: 'Video', section: 'animated', lang: 'ar', video: '480704b871df51967da670d2f9284679' },
+      { t: 'الغفار', meta: 'فيديو', tEn: 'Al-Ghafaar', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'f98afedc27b3f711863d1050adc8f352' },
+      { t: 'الغفور', meta: 'فيديو', tEn: 'Al-Ghafur', metaEn: 'Video', section: 'animated', lang: 'ar', video: 'fe1438a607552835534ade900a12cd9e' },
+      { t: 'الغني', meta: 'فيديو', tEn: 'Al-Ghani', metaEn: 'Video', section: 'animated', lang: 'ar', video: '77a1d02e62ecce2c77bf19695ea670e6' },
+     // { t: '', meta: 'فيديو', tEn: '', metaEn: 'Video', section: 'animated', lang: 'ar', video: '' },
+     // { t: '', meta: 'فيديو', tEn: '', metaEn: 'Video', section: 'animated', lang: 'ar', video: '' },
 
      
 
