@@ -88,7 +88,7 @@ export default function LibraryDetailView({ item }: LibraryDetailViewProps) {
       </section>
 
       {/* Content */}
-      <section className="max-w-[1200px] mx-auto px-4 md:px-7 pt-8 md:pt-10 pb-16 md:pb-20 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-[26px] items-start">
+      <section className="max-w-[980px] mx-auto px-4 md:px-7 pt-8 md:pt-10 pb-16 md:pb-20 grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-[26px] items-start">
         {/* Main content */}
         <div>
           <div className="font-cormorant text-xs uppercase tracking-[3px] text-secondary-dark mb-2">Overview</div>
