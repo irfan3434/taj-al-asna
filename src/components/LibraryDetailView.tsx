@@ -88,7 +88,7 @@ export default function LibraryDetailView({ item }: LibraryDetailViewProps) {
       </section>
 
       {/* Content */}
-      <section className="max-w-[980px] mx-auto px-4 md:px-7 pt-8 md:pt-10 pb-16 md:pb-20 grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-[26px] items-start">
+      <section className="max-w-[1200px] mx-auto px-4 md:px-7 pt-8 md:pt-10 pb-16 md:pb-20 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] gap-[26px] items-start">
         {/* Main content */}
         <div>
           <div className="font-cormorant text-xs uppercase tracking-[3px] text-secondary-dark mb-2">Overview</div>
@@ -138,7 +138,7 @@ export default function LibraryDetailView({ item }: LibraryDetailViewProps) {
 
           {isVideoCollection ? (
             /* Video collections → responsive grid of thumbnail cards */
-            <div className="grid grid-cols-1 min-[480px]:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
               {visibleEntries.length === 0 && (
                 <div className="col-span-full bg-cream-light border border-dashed border-border rounded-[16px] px-4 py-12 text-center text-text-muted font-naskh text-sm">
                   {t({ ar: 'لا توجد فيديوهات هنا بعد.', en: 'No videos here yet.' })}
