@@ -75,8 +75,10 @@ export const libraryData: LibraryItem[] = [
     about: 'مكتبةٌ صوتية تجمع تلاوات الآيات المتضمّنة للأسماء الحسنى، وتأمّلاتٍ هادئة تعين على الحضور والخشوع. مناسبة للاستماع في كل وقت.',
     aboutEn: 'An audio library gathering recitations of verses that contain the Beautiful Names, along with calm reflections that aid presence and humility. Suitable for listening at any time.',
     stat1: '١٢٠ مقطعاً', stat1En: '120 tracks', stat2: 'جودة عالية', stat2En: 'High quality', stat3: 'تحميل متاح', stat3En: 'Download available',
+    // 👇 Audio & Reflections — `audio` is the file's name in Cloudflare R2 (see src/lib/audio.ts).
+    //    Upload the mp3 to the R2 bucket, then reference it here by filename. Add more lines to add tracks.
     entries: [
-      { t: 'التاج الأسنى-مقدمة', meta: '٠٤:٣٠', tEn: 'Introduction to the Beautiful Names', metaEn: '04:30', audio: '/audio/Introduction-tajalasna.mp3' },
+      { t: 'التاج الأسنى-مقدمة', meta: '٠٤:٣٠', tEn: 'Introduction to the Beautiful Names', metaEn: '04:30', audio: 'Introduction-tajalasna.mp3' },
     ],
   },
   {

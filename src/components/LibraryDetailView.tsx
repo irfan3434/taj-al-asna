@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { LibraryItem } from '@/data/library';
 import { useLang } from '@/i18n/language';
 import { streamConfigured, streamThumbnail } from '@/lib/stream';
+import { audioSrc } from '@/lib/audio';
 import VideoModal from './VideoModal';
 
 interface LibraryDetailViewProps {
@@ -216,7 +217,7 @@ export default function LibraryDetailView({ item }: LibraryDetailViewProps) {
                           {t({ ar: ent.meta, en: ent.metaEn })}
                         </div>
                       </div>
-                      <audio controls preload="metadata" src={ent.audio} className="w-full">
+                      <audio controls preload="metadata" src={audioSrc(ent.audio)} className="w-full">
                         {t({ ar: 'متصفحك لا يدعم تشغيل الصوت.', en: 'Your browser does not support audio playback.' })}
                       </audio>
                     </div>
