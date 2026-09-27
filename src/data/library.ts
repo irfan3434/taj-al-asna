@@ -31,6 +31,8 @@ export interface LibraryItem {
   stat2: string; stat2En: string;
   stat3: string; stat3En: string;
   entries: LibraryEntry[];
+  /** When true, this section lists audio tracks live from R2 (via /api/audio) instead of `entries`. */
+  r2Audio?: boolean;
 }
 
 export const libraryData: LibraryItem[] = [
@@ -75,11 +77,9 @@ export const libraryData: LibraryItem[] = [
     about: 'مكتبةٌ صوتية تجمع تلاوات الآيات المتضمّنة للأسماء الحسنى، وتأمّلاتٍ هادئة تعين على الحضور والخشوع. مناسبة للاستماع في كل وقت.',
     aboutEn: 'An audio library gathering recitations of verses that contain the Beautiful Names, along with calm reflections that aid presence and humility. Suitable for listening at any time.',
     stat1: '١٢٠ مقطعاً', stat1En: '120 tracks', stat2: 'جودة عالية', stat2En: 'High quality', stat3: 'تحميل متاح', stat3En: 'Download available',
-    // 👇 Audio & Reflections — `audio` is the file's name in Cloudflare R2 (see src/lib/audio.ts).
-    //    Upload the mp3 to the R2 bucket, then reference it here by filename. Add more lines to add tracks.
-    entries: [
-      { t: 'التاج الأسنى-مقدمة', meta: '٠٤:٣٠', tEn: 'Introduction to the Beautiful Names', metaEn: '04:30', audio: 'Introduction-tajalasna.mp3' },
-    ],
+    // Audio & Reflections lists tracks live from the R2 bucket (see src/app/api/audio/route.ts).
+    r2Audio: true,
+    entries: [],
   },
   {
     id: 'kids', ar: 'ركن الأطفال', en: "Children's Corner", icon: '✿',

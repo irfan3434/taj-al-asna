@@ -6,6 +6,7 @@ import { LibraryItem } from '@/data/library';
 import { useLang } from '@/i18n/language';
 import { streamConfigured, streamThumbnail } from '@/lib/stream';
 import { audioSrc } from '@/lib/audio';
+import AudioLibrary from './AudioLibrary';
 import VideoModal from './VideoModal';
 
 interface LibraryDetailViewProps {
@@ -137,7 +138,10 @@ export default function LibraryDetailView({ item }: LibraryDetailViewProps) {
             </div>
           )}
 
-          {isVideoCollection ? (
+          {item.r2Audio ? (
+            /* Audio section → live list from the R2 bucket */
+            <AudioLibrary />
+          ) : isVideoCollection ? (
             /* Video collections → responsive grid of thumbnail cards */
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
               {visibleEntries.length === 0 && (
