@@ -53,28 +53,35 @@ export default function AudioLibrary() {
   }
 
   return (
-    <div className="flex flex-col gap-2.5">
-      <div className="mb-1 font-cormorant text-sm text-secondary-dark">
+    <div>
+      <div className="mb-4 font-cormorant text-sm text-secondary-dark">
         {tracks.length} {t({ ar: 'مقطعاً', en: 'tracks' })}
       </div>
-      {tracks.map((track) => (
-        <div
-          key={track.key}
-          className="bg-cream-light border border-border rounded-[14px] px-3.5 md:px-[18px] py-3.5 md:py-4"
-        >
-          <div className="flex items-center gap-3 md:gap-4 mb-3">
-            <div className="shrink-0 w-9 h-9 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-primary to-primary-mid grid place-items-center text-secondary-light text-base">
-              ♪
+      {/* 2 per row on mobile, 3 on tablet, 4 on desktop */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+        {tracks.map((track, i) => (
+          <div
+            key={track.key}
+            className="flex flex-col gap-3 bg-cream-light border border-border rounded-[16px] p-3 md:p-3.5"
+          >
+            <div className="flex items-center gap-2.5">
+              <div className="shrink-0 w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-mid grid place-items-center font-cormorant text-xs font-bold text-secondary-light">
+                {i + 1}
+              </div>
+              <div
+                className="flex-1 min-w-0 truncate text-[13px] md:text-sm font-semibold text-text-body"
+                dir="rtl"
+                title={track.title}
+              >
+                {track.title}
+              </div>
             </div>
-            <div className="flex-1 min-w-0 text-sm md:text-base font-semibold text-text-body truncate" dir="rtl">
-              {track.title}
-            </div>
+            <audio controls preload="none" src={audioSrc(track.key)} className="w-full">
+              {t({ ar: 'متصفحك لا يدعم تشغيل الصوت.', en: 'Your browser does not support audio playback.' })}
+            </audio>
           </div>
-          <audio controls preload="none" src={audioSrc(track.key)} className="w-full">
-            {t({ ar: 'متصفحك لا يدعم تشغيل الصوت.', en: 'Your browser does not support audio playback.' })}
-          </audio>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
