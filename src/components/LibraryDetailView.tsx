@@ -90,7 +90,7 @@ export default function LibraryDetailView({ item }: LibraryDetailViewProps) {
       </section>
 
       {/* Content */}
-      <section className="max-w-[1200px] mx-auto px-4 md:px-7 pt-8 md:pt-10 pb-16 md:pb-20 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_300px] gap-[26px] items-start">
+      <section className="max-w-[1200px] mx-auto px-4 md:px-7 pt-8 md:pt-10 pb-16 md:pb-20 grid gap-[26px] items-start">
         {/* Main content */}
         <div>
           <div className="font-cormorant text-xs uppercase tracking-[3px] text-secondary-dark mb-2">Overview</div>
@@ -268,7 +268,7 @@ export default function LibraryDetailView({ item }: LibraryDetailViewProps) {
         </div>
 
         {/* Sidebar */}
-        <aside className="bg-gradient-to-br from-primary to-primary-mid border border-secondary/25 rounded-[20px] p-7 text-text-light lg:sticky lg:top-[90px]">
+    {/*   <aside className="bg-gradient-to-br from-primary to-primary-mid border border-secondary/25 rounded-[20px] p-7 text-text-light lg:sticky lg:top-[90px]">
           <div className="font-cormorant text-[13px] tracking-[3px] uppercase text-secondary">
             About this collection
           </div>
@@ -291,7 +291,7 @@ export default function LibraryDetailView({ item }: LibraryDetailViewProps) {
           >
             {t({ ar: firstVideo ? 'شاهد الآن' : 'ابدأ الآن', en: firstVideo ? 'Watch now' : 'Start now' })}
           </button>
-        </aside>
+        </aside>  */}
       </section>
 
       {video && (
