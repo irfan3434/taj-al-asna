@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, type ReactNode } from 'react';
 import { useLang } from '@/i18n/language';
 
 interface Source {
@@ -28,6 +28,33 @@ function parseSSE(block: string): { event: string; data: string } {
     else if (line.startsWith('data:')) dataLines.push(line.slice(5).replace(/^ /, ''));
   }
   return { event, data: dataLines.join('\n') };
+}
+
+/**
+ * Prepare a bot answer for display:
+ *  - drop inline [n] / [n][m] citation markers (the Sources panel keeps them separately),
+ *  - emphasize "quoted" terms (names like الرَّحْمَن) so they stand out from the body text.
+ * Display-only; the raw streamed text is untouched. Safe on partial text while streaming
+ * (an unterminated quote just renders plain until its closing mark arrives).
+ */
+function renderAnswer(text: string): ReactNode {
+  const clean = text.replace(/\s*\[\d+\]/g, '');
+  const quoted = /[“”«»"][^“”«»"]+[“”«»"]/g; // matches "…", “…”, «…»
+  const parts: ReactNode[] = [];
+  let last = 0;
+  let key = 0;
+  let m: RegExpExecArray | null;
+  while ((m = quoted.exec(clean)) !== null) {
+    if (m.index > last) parts.push(clean.slice(last, m.index));
+    parts.push(
+      <strong key={key++} className="font-bold text-primary">
+        {m[0]}
+      </strong>,
+    );
+    last = m.index + m[0].length;
+  }
+  if (last < clean.length) parts.push(clean.slice(last));
+  return parts;
 }
 
 export default function AssistantView() {
@@ -197,7 +224,7 @@ function AssistantChat() {
                           : 'bg-cream-warm text-text-body border border-border'
                     }`}
                   >
-                    {msg.streaming && !msg.text ? <TypingDots /> : msg.text}
+                    {msg.streaming && !msg.text ? <TypingDots /> : isUser ? msg.text : renderAnswer(msg.text)}
                     {msg.streaming && msg.text && <span className="inline-block w-1.5 animate-[taj-pulse_1s_ease-in-out_infinite]">▍</span>}
                   </div>
 
