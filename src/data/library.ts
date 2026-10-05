@@ -241,6 +241,16 @@ export const libraryData: LibraryItem[] = [
       { t: 'الشكور', meta: 'فيديو', tEn: 'Al-Shakoor', metaEn: 'Video', section: 'real', lang: 'ar', video: 'fd4b128a8ed2659546cbb100c77834f5' },
       { t: 'العلي', meta: 'فيديو', tEn: 'Al-Alee', metaEn: 'Video', section: 'real', lang: 'ar', video: '85c1fb8062edf5706c3d67675c5b2c63' },
       { t: 'الحفيظ', meta: 'فيديو', tEn: 'Al-Hafiz', metaEn: 'Video', section: 'real', lang: 'ar', video: '2ee8f8569f8349ff41c61e2aac575fff' },
+      { t: 'اسم الله القوي', meta: 'فيديو', tEn: 'Name of Allah Al-Qawi', metaEn: 'Video', section: 'real', lang: 'ar', video: '2d4760cbcd6c3e3cc93566300688a0a7' },
+      { t: 'الاخر', meta: 'فيديو', tEn: 'Al-Akhir', metaEn: 'Video', section: 'real', lang: 'ar', video: '7b9d566b1121345b77343d42044bde3a' },
+      { t: 'الاول', meta: 'فيديو', tEn: 'Al-Awwal', metaEn: 'Video', section: 'real', lang: 'ar', video: 'dd977c0dc253aee20e9cd794ab9a5a52' },
+      { t: 'البارئ', meta: 'فيديو', tEn: 'Al-Baari', metaEn: 'Video', section: 'real', lang: 'ar', video: '6f76377a942ca2c4e0d87166d7d0e387' },
+      { t: 'الباسط', meta: 'فيديو', tEn: 'Al-Baasit', metaEn: 'Video', section: 'real', lang: 'ar', video: 'd2d35202f76c014536cd904cde891bf7' },
+      { t: 'الباطن', meta: 'فيديو', tEn: 'Al-Batin', metaEn: 'Video', section: 'real', lang: 'ar', video: '94e305a7329f7fd3c7294ccd99f2b02f' },
+      { t: '', meta: 'فيديو', tEn: '', metaEn: 'Video', section: 'real', lang: 'ar', video: '' },
+      { t: '', meta: 'فيديو', tEn: '', metaEn: 'Video', section: 'real', lang: 'ar', video: '' },
+      { t: '', meta: 'فيديو', tEn: '', metaEn: 'Video', section: 'real', lang: 'ar', video: '' },
+      { t: '', meta: 'فيديو', tEn: '', metaEn: 'Video', section: 'real', lang: 'ar', video: '' },
 
       // English
        { t: 'الكبير', meta: 'فيديو', tEn: 'Al-Kabeer', metaEn: 'Video', section: 'real', lang: 'en', video: 'a66740739b741ee76d586f9723789f21' },
