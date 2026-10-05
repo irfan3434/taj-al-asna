@@ -142,8 +142,14 @@ export default function LibraryDetailView({ item }: LibraryDetailViewProps) {
             /* Audio section → live list from the R2 bucket */
             <AudioLibrary />
           ) : isVideoCollection ? (
-            /* Video collections → responsive grid of thumbnail cards */
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
+            /* Video collections → responsive grid of numbered thumbnail cards */
+            <div>
+              {visibleEntries.length > 0 && (
+                <div className="mb-4 font-cormorant text-sm text-secondary-dark">
+                  {visibleEntries.length} {t({ ar: 'فيديو', en: visibleEntries.length === 1 ? 'video' : 'videos' })}
+                </div>
+              )}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5">
               {visibleEntries.length === 0 && (
                 <div className="col-span-full bg-cream-light border border-dashed border-border rounded-[16px] px-4 py-12 text-center text-text-muted font-naskh text-sm">
                   {t({ ar: 'لا توجد فيديوهات هنا بعد.', en: 'No videos here yet.' })}
@@ -179,8 +185,11 @@ export default function LibraryDetailView({ item }: LibraryDetailViewProps) {
                         </div>
                       )}
                     </div>
-                    <div className="p-3.5">
-                      <div className="font-naskh font-semibold text-primary group-hover:text-secondary-dark transition-colors truncate">
+                    <div className="p-3.5 flex items-center gap-2.5">
+                      <div className="shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-primary to-primary-mid grid place-items-center font-cormorant text-xs font-bold text-secondary-light">
+                        {i + 1}
+                      </div>
+                      <div className="flex-1 min-w-0 font-naskh font-semibold text-primary group-hover:text-secondary-dark transition-colors truncate">
                         {title}
                       </div>
                     </div>
@@ -194,6 +203,7 @@ export default function LibraryDetailView({ item }: LibraryDetailViewProps) {
                   <div key={i} className={`${cardClass} cursor-default`}>{card}</div>
                 );
               })}
+              </div>
             </div>
           ) : (
             /* Text sections → simple list */
