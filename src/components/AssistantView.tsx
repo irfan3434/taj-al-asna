@@ -31,13 +31,13 @@ function parseSSE(block: string): { event: string; data: string } {
 }
 
 /**
- * Prepare a bot answer for display:
+ * Inline formatting for a run of answer text (no block elements):
  *  - drop inline [n] / [n][m] citation markers (the Sources panel keeps them separately),
  *  - emphasize "quoted" terms (names like الرَّحْمَن) so they stand out from the body text.
  * Display-only; the raw streamed text is untouched. Safe on partial text while streaming
  * (an unterminated quote just renders plain until its closing mark arrives).
  */
-function renderAnswer(text: string): ReactNode {
+function renderInline(text: string): ReactNode {
   const clean = text.replace(/\s*\[\d+\]/g, '');
   const quoted = /[“”«»"][^“”«»"]+[“”«»"]/g; // matches "…", “…”, «…»
   const parts: ReactNode[] = [];
@@ -55,6 +55,105 @@ function renderAnswer(text: string): ReactNode {
   }
   if (last < clean.length) parts.push(clean.slice(last));
   return parts;
+}
+
+/** A GFM table separator row, e.g. "| --- | :--: |" (≥2 dash columns). */
+function isTableSeparator(line: string): boolean {
+  const cells = line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|');
+  return cells.length >= 2 && cells.every((c) => /^\s*:?-{1,}:?\s*$/.test(c));
+}
+
+function splitTableRow(line: string): string[] {
+  return line.trim().replace(/^\|/, '').replace(/\|$/, '').split('|').map((c) => c.trim());
+}
+
+/** True once a complete GFM table (header line + separator line) is present in the text. */
+function hasTable(text: string): boolean {
+  const lines = text.split('\n');
+  for (let i = 1; i < lines.length; i++) {
+    if (isTableSeparator(lines[i]!) && lines[i - 1]!.includes('|')) return true;
+  }
+  return false;
+}
+
+/** A styled, RTL-aware comparison table. Cells reuse the inline formatter. */
+function AnswerTable({ header, rows }: { header: string[]; rows: string[][] }) {
+  return (
+    <div className="my-2 overflow-x-auto">
+      <table className="w-full border-collapse text-sm">
+        <thead>
+          <tr>
+            {header.map((c, i) => (
+              <th
+                key={i}
+                className="border border-border bg-primary/10 px-3 py-2 text-start align-top font-semibold text-primary"
+              >
+                {renderInline(c)}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r, ri) => (
+            <tr key={ri} className={ri % 2 ? 'bg-cream-light/60' : undefined}>
+              {r.map((c, ci) => (
+                <td key={ci} className="border border-border px-3 py-2 text-start align-top leading-[1.7]">
+                  {renderInline(c)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/**
+ * Render a bot answer. Fast path (no table) is identical to before: inline formatting only.
+ * When a GFM table is present (e.g. a comparison), it is split out and rendered as a styled
+ * table while the surrounding prose keeps the inline formatting.
+ */
+function renderAnswer(text: string): ReactNode {
+  if (!hasTable(text)) return renderInline(text);
+
+  const lines = text.split('\n');
+  const blocks: ReactNode[] = [];
+  let buf: string[] = [];
+  let key = 0;
+
+  const flushText = () => {
+    const chunk = buf.join('\n').replace(/^\n+|\n+$/g, '');
+    if (chunk) {
+      blocks.push(
+        <div key={key++} className="whitespace-pre-line">
+          {renderInline(chunk)}
+        </div>,
+      );
+    }
+    buf = [];
+  };
+
+  for (let i = 0; i < lines.length; ) {
+    const line = lines[i]!;
+    const next = lines[i + 1];
+    if (line.includes('|') && next !== undefined && isTableSeparator(next)) {
+      flushText();
+      const header = splitTableRow(line);
+      const rows: string[][] = [];
+      i += 2;
+      while (i < lines.length && lines[i]!.includes('|') && lines[i]!.trim() !== '') {
+        rows.push(splitTableRow(lines[i]!));
+        i++;
+      }
+      blocks.push(<AnswerTable key={key++} header={header} rows={rows} />);
+    } else {
+      buf.push(line);
+      i++;
+    }
+  }
+  flushText();
+  return blocks;
 }
 
 export default function AssistantView() {
