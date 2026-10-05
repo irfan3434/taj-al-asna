@@ -32,28 +32,38 @@ function parseSSE(block: string): { event: string; data: string } {
 
 /**
  * Inline formatting for a run of answer text (no block elements):
- *  - drop inline [n] / [n][m] citation markers (the Sources panel keeps them separately),
+ *  - inline [n] citations → labelled reference chips ([مجلدN] in Arabic, [VolN] in English)
+ *    when showCitations is true; stripped entirely when false (e.g. inside comparison tables),
  *  - render **bold** Markdown as bold (asterisks removed),
  *  - emphasize "quoted" terms (names like الرَّحْمَن) in the distinct green so they stand out.
- * Display-only; the raw streamed text is untouched. Safe on partial text while streaming
- * (an unterminated **…** or "…" just renders plain until its closing marker arrives).
+ * Display-only; the raw streamed text is untouched. Safe on partial text while streaming.
  */
-function renderInline(text: string): ReactNode {
-  const clean = text.replace(/\s*\[\d+\]/g, '');
-  // Alt 1: **bold** (capture inner). Alt 2: "quoted" / “quoted” / «quoted» (keep the marks).
-  const token = /\*\*([^*\n]+)\*\*|[“”«»"][^“”«»"\n]+[“”«»"]/g;
+function renderInline(text: string, isAr: boolean, showCitations: boolean): ReactNode {
+  const base = showCitations ? text : text.replace(/\s*\[\d+\]/g, '');
+  // Alt 1: [n] citation. Alt 2: **bold** (inner). Alt 3: "quoted"/“quoted”/«quoted» (keep marks).
+  const token = /\[(\d+)\]|\*\*([^*\n]+)\*\*|[“”«»"][^“”«»"\n]+[“”«»"]/g;
   const parts: ReactNode[] = [];
   let last = 0;
   let key = 0;
   let m: RegExpExecArray | null;
-  while ((m = token.exec(clean)) !== null) {
-    if (m.index > last) parts.push(clean.slice(last, m.index));
+  while ((m = token.exec(base)) !== null) {
+    if (m.index > last) parts.push(base.slice(last, m.index));
     if (m[1] !== undefined) {
-      // **bold** → the model's own emphasis: bold, asterisks removed. Recurse so a quoted
-      // name inside the bold (the model often writes **"الرَّحْمَن"**) still gets the green.
+      // [n] → labelled reference chip (maps to source #n in the Sources panel below).
+      parts.push(
+        <span
+          key={key++}
+          className="mx-px align-baseline whitespace-nowrap font-cormorant text-[0.8em] font-semibold text-secondary-dark"
+        >
+          {isAr ? `[مجلد${m[1]}]` : `[Vol${m[1]}]`}
+        </span>,
+      );
+    } else if (m[2] !== undefined) {
+      // **bold** → model emphasis: bold, asterisks removed. Recurse so a quoted name inside
+      // the bold (the model often writes **"الرَّحْمَن"**) still gets the green.
       parts.push(
         <strong key={key++} className="font-semibold">
-          {renderInline(m[1])}
+          {renderInline(m[2], isAr, showCitations)}
         </strong>,
       );
     } else {
@@ -66,7 +76,7 @@ function renderInline(text: string): ReactNode {
     }
     last = m.index + m[0].length;
   }
-  if (last < clean.length) parts.push(clean.slice(last));
+  if (last < base.length) parts.push(base.slice(last));
   return parts;
 }
 
@@ -89,8 +99,8 @@ function hasTable(text: string): boolean {
   return false;
 }
 
-/** A styled, RTL-aware comparison table. Cells reuse the inline formatter. */
-function AnswerTable({ header, rows }: { header: string[]; rows: string[][] }) {
+/** A styled, RTL-aware comparison table. Cells reuse the inline formatter WITHOUT citations. */
+function AnswerTable({ header, rows, isAr }: { header: string[]; rows: string[][]; isAr: boolean }) {
   return (
     <div className="my-2 overflow-x-auto">
       <table className="w-full border-collapse text-sm">
@@ -101,7 +111,7 @@ function AnswerTable({ header, rows }: { header: string[]; rows: string[][] }) {
                 key={i}
                 className="border border-border bg-primary/10 px-3 py-2 text-start align-top font-semibold text-primary"
               >
-                {renderInline(c)}
+                {renderInline(c, isAr, false)}
               </th>
             ))}
           </tr>
@@ -111,7 +121,7 @@ function AnswerTable({ header, rows }: { header: string[]; rows: string[][] }) {
             <tr key={ri} className={ri % 2 ? 'bg-cream-light/60' : undefined}>
               {r.map((c, ci) => (
                 <td key={ci} className="border border-border px-3 py-2 text-start align-top leading-[1.7]">
-                  {renderInline(c)}
+                  {renderInline(c, isAr, false)}
                 </td>
               ))}
             </tr>
@@ -127,8 +137,8 @@ function AnswerTable({ header, rows }: { header: string[]; rows: string[][] }) {
  * When a GFM table is present (e.g. a comparison), it is split out and rendered as a styled
  * table while the surrounding prose keeps the inline formatting.
  */
-function renderAnswer(text: string): ReactNode {
-  if (!hasTable(text)) return renderInline(text);
+function renderAnswer(text: string, isAr: boolean): ReactNode {
+  if (!hasTable(text)) return renderInline(text, isAr, true);
 
   const lines = text.split('\n');
   const blocks: ReactNode[] = [];
@@ -140,7 +150,7 @@ function renderAnswer(text: string): ReactNode {
     if (chunk) {
       blocks.push(
         <div key={key++} className="whitespace-pre-line">
-          {renderInline(chunk)}
+          {renderInline(chunk, isAr, true)}
         </div>,
       );
     }
@@ -159,7 +169,7 @@ function renderAnswer(text: string): ReactNode {
         rows.push(splitTableRow(lines[i]!));
         i++;
       }
-      blocks.push(<AnswerTable key={key++} header={header} rows={rows} />);
+      blocks.push(<AnswerTable key={key++} header={header} rows={rows} isAr={isAr} />);
     } else {
       buf.push(line);
       i++;
@@ -336,7 +346,7 @@ function AssistantChat() {
                           : 'bg-cream-warm text-text-body border border-border'
                     }`}
                   >
-                    {msg.streaming && !msg.text ? <TypingDots /> : isUser ? msg.text : renderAnswer(msg.text)}
+                    {msg.streaming && !msg.text ? <TypingDots /> : isUser ? msg.text : renderAnswer(msg.text, isAr)}
                     {msg.streaming && msg.text && <span className="inline-block w-1.5 animate-[taj-pulse_1s_ease-in-out_infinite]">▍</span>}
                   </div>
 
