@@ -33,24 +33,37 @@ function parseSSE(block: string): { event: string; data: string } {
 /**
  * Inline formatting for a run of answer text (no block elements):
  *  - drop inline [n] / [n][m] citation markers (the Sources panel keeps them separately),
- *  - emphasize "quoted" terms (names like الرَّحْمَن) so they stand out from the body text.
+ *  - render **bold** Markdown as bold (asterisks removed),
+ *  - emphasize "quoted" terms (names like الرَّحْمَن) in the distinct green so they stand out.
  * Display-only; the raw streamed text is untouched. Safe on partial text while streaming
- * (an unterminated quote just renders plain until its closing mark arrives).
+ * (an unterminated **…** or "…" just renders plain until its closing marker arrives).
  */
 function renderInline(text: string): ReactNode {
   const clean = text.replace(/\s*\[\d+\]/g, '');
-  const quoted = /[“”«»"][^“”«»"]+[“”«»"]/g; // matches "…", “…”, «…»
+  // Alt 1: **bold** (capture inner). Alt 2: "quoted" / “quoted” / «quoted» (keep the marks).
+  const token = /\*\*([^*\n]+)\*\*|[“”«»"][^“”«»"\n]+[“”«»"]/g;
   const parts: ReactNode[] = [];
   let last = 0;
   let key = 0;
   let m: RegExpExecArray | null;
-  while ((m = quoted.exec(clean)) !== null) {
+  while ((m = token.exec(clean)) !== null) {
     if (m.index > last) parts.push(clean.slice(last, m.index));
-    parts.push(
-      <strong key={key++} className="font-bold text-primary">
-        {m[0]}
-      </strong>,
-    );
+    if (m[1] !== undefined) {
+      // **bold** → the model's own emphasis: bold, asterisks removed. Recurse so a quoted
+      // name inside the bold (the model often writes **"الرَّحْمَن"**) still gets the green.
+      parts.push(
+        <strong key={key++} className="font-semibold">
+          {renderInline(m[1])}
+        </strong>,
+      );
+    } else {
+      // "quoted" name → distinct green emphasis (keep the surrounding quotes).
+      parts.push(
+        <strong key={key++} className="font-bold text-primary">
+          {m[0]}
+        </strong>,
+      );
+    }
     last = m.index + m[0].length;
   }
   if (last < clean.length) parts.push(clean.slice(last));
