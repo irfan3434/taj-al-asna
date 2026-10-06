@@ -287,6 +287,7 @@ export const libraryData: LibraryItem[] = [
       { t: 'العفو', meta: 'فيديو', tEn: 'Al-Afuu', metaEn: 'Video', section: 'real', lang: 'ar', video: 'eaf67765765eeb5a148824009193fdd4' },
       { t: 'العلي', meta: 'فيديو', tEn: 'Al-Ali', metaEn: 'Video', section: 'real', lang: 'ar', video: '3c56f3997d35199cbb07bd416dbdd253' },
       { t: 'العليم', meta: 'فيديو', tEn: 'Al-Aleem', metaEn: 'Video', section: 'real', lang: 'ar', video: 'c576dc85ace112dd46b82c3be08b657b' },
+      { t: 'الغفار', meta: 'فيديو', tEn: 'Al-Ghafaar', metaEn: 'Video', section: 'real', lang: 'ar', video: '1ad4bec01d95129d3d75d97a6aa64073' },
 
       
 
