@@ -338,6 +338,14 @@ export const libraryData: LibraryItem[] = [
       { t: 'الولي', meta: 'فيديو', tEn: 'Al-Wali', metaEn: 'Video', section: 'real', lang: 'ar', video: 'a934491468b9d7c032b8272662e27eed' },
       { t: 'الوهاب', meta: 'فيديو', tEn: 'Al-Wahhab', metaEn: 'Video', section: 'real', lang: 'ar', video: '9269b74bd2ae673c779c0e3d942ac68a' },
       { t: 'ذو الجلال والإكرام', meta: 'فيديو', tEn: 'Zul-Jalal Wal-Ikram', metaEn: 'Video', section: 'real', lang: 'ar', video: '62f31ea9b742e4f8d888e1d4aa1f27f2' },
+      { t: 'الوتر الي الطبيب حقيقي مجموع', meta: 'فيديو', tEn: 'Combined Video 1', metaEn: 'Video', section: 'real', lang: 'ar', video: 'b9e854ec403cfacf2c0fb0e1080626ce' },
+      { t: 'المعطي الي ذوالجلال والاكرام حقيقي مجموع', meta: 'فيديو', tEn: 'Combined Video 2', metaEn: 'Video', section: 'real', lang: 'ar', video: 'ef3e0fc6e2c8e00577d872237a31ea0b' },
+      { t: 'الله الي المهيمن حقيقي مجموع', meta: 'فيديو', tEn: 'Combined Video 3', metaEn: 'Video', section: 'real', lang: 'ar', video: '026c90a7512ba4533fdfa64d6ac34345' },
+      { t: 'الغني الي المذل حقيقي مجموع', meta: 'فيديو', tEn: 'Combined Video 4', metaEn: 'Video', section: 'real', lang: 'ar', video: '576026b7c945f6778fe1f9a3ed54cb0f' },
+      { t: 'العزيز الي الوهاب حقيقي مجموع', meta: 'فيديو', tEn: 'Combined Video 5', metaEn: 'Video', section: 'real', lang: 'ar', video: '5f90f9aeb9d127d175dbe62c579abfeb' },
+      { t: 'الظاهر الي القيوم حقيقي مجموع', meta: 'فيديو', tEn: 'Combined Video 6', metaEn: 'Video', section: 'real', lang: 'ar', video: 'cf24238f6f74245fd5844437b73e5a87' },
+      
+
 
 
       
