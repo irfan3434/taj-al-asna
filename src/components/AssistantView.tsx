@@ -30,8 +30,23 @@ function parseSSE(block: string): { event: string; data: string } {
   return { event, data: dataLines.join('\n') };
 }
 
+/** A safe external link that opens in a new browser tab. */
+function ExternalLink({ href, label }: { href: string; label: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="break-words text-primary underline decoration-primary/40 underline-offset-2 transition-colors hover:decoration-primary"
+    >
+      {label}
+    </a>
+  );
+}
+
 /**
  * Inline formatting for a run of answer text (no block elements):
+ *  - [label](url) and bare https URLs → clickable links that open in a new browser tab,
  *  - inline [n] citations → labelled reference chips ([مجلدN] in Arabic, [VolN] in English)
  *    when showCitations is true; stripped entirely when false (e.g. inside comparison tables),
  *  - render **bold** Markdown as bold (asterisks removed),
@@ -40,30 +55,45 @@ function parseSSE(block: string): { event: string; data: string } {
  */
 function renderInline(text: string, isAr: boolean, showCitations: boolean): ReactNode {
   const base = showCitations ? text : text.replace(/\s*\[\d+\]/g, '');
-  // Alt 1: [n] citation. Alt 2: **bold** (inner). Alt 3: "quoted"/“quoted”/«quoted» (keep marks).
-  const token = /\[(\d+)\]|\*\*([^*\n]+)\*\*|[“”«»"][^“”«»"\n]+[“”«»"]/g;
+  // Alts in order: [label](url) link · [n] citation · bare url · **bold** · "quoted".
+  const token =
+    /\[([^\]\n]+)\]\((https?:\/\/[^)\s]+)\)|\[(\d+)\]|(https?:\/\/[^\s<>()]+)|\*\*([^*\n]+)\*\*|[“”«»"][^“”«»"\n]+[“”«»"]/g;
   const parts: ReactNode[] = [];
   let last = 0;
   let key = 0;
   let m: RegExpExecArray | null;
   while ((m = token.exec(base)) !== null) {
     if (m.index > last) parts.push(base.slice(last, m.index));
-    if (m[1] !== undefined) {
+    if (m[1] !== undefined && m[2] !== undefined) {
+      // [label](url) → clickable link.
+      parts.push(<ExternalLink key={key++} href={m[2]} label={m[1]} />);
+    } else if (m[3] !== undefined) {
       // [n] → labelled reference chip (maps to source #n in the Sources panel below).
       parts.push(
         <span
           key={key++}
           className="mx-px align-baseline whitespace-nowrap font-cormorant text-[0.8em] font-semibold text-secondary-dark"
         >
-          {isAr ? `[مجلد${m[1]}]` : `[Vol${m[1]}]`}
+          {isAr ? `[مجلد${m[3]}]` : `[Vol${m[3]}]`}
         </span>,
       );
-    } else if (m[2] !== undefined) {
+    } else if (m[4] !== undefined) {
+      // bare url → clickable link (trailing sentence punctuation stays as text).
+      let url = m[4];
+      let trail = '';
+      const tm = url.match(/[.,;:!؟،)]+$/);
+      if (tm) {
+        trail = tm[0];
+        url = url.slice(0, url.length - trail.length);
+      }
+      parts.push(<ExternalLink key={key++} href={url} label={url} />);
+      if (trail) parts.push(trail);
+    } else if (m[5] !== undefined) {
       // **bold** → model emphasis: bold, asterisks removed. Recurse so a quoted name inside
       // the bold (the model often writes **"الرَّحْمَن"**) still gets the green.
       parts.push(
         <strong key={key++} className="font-semibold">
-          {renderInline(m[2], isAr, showCitations)}
+          {renderInline(m[5], isAr, showCitations)}
         </strong>,
       );
     } else {
@@ -99,35 +129,116 @@ function hasTable(text: string): boolean {
   return false;
 }
 
-/** A styled, RTL-aware comparison table. Cells reuse the inline formatter WITHOUT citations. */
+function escapeHtml(s: string): string {
+  return s.replace(/[&<>"]/g, (c) => {
+    switch (c) {
+      case '&':
+        return '&amp;';
+      case '<':
+        return '&lt;';
+      case '>':
+        return '&gt;';
+      default:
+        return '&quot;';
+    }
+  });
+}
+
+/** Strip [n] citations and ** bold markers from a raw cell before copying. */
+function cellForCopy(raw: string): string {
+  return raw.replace(/\s*\[\d+\]/g, '').replace(/\*\*([^*\n]+)\*\*/g, '$1').trim();
+}
+
+/** Plain-text cell for the TSV copy: a markdown link becomes "label (url)". */
+function cellPlain(raw: string): string {
+  return cellForCopy(raw).replace(/\[([^\]\n]+)\]\((https?:\/\/[^)\s]+)\)/g, '$1 ($2)');
+}
+
+/** HTML cell for the rich copy: markdown links and bare URLs become anchors. */
+function cellHtmlContent(raw: string): string {
+  let s = escapeHtml(cellForCopy(raw));
+  s = s.replace(/\[([^\]\n]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2">$1</a>');
+  s = s.replace(/(?<!["=>])(https?:\/\/[^\s<>()]+)/g, '<a href="$1">$1</a>');
+  return s;
+}
+
+function tableToTsv(header: string[], rows: string[][]): string {
+  return [header, ...rows].map((r) => r.map(cellPlain).join('\t')).join('\n');
+}
+
+function tableToHtml(header: string[], rows: string[][]): string {
+  const cell = (c: string, tag: 'th' | 'td') =>
+    `<${tag} style="border:1px solid #c9c2ab;padding:6px 10px;text-align:start;vertical-align:top">${cellHtmlContent(c)}</${tag}>`;
+  const head = `<tr>${header.map((c) => cell(c, 'th')).join('')}</tr>`;
+  const body = rows.map((r) => `<tr>${r.map((c) => cell(c, 'td')).join('')}</tr>`).join('');
+  return `<table dir="rtl" style="border-collapse:collapse;font-family:sans-serif"><thead>${head}</thead><tbody>${body}</tbody></table>`;
+}
+
+/**
+ * A styled, RTL-aware comparison table with a copy-to-clipboard button. Cells reuse the inline
+ * formatter WITHOUT [n] citations (markdown/URL links inside cells still render as clickable).
+ */
 function AnswerTable({ header, rows, isAr }: { header: string[]; rows: string[][]; isAr: boolean }) {
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    try {
+      if (typeof ClipboardItem !== 'undefined' && navigator.clipboard?.write) {
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            'text/html': new Blob([tableToHtml(header, rows)], { type: 'text/html' }),
+            'text/plain': new Blob([tableToTsv(header, rows)], { type: 'text/plain' }),
+          }),
+        ]);
+      } else {
+        await navigator.clipboard.writeText(tableToTsv(header, rows));
+      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      /* clipboard unavailable or denied */
+    }
+  };
+
   return (
-    <div className="my-2 overflow-x-auto">
-      <table className="w-full border-collapse text-sm">
-        <thead>
-          <tr>
-            {header.map((c, i) => (
-              <th
-                key={i}
-                className="border border-border bg-primary/10 px-3 py-2 text-start align-top font-semibold text-primary"
-              >
-                {renderInline(c, isAr, false)}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r, ri) => (
-            <tr key={ri} className={ri % 2 ? 'bg-cream-light/60' : undefined}>
-              {r.map((c, ci) => (
-                <td key={ci} className="border border-border px-3 py-2 text-start align-top leading-[1.7]">
+    <div className="my-2">
+      <div className="mb-1.5 flex">
+        <button
+          type="button"
+          onClick={copy}
+          className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-cream-light px-3 py-1 font-naskh text-xs text-secondary-dark transition-colors hover:border-secondary hover:text-primary"
+        >
+          <span aria-hidden>{copied ? '✓' : '⧉'}</span>
+          {copied ? (isAr ? 'تم النسخ' : 'Copied') : isAr ? 'نسخ الجدول' : 'Copy table'}
+        </button>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full border-collapse text-sm">
+          <thead>
+            <tr>
+              {header.map((c, i) => (
+                <th
+                  key={i}
+                  className="border border-border bg-primary/10 px-3 py-2 text-start align-top font-semibold text-primary"
+                >
                   {renderInline(c, isAr, false)}
-                </td>
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rows.map((r, ri) => (
+              <tr key={ri} className={ri % 2 ? 'bg-cream-light/60' : undefined}>
+                {r.map((c, ci) => (
+                  <td key={ci} className="border border-border px-3 py-2 text-start align-top leading-[1.7]">
+                    {renderInline(c, isAr, false)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
