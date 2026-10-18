@@ -55,9 +55,9 @@ function ExternalLink({ href, label }: { href: string; label: string }) {
  */
 function renderInline(text: string, isAr: boolean, showCitations: boolean): ReactNode {
   const base = showCitations ? text : text.replace(/\s*\[\d+\]/g, '');
-  // Alts in order: [label](url) link · [n] citation · bare url · **bold** · "quoted".
+  // Alts in order: [label](url) link · [n] citation · bare url · **bold** · "quoted" · <br>.
   const token =
-    /\[([^\]\n]+)\]\((https?:\/\/[^)\s]+)\)|\[(\d+)\]|(https?:\/\/[^\s<>()]+)|\*\*([^*\n]+)\*\*|[“”«»"][^“”«»"\n]+[“”«»"]/g;
+    /\[([^\]\n]+)\]\((https?:\/\/[^)\s]+)\)|\[(\d+)\]|(https?:\/\/[^\s<>()]+)|\*\*([^*\n]+)\*\*|[“”«»"][^“”«»"\n]+[“”«»"]|(<br\s*\/?>)/g;
   const parts: ReactNode[] = [];
   let last = 0;
   let key = 0;
@@ -96,6 +96,9 @@ function renderInline(text: string, isAr: boolean, showCitations: boolean): Reac
           {renderInline(m[5], isAr, showCitations)}
         </strong>,
       );
+    } else if (m[6] !== undefined) {
+      // explicit <br> → line break (lets several links stack on their own lines in a cell).
+      parts.push(<br key={key++} />);
     } else {
       // "quoted" name → distinct green emphasis (keep the surrounding quotes).
       parts.push(
@@ -149,16 +152,19 @@ function cellForCopy(raw: string): string {
   return raw.replace(/\s*\[\d+\]/g, '').replace(/\*\*([^*\n]+)\*\*/g, '$1').trim();
 }
 
-/** Plain-text cell for the TSV copy: a markdown link becomes "label (url)". */
+/** Plain-text cell for the TSV copy: markdown links become "label (url)", <br> → " / ". */
 function cellPlain(raw: string): string {
-  return cellForCopy(raw).replace(/\[([^\]\n]+)\]\((https?:\/\/[^)\s]+)\)/g, '$1 ($2)');
+  return cellForCopy(raw)
+    .replace(/\[([^\]\n]+)\]\((https?:\/\/[^)\s]+)\)/g, '$1 ($2)')
+    .replace(/<br\s*\/?>/gi, ' / ');
 }
 
-/** HTML cell for the rich copy: markdown links and bare URLs become anchors. */
+/** HTML cell for the rich copy: markdown links and bare URLs become anchors, <br> kept. */
 function cellHtmlContent(raw: string): string {
   let s = escapeHtml(cellForCopy(raw));
   s = s.replace(/\[([^\]\n]+)\]\((https?:\/\/[^)\s]+)\)/g, '<a href="$2">$1</a>');
   s = s.replace(/(?<!["=>])(https?:\/\/[^\s<>()]+)/g, '<a href="$1">$1</a>');
+  s = s.replace(/&lt;br\s*\/?&gt;/gi, '<br>');
   return s;
 }
 
