@@ -351,7 +351,20 @@ export const libraryData: LibraryItem[] = [
       
 
       // English
-       { t: 'الكبير', meta: 'فيديو', tEn: 'Al-Kabeer', metaEn: 'Video', section: 'real', lang: 'en', video: 'a66740739b741ee76d586f9723789f21' },
+       { t: 'الاخر', meta: 'فيديو', tEn: 'Al-Aakhir', metaEn: 'Video', section: 'real', lang: 'en', video: 'd3b062c541ab3567aa4c6d56f5bcca4d' },
+       { t: 'الاول', meta: 'فيديو', tEn: 'Al-Awwal', metaEn: 'Video', section: 'real', lang: 'en', video: '3b373e4b3b5ca44248bd02b53554d7be' },
+       { t: 'البارئ', meta: 'فيديو', tEn: 'Al-Baari', metaEn: 'Video', section: 'real', lang: 'en', video: 'a44cb70cb235c637e2b0bfe5e7c04715' },
+       { t: 'الباسط', meta: 'فيديو', tEn: 'Al-Baasit', metaEn: 'Video', section: 'real', lang: 'en', video: 'cf147557845a4646baebbb54863281b6' },
+       { t: 'الباطن', meta: 'فيديو', tEn: 'Al-Baatin', metaEn: 'Video', section: 'real', lang: 'en', video: '1796a0464aadd9fda8e2f45b971d9e04' },
+       { t: 'البر', meta: 'فيديو', tEn: 'Al-Burr', metaEn: 'Video', section: 'real', lang: 'en', video: '0a858ab810c84b4103c4738bd866876b' },
+       { t: 'البصير', meta: 'فيديو', tEn: 'Al-Baseer', metaEn: 'Video', section: 'real', lang: 'en', video: '30e8828ad240138a9411b184005d374f' },
+       { t: 'التواب', meta: 'فيديو', tEn: 'Al-Tawwab', metaEn: 'Video', section: 'real', lang: 'en', video: '84cc1944bdf403acca9472ae0cc47988' },
+       { t: 'الجبار', meta: 'فيديو', tEn: 'Al-Jabbar', metaEn: 'Video', section: 'real', lang: 'en', video: 'fc0ea691d1a61cf15f5cce97015d020e' },
+       { t: 'الجميل', meta: 'فيديو', tEn: 'Al-Jameel', metaEn: 'Video', section: 'real', lang: 'en', video: '73a4ef94d2e6ad79dc67b67700977722' },
+       { t: 'الجواد', meta: 'فيديو', tEn: 'Al-Jawad', metaEn: 'Video', section: 'real', lang: 'en', video: 'e3f6088125aed66d7f111361ed3dfb10' },
+       { t: 'الحسيب', meta: 'فيديو', tEn: 'Al-Haseeb', metaEn: 'Video', section: 'real', lang: 'en', video: 'c23ef5dfb1cd4da7f914abc23194c334' },
+
+
 
        // Urdu
        { t: 'الغفور', meta: 'فيديو', tEn: 'Al-Ghafur', metaEn: 'Video', section: 'real', lang: 'ur', video: '4ceae82068703a87a3408422639dd80f' },
