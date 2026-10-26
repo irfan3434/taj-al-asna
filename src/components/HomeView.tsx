@@ -25,7 +25,7 @@ const FEATURED_NAMES_INDICES = [0, 1, 2, 3, 4, 7, 16, 18];
 
 const COUNTERS: { target: number; suffix: string; label: Bi }[] = [
   { target: 99, suffix: '', label: { ar: 'اسمًا من أسماء الله', en: 'Divine Names' } },
-  { target: 100, suffix: 'M+', label: { ar: 'مسلم حول العالم', en: 'Muslims Worldwide' } },
+  { target: 8, suffix: 'B+', label: { ar: 'مسلم حول العالم', en: 'Muslims Worldwide' } },
   { target: 200, suffix: '+', label: { ar: 'مرجع ومصدر', en: 'References & Sources' } },
   { target: 10, suffix: '+', label: { ar: 'لغة مدعومة', en: 'Supported Languages' } },
 ];
